@@ -1,14 +1,7 @@
 import { suggestMaxPriorityFee } from '@rainbow-me/fee-suggestions';
 import { getPublicClient } from '@wagmi/core';
 import BigNum from 'bignumber.js';
-import {
-  config,
-  nexusGoerliNode,
-  nexusNode,
-  nexusSepoliaNode,
-  nodeType,
-  PRIMARY_CHAIN_KEY,
-} from 'config/zklin-networks';
+import { config, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
 import primaryGetterAbi from 'constants/contracts/abis/GettersFacet.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import IL1Bridge from 'constants/contracts/abis/IL1Bridge.json';
@@ -23,150 +16,39 @@ import { zkSyncProvider } from 'providers/zksync-provider';
 import { useCallback, useMemo, useState } from 'react';
 import type { ForwardL2Request } from 'types/token';
 import { getERC20BridgeCalldata } from 'utils/bridge';
-import type { Abi, Address, Hash, WalletClient, WriteContractParameters } from 'viem';
+import type { Abi, Address, Hash, WriteContractParameters } from 'viem';
 import { decodeEventLog } from 'viem';
 import { usePublicClient, useWalletClient } from 'wagmi';
 import { useAccount } from 'wagmi';
-import { Provider } from 'zksync-web3';
 import type { FullDepositFee } from 'zksync-web3/build/src/types';
 import { applyL1ToL2Alias, isETH, scaleGasLimit, sleep } from 'zksync-web3/build/src/utils';
 
 import { useBridgeNetworkStore } from './useBridgeNetwork';
-
-export const l1EthDepositAbi = {
-  inputs: [
-    {
-      internalType: 'address',
-      name: '_contractL2',
-      type: 'address',
-    },
-    {
-      internalType: 'uint256',
-      name: '_l2Value',
-      type: 'uint256',
-    },
-    {
-      internalType: 'bytes',
-      name: '_calldata',
-      type: 'bytes',
-    },
-    {
-      internalType: 'uint256',
-      name: '_l2GasLimit',
-      type: 'uint256',
-    },
-    {
-      internalType: 'uint256',
-      name: '_l2GasPerPubdataByteLimit',
-      type: 'uint256',
-    },
-    {
-      internalType: 'bytes[]',
-      name: '_factoryDeps',
-      type: 'bytes[]',
-    },
-    {
-      internalType: 'address',
-      name: '_refundRecipient',
-      type: 'address',
-    },
-  ],
-  name: 'requestL2Transaction',
-  outputs: [
-    {
-      internalType: 'bytes32',
-      name: 'canonicalTxHash',
-      type: 'bytes32',
-    },
-  ],
-  stateMutability: 'payable',
-  type: 'function',
-};
-
-export const nodeConfig = (() => {
-  switch (nodeType) {
-    case 'nexus-goerli':
-      return nexusGoerliNode;
-    case 'nexus-sepolia':
-      return nexusSepoliaNode;
-    default:
-      return nexusNode;
-  }
-})();
+import { useZksyncProvider, nodeConfig, walletClientToProvider, l1EthDepositAbi } from '../utils';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
-export const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
-
-export const defaultNetwork = nodeConfig[0];
-
-export const useZksyncProvider = () => {
-  const networkKey = useBridgeNetworkStore.getState().networkKey;
-  const eraNetwork = nodeConfig.find((item) => item.key === networkKey) ?? defaultNetwork;
-
-  const provider = useMemo(() => {
-    if (!networkKey) return;
-    return new Provider(eraNetwork.rpcUrl);
-  }, [eraNetwork.rpcUrl, networkKey]);
-
-  const getDefaultBridgeAddresses = useCallback(async () => {
-    return {
-      erc20L1: eraNetwork.erc20BridgeL1,
-      erc20L2: eraNetwork.erc20BridgeL2,
-    };
-  }, [eraNetwork.erc20BridgeL1, eraNetwork.erc20BridgeL2]);
-  return { provider, getDefaultBridgeAddresses };
-};
-
-export function walletClientToProvider(walletClient: WalletClient) {
-  const { chain, transport } = walletClient;
-  const network = {
-    chainId: chain!.id,
-    name: chain!.name,
-    ensAddress: chain!.contracts?.ensRegistry?.address,
-  };
-  const provider = new ethers.providers.Web3Provider(transport, network);
-  return provider;
-}
-
+const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
 export const useBridgeTx = () => {
   const { chainId } = useAccount();
   const networkKey = useBridgeNetworkStore.getState().networkKey;
-  console.log('networkKey: ', networkKey);
   const publicClient = usePublicClient({ config, chainId });
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
   const [loading, setLoading] = useState(false);
   const { provider: providerL2, getDefaultBridgeAddresses } = useZksyncProvider();
 
-  const isZkSyncChain = useMemo(() => {
-    return networkKey === 'zksync';
-  }, [networkKey]);
-
-  const isLineaChain = useMemo(() => {
-    return networkKey === PRIMARY_CHAIN_KEY;
-  }, [networkKey]);
-
-  const isArbitrum = useMemo(() => {
-    return networkKey === 'arbitrum';
-  }, [networkKey]);
-
-  const isManta = useMemo(() => {
-    return networkKey === 'manta';
-  }, [networkKey]);
-
-  const isBlast = useMemo(() => {
-    return networkKey === 'blast';
-  }, [networkKey]);
-
-  const isMantle = useMemo(() => {
-    return networkKey === 'mantle';
-  }, [networkKey]);
+  const isZkSyncChain = useMemo(() => networkKey === 'zksync', [networkKey]);
+  const isLineaChain = useMemo(() => networkKey === PRIMARY_CHAIN_KEY, [networkKey]);
+  const isArbitrum = useMemo(() => networkKey === 'arbitrum', [networkKey]);
+  const isManta = useMemo(() => networkKey === 'manta', [networkKey]);
+  const isBlast = useMemo(() => networkKey === 'blast', [networkKey]);
+  const isMantle = useMemo(() => networkKey === 'mantle', [networkKey]);
 
   //estimate: getbaseCost * l2gaslimit
   const getBaseCost = async (l2GasLimit: BigNumber) => {
     const feeData = await getFeeData();
     const gasPriceForEstimation = feeData?.maxFeePerGas || feeData?.gasPrice;
-    const gasPrice = networkKey === 'primary' ? BigNumber.from(gasPriceForEstimation!).mul(2) : await getTxGasPrice();
+    const gasPrice = networkKey === 'primary' ? BigNumber.from(gasPriceForEstimation).mul(2) : await getTxGasPrice();
     console.log('gasPrice: ', gasPrice);
     const zksyncContract = nodeConfig.find((item) => item.key === networkKey)?.mainContract;
     const baseCost = await publicClient?.readContract({
@@ -209,8 +91,8 @@ export const useBridgeTx = () => {
       const calldata = await getERC20BridgeCalldata(token, from, to, amount, provider1, isMergeSelected);
 
       return await providerL2.estimateL1ToL2Execute({
-        caller: applyL1ToL2Alias(l1ERC20BridgeAddresses!),
-        contractAddress: erc20BridgeAddress!,
+        caller: applyL1ToL2Alias(l1ERC20BridgeAddresses),
+        contractAddress: erc20BridgeAddress,
         gasPerPubdataByte: REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT,
         calldata: calldata,
       });
@@ -475,16 +357,16 @@ export const useBridgeTx = () => {
           await depositMNT(amount);
           const bridgeContract = network.erc20BridgeL1;
           tx = {
-            address: bridgeContract!,
+            address: bridgeContract,
             abi: IL1Bridge.abi as Abi,
             functionName: isMergeSelected ? 'depositToMerge' : 'deposit',
             args: [address, WRAPPED_MNT, amount, l2GasLimit, REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT, address],
           };
           tx.value = baseCost.toBigInt();
           // tx.gasLimit = l1GasLimit;
-          const allowance = await getErc20Allowance(WRAPPED_MNT, address, bridgeContract!);
+          const allowance = await getErc20Allowance(WRAPPED_MNT, address, bridgeContract);
           if (allowance.lt(amount)) {
-            await sendApproveErc20Tx(WRAPPED_MNT, amount, bridgeContract!);
+            await sendApproveErc20Tx(WRAPPED_MNT, amount, bridgeContract);
           }
         } else {
           tx = {
@@ -530,16 +412,16 @@ export const useBridgeTx = () => {
       } else {
         const bridgeContract = network.erc20BridgeL1;
         tx = {
-          address: bridgeContract!,
+          address: bridgeContract,
           abi: IL1Bridge.abi as Abi,
           functionName: isMergeSelected ? 'depositToMerge' : 'deposit',
           args: [address, token, amount, l2GasLimit, REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT, address],
         };
         tx.value = baseCost.toBigInt();
         // tx.gasLimit = l1GasLimit;
-        const allowance = await getErc20Allowance(token, address, bridgeContract!);
+        const allowance = await getErc20Allowance(token, address, bridgeContract);
         if (allowance.lt(amount)) {
-          await sendApproveErc20Tx(token, amount, bridgeContract!);
+          await sendApproveErc20Tx(token, amount, bridgeContract);
         }
         //handle zksync and linea gas
         const face = new Interface(IL1Bridge.abi);
@@ -652,7 +534,7 @@ export const useBridgeTx = () => {
       const primaryNetwork = nodeConfig.find((item) => item.key === PRIMARY_CHAIN_KEY);
       const web3Provider = new ethers.providers.Web3Provider(
         getPublicClient(config, {
-          chainId: primaryNetwork!.l1Network?.id,
+          chainId: primaryNetwork.l1Network?.id,
         }) as any,
         'any',
       );
@@ -660,7 +542,7 @@ export const useBridgeTx = () => {
 
       // const l2Provider = new Provider(primaryNetwork!.rpcUrl);
       const l1Provider = voidSigner.provider;
-      const contractAddress = primaryNetwork!.mainContract;
+      const contractAddress = primaryNetwork.mainContract;
       const iface = new Interface(primaryGetterAbi.abi);
       const tx: ethers.providers.TransactionRequest = {
         to: contractAddress,
