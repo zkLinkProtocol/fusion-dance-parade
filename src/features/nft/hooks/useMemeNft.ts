@@ -155,8 +155,6 @@ const useMemeNft = () => {
           const token = tokenMap[key];
           token.eligible = test_intro.some((obj) => token.name.includes(obj.coin));
         });
-
-        console.log(tokenMap, tokenMap[tokenId].eligible, 'tokenMap-omg');
         return {
           isEligible: tokenMap[tokenId].eligible,
           tokenId,
