@@ -19,6 +19,7 @@ import type { Hash, WriteContractParameters } from 'viem';
 import { encodeFunctionData } from 'viem';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { sleep } from 'zksync-web3/build/src/utils';
+import { checkMintEligibility } from 'constants/api';
 
 export type NovaNftType = 'ISTP' | 'ESFJ' | 'INFJ' | 'ENTP';
 export type NovaNft = {
@@ -125,6 +126,9 @@ const useMemeNft = () => {
   };
 
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
+    const eligibilityRes = await checkMintEligibility(address);
+    console.log(eligibilityRes.result, 'eligibility-res');
+    const test_intro = eligibilityRes.result || [];
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
@@ -141,20 +145,21 @@ const useMemeNft = () => {
           '6': { name: 'Arbitrum-AIdoge' },
           '7': { name: 'Arbitrum-Omni' },
         };
-        const test_intro = [
-          { chain: 'Base', coin: 'Omni' },
-          { chain: 'Linea', coin: 'Foxy' },
-          // { chain: 'Base', coin: 'Degen' },
-          // { chain: 'Base', coin: 'Brett' },
-          { chain: 'ZkSync', coin: 'Meow' },
-          { chain: 'Arbitrum', coin: 'AIdoge' },
-          { chain: 'Arbitrum', coin: 'Omni' },
-        ];
+        // const test_intro = [
+        //   { chain: 'Base', coin: 'Omni' },
+        //   { chain: 'Linea', coin: 'Foxy' },
+        //   { chain: 'Base', coin: 'Degen' },
+        //   { chain: 'Base', coin: 'Brett' },
+        //   { chain: 'ZkSync', coin: 'Meow' },
+        //   { chain: 'Arbitrum', coin: 'AIdoge' },
+        //   { chain: 'Arbitrum', coin: 'Omni' },
+        // ];
         // Update the `eligible` property in the `tokenMap` based on `test_intro`
         Object.keys(tokenMap).forEach((key) => {
           const token = tokenMap[key];
           token.eligible = test_intro.some((obj) => token.name.includes(obj.coin));
         });
+        console.log(tokenMap[tokenId].eligible, 'tokenMap[tokenId].eligible');
         return {
           isEligible: tokenMap[tokenId].eligible,
           tokenId,
@@ -327,6 +332,11 @@ const useMemeNft = () => {
     }
   };
 
+  const fetchUserEligibility = async (address: string) => {
+    const eligibilityRes = await checkMintEligibility(address);
+    console.log(eligibilityRes.result, 'eligibility-res');
+  };
+
   useEffect(() => {
     if (address) {
       fetchMemeNftBalances(address);
@@ -337,6 +347,7 @@ const useMemeNft = () => {
     if (address) {
       fetchNovaNft(address);
       fetchComposeNftInfo(address);
+      // fetchUserEligibility(address);
     }
   }, [address, fetchNovaNft]);
 

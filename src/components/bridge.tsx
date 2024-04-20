@@ -313,6 +313,8 @@ export default function Bridge(props: IBridgeComponentProps) {
     return 'Deposit to Mint';
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20]);
 
+  console.log(amount, tokenFiltered[tokenActive], tokenFiltered[tokenActive]?.formatedBalance, 'status-check');
+
   const handleInputValue = (v: string) => {
     if (!v) {
       setAmount(v);
