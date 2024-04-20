@@ -10,6 +10,7 @@ import { cn } from 'lib/utils';
 import { Button } from 'components/ui/buttons/button';
 import Bridge from 'components/bridge';
 import Mint from 'components/mint-view';
+import Merge from 'components/merge';
 interface MemeAxisNftItemProps {
   data: any;
 }
@@ -138,6 +139,7 @@ const Summon: React.FC = () => {
               <div className='my-auto flex-auto'>Select 5 NFT to Summon</div>
               <img loading='lazy' src='' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
+            <Merge />
             <div className='mt-5 flex gap-5 self-start'>
               <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
               <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
