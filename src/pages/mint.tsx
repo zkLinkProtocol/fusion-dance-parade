@@ -37,11 +37,11 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 <div className='relative flex aspect-[0.93] w-full flex-col overflow-hidden pt-2.5'>
                   <img
                     src={`/assets/imgs/${type}.png`}
-                    className={cn('absolute inset-0 object-cover', hasMint && 'opacity-20 cursor-not-allowed')}
+                    className={cn('absolute inset-0 object-cover', !isEligible && 'opacity-20 cursor-not-allowed')}
                     alt=''
                   />
                   <div className='max-md:mr-2.5 relative h-10 w-10 items-center justify-center self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5'>
-                    {balance?.toString()}
+                    {!hasMint && isEligible ? 'Mintable' : balance?.toString()}
                   </div>
                 </div>
               </div>

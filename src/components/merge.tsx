@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/react';
 import classNames from 'classnames';
 import { config } from 'config/zklin-networks';
 import NovaMeMeNft from 'constants/contracts/abis/NovaMemeAxisNFT.json';
