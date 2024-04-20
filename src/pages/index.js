@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import { Button } from 'components/ui/buttons/button';
 import classNames from 'classnames';
+import Bridge from 'components/bridge';
 
 const IMAGES_DATA = [
   { id: 1, src: '/images/carousel/1.jpg' },
@@ -14,14 +15,13 @@ const IMAGES_DATA = [
   { id: 7, src: '/images/carousel/7.jpg' },
 ];
 
-export default function Carousel({list}) {
-    console.log(list)
+export default function Carousel({lists}) {
   const [index, setIndex] = useState(0);
-  const [images, setImages] = useState(IMAGES_DATA);
+  const [list, setList] = useState(lists);
 
   const handleMove = direction => {
     // Create a shallow copy of the images array
-    const imgArrCopy = [...images];
+    const imgArrCopy = [...list];
 
     // If Next Click -> ie handleMove(1)
     if (direction > 0) {
@@ -30,97 +30,91 @@ export default function Carousel({list}) {
       // If firstItem returns false
       if (!firstItem) return;
       // Add the first item to the end of the array
-      imgArrCopy.push({ ...firstItem, id: Math.random() });
+      imgArrCopy.push({ ...firstItem});
       // Update the images array
-      setImages(imgArrCopy);
+      setList(imgArrCopy)
     } else {
       // Grab the last item in the array
       const lastItem = imgArrCopy.pop();
       // Add the last item to the beginning of the array
-      imgArrCopy.unshift({ ...lastItem, id: Math.random() });
+      imgArrCopy.unshift({ ...lastItem});
       // Update the images array
-      setImages(imgArrCopy);
+      setList(imgArrCopy)
     }
-    console.log('images', images);
+    console.log('images', list);
   };
 
   const variants = {
     active: {
       x: 'calc(-50% + 0px)',
-      width: '22rem',
+      width: '16rem',
       scale: 1.1,
       opacity: 1,
+      zIndex: 9,
     },
     level1: (position) => ({
-      x: `calc(-50% + ${position * 240}px)`,
-      width: '3rem',
+      x: `calc(-50% + ${position * 50}px)`,
+      width: '16rem',
       scale: 0.9,
       opacity: 1,
+      zIndex: 1,
     }),
     level2: (position) => ({
-      x: `calc(-50% + ${position * 145}px)`,
-      width: '2rem',
-      scale: 0.75,
-      opacity: 1,
-    }),
-    level3: (position) => ({
-      x: `calc(-50% + ${position * 108}px)`,
-      width: '1.5rem',
-      scale: 0.5,
-      opacity: 1,
-    }),
-    level4: (position) => ({
       x: `calc(-50% + ${position * 90}px)`,
       width: 0,
       scale: 0.25,
       opacity: 0,
+      zIndex: 1,
     })
   };
-
-
   return (
-    <div className="relative h-96 w-[90%] mx-auto items-center flex justify-center">
-      {images.map((image, i) => {
+    <div className="block md:hidden">
+    <div className="relative h-96 w-[90%] mx-auto items-center flex justify-center md:hidden">
+      {list.map((image, i) => {
         let position = 0;
-
-        if (images.length % 2) {
-          position = i - (images.length + 1) / 2;
+        if (i===0) {
+            position = 0;
+        } else if (i===1){
+            position = 1;
+        } else if (i===(list.length-1)){
+            position = -1;
         } else {
-          position = i - images.length / 2;
+            position = 2;
         }
-
         let imgLevel =
           position === 0
           ? "active"
           : position === -1 || position === 1
           ? "level1"
-          : position === -2 || position === 2
-          ? "level2"
-          : position === -3 || position === 3
-          ? "level3"
-          : "level4";
-        console.log(list)
-        console.log(i)
-        console.log(list[0])
+          : "level2"
         return (
           <motion.div
-            key={image.id}
+            key={image.type}
             initial={false}
-            className={`absolute left-1/2 flex-none aspect-[3/2] text-white rounded-3xl overflow-hidden h-60 border border-neutral-200 dark:border-neutral-700 shadow-md`}
+            className={`absolute left-1/2 flex-none aspect-[3/2] text-white overflow-hidden h-80 rounded-2xl border border-solid border-indigo-500 bg-zinc-900 shadow-md`}
             animate={imgLevel}
             custom={position}
             variants={variants}
             transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
           >
-            {image.src}
-            {i}
-            
+            <img
+            src={`/assets/imgs/${image.type}.png`}
+            className={cn(
+                'absolute inset-0 object-cover rounded-2xl',
+                !image.isEligible && 'opacity-20 cursor-not-allowed',
+                !image.hasMint && image.isEligible && 'cursor-pointer !opacity-80',
+            )}
+            alt=''
+            />
+            <div className={cn('font-normal mr-2.5 absolute top-[10px] right-[10px] rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5', !image.hasMint&&!image.isEligible&&'hidden')}>
+            {image.hasMint?image.balance?.toString(): image.isEligible? 'Mintable':''}
+            </div>
           </motion.div>
         );
       })}
         <button
           onClick={() => handleMove(-1)}
-          className="grid h-14 w-14 place-content-center text-3xl transition-colors  hover:text-sky-500 absolute -left-6"
+          className="grid h-14 w-14 place-content-center text-3xl transition-colors absolute -left-12 text-white"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +133,7 @@ export default function Carousel({list}) {
         </button>
         <button
           onClick={() => handleMove(1)}
-          className="grid h-14 w-14 place-content-center text-3xl transition-colors  hover:text-sky-500 absolute -right-6"
+          className="grid h-14 w-14 place-content-center text-3xl transition-colors absolute -right-12 text-white"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -156,6 +150,8 @@ export default function Carousel({list}) {
             />
           </svg>
         </button>
+    </div>
+    <Bridge />
     </div>
   );
 }

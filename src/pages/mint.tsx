@@ -1,25 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable tailwindcss/no-custom-classname */
 import { checkMintEligibility } from 'constants/api';
-import useMintNft from 'features/nft/hooks/useMintNft';
+import useMintNft from '../features/nft/hooks/useMemeNft';
 import React, { useCallback, useMemo,useState } from 'react';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 import { Button } from 'components/ui/buttons/button';
+import Bridge from 'components/bridge';
+import Mint from 'components/mint-view';
+import Merge from 'components/merge';
 import Carousel from './index';
 
 interface MemeAxisNftItemProps {
   data: any;
 }
-const copyAddress = (address:string)=>{
-  navigator.clipboard.writeText(address)
+const copyAddress = (address: string) => {
+  navigator.clipboard
+    .writeText(address)
     .then(() => {
       console.log('Text copied to clipboard: ' + address);
     })
     .catch((error) => {
       console.error('Unable to copy text to clipboard: ', error);
     });
-}
+};
 //http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { type, balance, hasMint, isEligible } = item.data;
@@ -33,7 +39,11 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden pt-2.5'>
                 <img
                     src={`/assets/imgs/${type}.png`}
-                    className={cn('absolute inset-0 object-cover rounded-2xl', !hasMint && 'opacity-40')}
+                    className={cn(
+                      'absolute inset-0 object-cover rounded-2xl',
+                      !isEligible && 'opacity-20 cursor-not-allowed',
+                      !hasMint && isEligible && 'cursor-pointer !opacity-80',
+                    )}
                     alt=''
                   />
                   <div className={cn('font-normal mr-2.5 relative self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5', !hasMint&&!isEligible&&'hidden')}>
@@ -43,29 +53,36 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               </div>
             </div>
           </div>
-          <div className="card-back">
-            <div className='flex flex-col items-center p-[20px] gap-1'>
+          <div className='card-back'>
+            <div className='flex flex-col items-center gap-1 p-[20px]'>
+              {/* <Bridge /> */}
               <img src={`/assets/imgs/${type}.png`} className='w-[80px]' alt='' />
-              <div className='text-white text-2xl font-bold'>
-              Foxy{/* {nft.name} */}
-              </div>
-              <div className='text-white text-xs flex gap-1 mb-3'>
-              0x5FBD....1566
+              <div className='text-2xl font-bold text-white'>Foxy{/* {nft.name} */}</div>
+              <div className='mb-3 flex gap-1 text-xs text-white'>
+                0x5FBD....1566
                 {/* {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)} */}
-                <img src="/assets/copy.svg" alt="" className='w-[9px] h-[9px] mt-[3px] cursor-pointer' onClick={()=>{copyAddress(nft.address)}}/>
-                <img src="/assets/circle.svg" alt="" className='w-[9px] h-[9px] mt-[3px] cursor-pointer'/>
-                <img src="/assets/dexscreener.svg" alt="" className='w-[9px] h-[9px] mt-[3px] cursor-pointer'/>
+                <img
+                  src='/assets/copy.svg'
+                  alt=''
+                  className='mt-[3px] h-[9px] w-[9px] cursor-pointer'
+                  // onClick={() => {
+                  //   copyAddress(nft.address);
+                  // }}
+                />
+                <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
+                <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
               </div>
-              <div className='text-slate-400 text-[15px] mb-2'>Deposit 1 FOXY into Nova Network and mint your NOVA Linea Foxy.</div>
-              <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div>
-              
+              <div className='mb-2 text-[15px] text-slate-400'>
+                Deposit 1 FOXY into Nova Network and mint your NOVA Linea Foxy.
+              </div>
+              <Bridge />
+              <Mint />
+              {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>
-          {hasMint && 'Minted'}
-          {isEligible && 'Eligible to Mint'}
-          <Button className='absolute inset-0' disabled={!isEligible}>
-            Mint
-          </Button>
+          {/* <Button className='absolute inset-0' disabled={!isEligible}>
+            {hasMint && 'Minted'} Mint {isEligible && 'Eligible to Mint'}
+          </Button> */}
         </div>
       </div>
     </div>
@@ -89,154 +106,6 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
     const res = await checkMintEligibility(_address);
     console.log(res.result, 'eligibility-res');
   };
-  // const test = [
-  //   {
-  //     chain: 'Base',
-  //     coin: 'Omni',
-  //   },
-  //   {
-  //     chain: 'Linea',
-  //     coin: 'Foxy',
-  //   },
-  //   {
-  //     chain: 'Base',
-  //     coin: 'Degen',
-  //   },
-  //   {
-  //     chain: 'Base',
-  //     coin: 'Brett',
-  //   },
-  //   {
-  //     chain: 'ZkSync',
-  //     coin: 'Meow',
-  //   },
-  //   {
-  //     chain: 'Arbitrum',
-  //     coin: 'AIdoge',
-  //   },
-  //   {
-  //     chain: 'Arbitrum',
-  //     coin: 'Omni',
-  //   },
-  // ];
-  // const test2 = [
-  //   {
-  //     balance: 0n,
-  //     tokenId: '1',
-  //     nft: {
-  //       name: 'Nova Booster Phase II - 50',
-  //       description: 'The zkLink Nova Booster Phase II NFT',
-  //       image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-  //       type: '1',
-  //     },
-  //   },
-  // ];
-
-  function assignTokenIds(memeNfts, objectArray) {
-    return objectArray.map((obj) => {
-      const matchingNft = memeNfts.find((nft) => nft.name === `${obj.chain}-${obj.coin}`);
-      if (matchingNft) {
-        return {
-          ...obj,
-          tokenId: matchingNft.tokenId,
-        };
-      }
-      return obj;
-    });
-  }
-
-  // Usage
-  const test_intro = [
-    { chain: 'Base', coin: 'Omni' },
-    { chain: 'Linea', coin: 'Foxy' },
-    { chain: 'Base', coin: 'Degen' },
-    { chain: 'Base', coin: 'Brett' },
-    { chain: 'ZkSync', coin: 'Meow' },
-    { chain: 'Arbitrum', coin: 'AIdoge' },
-    { chain: 'Arbitrum', coin: 'Omni' },
-  ];
-
-  // const shit = [
-  //   {
-  //     balance: 1n,
-  //     description: 'The zkLink Nova Booster Phase II NFT',
-  //     hasMint: true,
-  //     image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+1000.png',
-  //     name: 'Nova Booster Phase II - 1000',
-  //     tokenId: '7',
-  //     type: 7,
-  //   },
-  // ];
-
-  const memeNftBalances_intro = [
-    {
-      name: 'Linea-Foxy',
-      address: '0x5FBDF89403270a1846F5ae7D113A989F850d1566',
-      tokenId: '1',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Base-Degen',
-      address: '0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed',
-      tokenId: '2',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Base-Brett',
-      address: '0x532f27101965dd16442E59d40670FaF5eBB142E4',
-      tokenId: '3',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Base-Omni',
-      address: '0xC48E605c7b722a57277e087a6170B9E227e5AC0A',
-      tokenId: '4',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'ZkSync-Meow',
-      address: '0x79db8c67d0c33203da4Efb58F7D325E1e0d4d692',
-      tokenId: '5',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Arbitrum-AIdoge',
-      address: '0x09E18590E8f76b6Cf471b3cd75fE1A1a9D2B2c2b',
-      tokenId: '6',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Arbitrum-Omni',
-      address: '0x9e20461bc2c4c980f62f1B279D71734207a6A356',
-      tokenId: '7',
-      balance: 0,
-      nft: null,
-    },
-  ];
-  
-  const updatedTest = assignTokenIds(memeNftBalances_intro, test_intro);
-  console.log(updatedTest, 'updatedTest');
-
-  // const test5 = [
-  //   {
-  //     balance: 0n,
-  //     tokenId: '1',
-  //     nft: {
-  //       name: 'Nova Booster Phase II - 50',
-  //       description: 'The zkLink Nova Booster Phase II NFT',
-  //       image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-  //       type: '1',
-  //     },
-  //   },
-  // ];
-
-  //mintRecord
 
   useEffect(() => {
     if (address) fetchRes(address);
@@ -244,12 +113,12 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
 
   return (
     <div className='max-md:max-w-full relative md:mt-10 mt-4 w-full'>
-      <div className='max-md:flex-col max-md:gap-0 md:flex gap-5 flex-wrap hidden '>
+      <div className='max-md:flex-col max-md:gap-0 md:flex gap-5 flex-wrap hidden'>
         {memeNftBalances.map((item, index) => (
           <MemeAxisNftItem key={index} data={item} />
         ))}
       </div>
-      <Carousel list={memeNftBalances}></Carousel>
+      <Carousel lists={memeNftBalances}></Carousel>
     </div>
   );
 };
@@ -257,32 +126,25 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
 const Summon: React.FC = () => {
   return (
     <div className='max-md:max-w-full w-full'>
-      <div className='max-md:mt-10 max-md:max-w-full max-md:text-4xl relative mb-5 mt-24 self-start text-5xl font-black leading-[56.16px] tracking-tight text-white'>
+      <div className='max-md:mt-10 max-md:max-w-full text-2xl relative mb-5 md:mt-24 mt-6 self-start md:text-5xl font-black leading-[56.16px] tracking-tight text-white'>
         Summon The Nova MEMECROSS
       </div>
-      <div className='max-md:flex-col max-md:gap-0 flex gap-5'>
-        <div className='max-md:ml-0 max-md:w-full flex w-[29%] flex-col'>
-          <div className='max-md:mt-8 flex w-full grow flex-col justify-center rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'>
-            <img loading='lazy' srcSet='...' className='aspect-[0.93] w-full' alt='' />
+      <div className='max-md:flex-col gap-1 flex md:gap-5'>
+        <div className='max-md:ml-0 max-md:w-full flex md:w-[29%] w-[40%] flex-col'>
+          <div className='max-md:mt-8 flex w-full grow flex-col justify-center rounded-2xl md:border-2 md:border-solid md:border-indigo-500 bg-zinc-900'>
+            <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
-        <div className='max-md:ml-0 max-md:w-full ml-5 flex w-[71%] flex-col'>
-          <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-5'>
+        <div className='max-md:ml-0 max-md:w-full md:ml-5 ml-1 flex md:w-[71%] w-[60%] flex-col'>
+          <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col md:px-5 px-1'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova
-              Meme NFTs. You will have different Nova Meme NFT because you bridge different meme coins. Bridge any
-              amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova Meme NFTs.
+            Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova Meme NFTs.  You will have different Nova Meme NFT because you bridge different meme coins.
             </div>
-            <div className='max-md:mt-10 mt-24 flex gap-2 self-start text-base leading-6 tracking-tight text-white'>
+            <div className='max-md:mt-10 md:mt-24 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white mb-4'>
               <div className='my-auto flex-auto'>Select 5 NFT to Summon</div>
-              <img loading='lazy' src='' className='aspect-square w-4 shrink-0 fill-white' alt='' />
+              <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
-            <div className='mt-5 flex gap-5 self-start'>
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-            </div>
+            <Merge />
             <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
               Summon Now
             </div>
@@ -293,60 +155,35 @@ const Summon: React.FC = () => {
   );
 };
 
+const Rules: React.FC = () => {
+  return (
+    <div className='max-md:max-w-full w-full'>
+      <div className='max-md:mt-10 max-md:max-w-full text-2xl relative mb-5 mt-24 self-start  md:text-5xl font-black leading-[56.16px] tracking-tight text-white'>
+      Rules
+      </div>
+      <div className='w-full p-8 rounded-lg bg-slate-900 text-sm text-slate-400'>
+      Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box. Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box. Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box.
+      </div>
+    </div>
+  );
+};
 const Page: React.FC = () => {
   const { memeNftBalances } = useMintNft();
   return (
-    <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center pb-[200px] md:px-[10rem] px-[1rem]'>
+    <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
       <div className='mx-auto max-w-[1200px]'>
-        <div className='max-md:max-w-full relative flex grow flex-col md:pt-[100px] tracking-tight'>
-          <div className='max-md:max-w-full text-3xl md:text-5xl font-black leading-[56.16px] text-white'>
+        <div className='max-md:max-w-full relative flex grow flex-col tracking-tight md:pt-[100px]'>
+          <div className='max-md:max-w-full text-2xl font-black leading-[56.16px] text-white md:text-5xl'>
             Mint MEME NFT on Nova
           </div>
-          <div className='max-md:max-w-full md:mt-8 md:text-base text-sm leading-6 text-neutral-400'>
+          <div className='max-md:max-w-full text-sm leading-6 text-neutral-400 md:mt-8 md:text-base'>
             Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova Meme
             NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
           </div>
         </div>
-        <MemeNftGrid memeNftBalances={[
-    {
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 1,
-    },{
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 2,
-    },{
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 3,
-    },{
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 4,
-    },
-  ]} />
+        <MemeNftGrid memeNftBalances={memeNftBalances} />
         <Summon />
+        <Rules />
       </div>
     </section>
   );
