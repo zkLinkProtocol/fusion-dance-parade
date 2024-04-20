@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
+import { Button } from 'components/ui/buttons/button';
 interface MemeAxisNftItemProps {
   data: any;
 }
@@ -19,7 +20,7 @@ const copyAddress = (address:string)=>{
 }
 //http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
-  const { type, balance, hasMint } = item.data;
+  const { type, balance, hasMint, isEligible } = item.data;
   console.log(item, 'item');
   return (
     <div className="card-container">
@@ -59,6 +60,10 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
             </div>
           </div> */}
           {hasMint && 'Minted'}
+          {isEligible && 'Eligible to Mint'}
+          <Button className='absolute inset-0' disabled={!isEligible}>
+            Mint
+          </Button>
         </div>
       </div>
     </div>
@@ -83,48 +88,48 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
     const res = await checkMintEligibility(_address);
     console.log(res.result, 'eligibility-res');
   };
-  const test = [
-    {
-      chain: 'Base',
-      coin: 'Omni',
-    },
-    {
-      chain: 'Linea',
-      coin: 'Foxy',
-    },
-    {
-      chain: 'Base',
-      coin: 'Degen',
-    },
-    {
-      chain: 'Base',
-      coin: 'Brett',
-    },
-    {
-      chain: 'ZkSync',
-      coin: 'Meow',
-    },
-    {
-      chain: 'Arbitrum',
-      coin: 'AIdoge',
-    },
-    {
-      chain: 'Arbitrum',
-      coin: 'Omni',
-    },
-  ];
-  const test2 = [
-    {
-      balance: 0n,
-      tokenId: '1',
-      nft: {
-        name: 'Nova Booster Phase II - 50',
-        description: 'The zkLink Nova Booster Phase II NFT',
-        image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-        type: '1',
-      },
-    },
-  ];
+  // const test = [
+  //   {
+  //     chain: 'Base',
+  //     coin: 'Omni',
+  //   },
+  //   {
+  //     chain: 'Linea',
+  //     coin: 'Foxy',
+  //   },
+  //   {
+  //     chain: 'Base',
+  //     coin: 'Degen',
+  //   },
+  //   {
+  //     chain: 'Base',
+  //     coin: 'Brett',
+  //   },
+  //   {
+  //     chain: 'ZkSync',
+  //     coin: 'Meow',
+  //   },
+  //   {
+  //     chain: 'Arbitrum',
+  //     coin: 'AIdoge',
+  //   },
+  //   {
+  //     chain: 'Arbitrum',
+  //     coin: 'Omni',
+  //   },
+  // ];
+  // const test2 = [
+  //   {
+  //     balance: 0n,
+  //     tokenId: '1',
+  //     nft: {
+  //       name: 'Nova Booster Phase II - 50',
+  //       description: 'The zkLink Nova Booster Phase II NFT',
+  //       image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+  //       type: '1',
+  //     },
+  //   },
+  // ];
 
   function assignTokenIds(memeNfts, objectArray) {
     return objectArray.map((obj) => {
@@ -150,15 +155,17 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
     { chain: 'Arbitrum', coin: 'Omni' },
   ];
 
-  const shit = [{
-    balance: 1n,
-    description: 'The zkLink Nova Booster Phase II NFT',
-    hasMint: true,
-    image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+1000.png',
-    name: 'Nova Booster Phase II - 1000',
-    tokenId: '7',
-    type: 7,
-  }]
+  // const shit = [
+  //   {
+  //     balance: 1n,
+  //     description: 'The zkLink Nova Booster Phase II NFT',
+  //     hasMint: true,
+  //     image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+1000.png',
+  //     name: 'Nova Booster Phase II - 1000',
+  //     tokenId: '7',
+  //     type: 7,
+  //   },
+  // ];
 
   const memeNftBalances_intro = [
     {
@@ -215,18 +222,18 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
   const updatedTest = assignTokenIds(memeNftBalances_intro, test_intro);
   console.log(updatedTest, 'updatedTest');
 
-  const test5 = [
-    {
-      balance: 0n,
-      tokenId: '1',
-      nft: {
-        name: 'Nova Booster Phase II - 50',
-        description: 'The zkLink Nova Booster Phase II NFT',
-        image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-        type: '1',
-      },
-    },
-  ];
+  // const test5 = [
+  //   {
+  //     balance: 0n,
+  //     tokenId: '1',
+  //     nft: {
+  //       name: 'Nova Booster Phase II - 50',
+  //       description: 'The zkLink Nova Booster Phase II NFT',
+  //       image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+  //       type: '1',
+  //     },
+  //   },
+  // ];
 
   //mintRecord
 
