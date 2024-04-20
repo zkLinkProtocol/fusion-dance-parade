@@ -1,11 +1,13 @@
 import { checkMintEligibility } from 'constants/api';
 import useMintNft from 'features/nft/hooks/useMintNft';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo,useState } from 'react';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 import { Button } from 'components/ui/buttons/button';
+import Carousel from './index';
+
 interface MemeAxisNftItemProps {
   data: any;
 }
@@ -21,22 +23,21 @@ const copyAddress = (address:string)=>{
 //http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { type, balance, hasMint, isEligible } = item.data;
-  console.log(item, 'item');
   return (
     <div className="card-container">
       <div className="card">
-        <div className="card-inner">
+        <div className={cn(hasMint?'disTranform':'card-inner')}>
           <div className="card-front">
-            <div className='max-md:ml-0 max-md:w-full col-span-3 flex flex-col'>
-              <div className='max-md:mt-6 relative flex w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
-                <div className='relative flex aspect-[0.93] w-full flex-col overflow-hidden pt-2.5'>
+            <div className='h-full w-full'>
+              <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
+                <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden pt-2.5'>
                 <img
                     src={`/assets/imgs/${type}.png`}
-                    className={cn('absolute inset-0 object-cover', hasMint && 'opacity-20 cursor-not-allowed')}
+                    className={cn('absolute inset-0 object-cover rounded-2xl', !hasMint && 'opacity-40')}
                     alt=''
                   />
-                  <div className='max-md:mr-2.5 relative h-10 w-10 items-center justify-center self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5'>
-                    {balance?.toString()}
+                  <div className={cn('font-normal mr-2.5 relative self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5', !hasMint&&!isEligible&&'hidden')}>
+                    {hasMint?balance?.toString(): isEligible? 'Mintable':''}
                   </div>
                 </div>
               </div>
@@ -70,7 +71,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
     </div>
   );
 };
-
 interface MemeNftGridProps {
   memeNftBalances: Array<{
     nft: {
@@ -219,7 +219,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
       nft: null,
     },
   ];
-
+  
   const updatedTest = assignTokenIds(memeNftBalances_intro, test_intro);
   console.log(updatedTest, 'updatedTest');
 
@@ -241,13 +241,15 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
   useEffect(() => {
     if (address) fetchRes(address);
   }, [address]);
+
   return (
     <div className='max-md:max-w-full relative md:mt-10 mt-4 w-full'>
-      <div className='max-md:flex-col max-md:gap-0 flex gap-5 flex-wrap'>
+      <div className='max-md:flex-col max-md:gap-0 md:flex gap-5 flex-wrap hidden '>
         {memeNftBalances.map((item, index) => (
           <MemeAxisNftItem key={index} data={item} />
         ))}
       </div>
+      <Carousel list={memeNftBalances}></Carousel>
     </div>
   );
 };
@@ -293,7 +295,6 @@ const Summon: React.FC = () => {
 
 const Page: React.FC = () => {
   const { memeNftBalances } = useMintNft();
-
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center pb-[200px] md:px-[10rem] px-[1rem]'>
       <div className='mx-auto max-w-[1200px]'>
@@ -316,6 +317,33 @@ const Page: React.FC = () => {
       name: 'Nova Booster Phase II - 50',
       tokenId: '1',
       type: 1,
+    },{
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 2,
+    },{
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 3,
+    },{
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 4,
     },
   ]} />
         <Summon />
