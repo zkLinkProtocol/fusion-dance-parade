@@ -289,7 +289,9 @@ export default function Merge() {
 
   return (
     <>
-      <MultiSelectContent tags={tags} onClick={handleClickTag} isSelectedTag={isSelectedTag} />
+      <div className='flex gap-4'>
+        <MultiSelectContent tags={tags} onClick={handleClickTag} isSelectedTag={isSelectedTag} />
+      </div>
       <div className='flex flex-col items-center gap-6 p-6'>
         <div className='flex w-full items-center'>
           <Button
