@@ -42,14 +42,15 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               </div>
             </div>
           </div>
-          {/* <div className="card-back">
+          <div className="card-back">
             <div className='flex flex-col items-center p-[20px] gap-1'>
-              <img src={nft.image} className='w-[80px]' alt='' />
+              <img src={`/assets/imgs/${type}.png`} className='w-[80px]' alt='' />
               <div className='text-white text-2xl font-bold'>
-                {nft.name}
+              Foxy{/* {nft.name} */}
               </div>
               <div className='text-white text-xs flex gap-1 mb-3'>
-                {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)}
+              0x5FBD....1566
+                {/* {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)} */}
                 <img src="/assets/copy.svg" alt="" className='w-[9px] h-[9px] mt-[3px] cursor-pointer' onClick={()=>{copyAddress(nft.address)}}/>
                 <img src="/assets/circle.svg" alt="" className='w-[9px] h-[9px] mt-[3px] cursor-pointer'/>
                 <img src="/assets/dexscreener.svg" alt="" className='w-[9px] h-[9px] mt-[3px] cursor-pointer'/>
@@ -58,7 +59,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div>
               
             </div>
-          </div> */}
+          </div>
           {hasMint && 'Minted'}
           {isEligible && 'Eligible to Mint'}
           <Button className='absolute inset-0' disabled={!isEligible}>
@@ -305,7 +306,18 @@ const Page: React.FC = () => {
             NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
           </div>
         </div>
-        <MemeNftGrid memeNftBalances={memeNftBalances} />
+        <MemeNftGrid memeNftBalances={[
+    {
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 1,
+    },
+  ]} />
         <Summon />
       </div>
     </section>
