@@ -25,6 +25,7 @@ export type NovaNft = {
   name: string;
   description: string;
   image: string;
+  type: number;
 };
 
 const useNovaNftMinting = () => {
@@ -85,7 +86,7 @@ const useNovaNftMinting = () => {
     return tokenURI as string;
   }, []);
 
-  const fetchMetadataByURI = async (uri: string) => {
+  const fetchMetadataByURI = async (uri: string, tokenId: number) => {
     if (uri.startsWith('ipfs://')) {
       uri = uri.substring(7);
     }
@@ -95,6 +96,7 @@ const useNovaNftMinting = () => {
       name: json.name,
       description: json.description,
       image: `https://ipfs.io/ipfs/${json.image.substring(7)}`,
+      type: tokenId,
     };
     console.log('Metadata:', result);
     return result;
@@ -116,7 +118,7 @@ const useNovaNftMinting = () => {
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
         const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
-        const nft = await fetchMetadataByURI(tokenURI);
+        const nft = await fetchMetadataByURI(tokenURI, tokenId);
         return { tokenId, balance, nft };
       }),
     );
@@ -193,7 +195,7 @@ const useNovaNftMinting = () => {
         if (BigNumber.from(balance).eq(0)) {
           return;
         }
-        const tokenId = 4; // await getTokenIdByIndex(address)
+        const tokenId = 4;
         const tokenURI = await getTokenURIByTokenId(tokenId);
         const nft = await fetchMetadataByURI(tokenURI);
         setNovaNft(nft);

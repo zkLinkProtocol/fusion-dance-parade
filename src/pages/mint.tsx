@@ -6,13 +6,16 @@ interface MemeAxisNftItemProps {
   balance: number;
 }
 
-const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = ({ nft, balance }) => {
+
+
+const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = ({ nft, balance, num }: any) => {
+  console.log('MemeAxisNftItem:', nft, balance);
   return (
-    <div className='max-md:ml-0 max-md:w-full col-span-3 flex flex-col'>
+    <div className='max-md:ml-0 max-md:w-full col-span-3 flex flex-col' key={num}>
       <div className='max-md:mt-6 relative flex w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
         <div className='relative flex aspect-[0.93] w-full flex-col overflow-hidden pt-2.5'>
-          <img src={nft.image} className='size-full absolute inset-0 object-cover' alt='' />
-          <div className='relative mr-3 h-10 w-10 items-center justify-center self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5'>
+          <img src={`/assets/imgs/${nft.type}.png`} className='absolute inset-0 object-cover' alt='' />
+          <div className='max-md:mr-2.5 relative h-10 w-10 items-center justify-center self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5'>
             {balance.toString()}
           </div>
         </div>
@@ -35,7 +38,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
     <div className='max-md:max-w-full relative mt-10 w-full'>
       <div className='max-md:flex-col max-md:gap-0 grid grid-cols-12 gap-5'>
         {memeNftBalances.map((item, index) => (
-          <MemeAxisNftItem key={index} nft={item.nft} balance={item.balance} />
+          <MemeAxisNftItem key={index} nft={item.nft} num={index} balance={item.balance} />
         ))}
       </div>
     </div>
@@ -84,7 +87,6 @@ const Summon: React.FC = () => {
 const Page: React.FC = () => {
   const { memeNftBalances } = useMintNft();
 
-  console.log(memeNftBalances, 'memeNftBalances');
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center pb-[200px]'>
       <div className='mx-auto max-w-[1200px]'>
