@@ -165,6 +165,7 @@ export default function Merge() {
     if (!address) return;
 
     const tokenIds = selectedTags.map((tag) => tag.tokenId);
+    console.log('tokenIds', tokenIds);
     try {
       setLoading(true);
       const tx: WriteContractParameters = {

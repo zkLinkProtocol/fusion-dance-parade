@@ -140,12 +140,6 @@ const Summon: React.FC = () => {
               <img loading='lazy' src='' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge />
-            <div className='mt-5 flex gap-5 self-start'>
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-              <img loading='lazy' srcSet='...' className='aspect-[0.93] w-[72px] shrink-0' alt='' />
-            </div>
             <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
               Summon Now
             </div>
