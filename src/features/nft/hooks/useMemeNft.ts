@@ -28,7 +28,7 @@ export type NovaNft = {
   type: number;
 };
 
-const useNovaNftMinting = () => {
+const useMemeNft = () => {
   const publicClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { data: walletClient } = useWalletClient();
   const [novaNft, setNovaNft] = useState<NovaNft>();
@@ -211,7 +211,7 @@ const useNovaNftMinting = () => {
       const tokenId = await getComposeTokenIdByIndex(address);
       const tokenURI = await getComposeTokenURIByTokenId(tokenId);
       const balance = await getMemeComposeNftBalance(address);
-      const nft = await fetchMetadataByURI(tokenURI);
+      const nft = await fetchMetadataByURI(tokenURI, tokenId.toString());
       const composeNftInfo = { tokenId, balance, info: nft };
       setComposeNftInfo(composeNftInfo);
     } catch (error) {
@@ -354,4 +354,4 @@ const useNovaNftMinting = () => {
   };
 };
 
-export default useNovaNftMinting;
+export default useMemeNft;

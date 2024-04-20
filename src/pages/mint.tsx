@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
 import { checkMintEligibility } from 'constants/api';
-import useMintNft from 'features/nft/hooks/useMintNft';
+import useMintNft from 'features/nft/hooks/useMemeNft';
 import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { useEffect } from 'react';
@@ -9,6 +9,7 @@ import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 import { Button } from 'components/ui/buttons/button';
 import Bridge from 'components/bridge';
+import Mint from 'components/mint-view';
 interface MemeAxisNftItemProps {
   data: any;
 }
@@ -68,6 +69,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 Deposit 1 FOXY into Nova Network and mint your NOVA Linea Foxy.
               </div>
               <Bridge />
+              <Mint />
               {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>
