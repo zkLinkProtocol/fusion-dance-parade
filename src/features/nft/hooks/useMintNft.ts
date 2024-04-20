@@ -144,13 +144,21 @@ const useNovaNftMinting = () => {
         const test_intro = [
           { chain: 'Base', coin: 'Omni' },
           { chain: 'Linea', coin: 'Foxy' },
-          { chain: 'Base', coin: 'Degen' },
-          { chain: 'Base', coin: 'Brett' },
+          // { chain: 'Base', coin: 'Degen' },
+          // { chain: 'Base', coin: 'Brett' },
           { chain: 'ZkSync', coin: 'Meow' },
           { chain: 'Arbitrum', coin: 'AIdoge' },
           { chain: 'Arbitrum', coin: 'Omni' },
         ];
+        // Update the `eligible` property in the `tokenMap` based on `test_intro`
+        Object.keys(tokenMap).forEach((key) => {
+          const token = tokenMap[key];
+          token.eligible = test_intro.some((obj) => token.name.includes(obj.coin));
+        });
+
+        console.log(tokenMap, tokenMap[tokenId].eligible, 'tokenMap-omg');
         return {
+          isEligible: tokenMap[tokenId].eligible,
           tokenId,
           balance,
           hasMint,
