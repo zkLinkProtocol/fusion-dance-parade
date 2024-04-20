@@ -25,7 +25,6 @@ export type NovaNft = {
   name: string;
   description: string;
   image: string;
-  type: number;
 };
 
 const useNovaNftMinting = () => {
@@ -86,7 +85,7 @@ const useNovaNftMinting = () => {
     return tokenURI as string;
   }, []);
 
-  const fetchMetadataByURI = async (uri: string, tokenId: string) => {
+  const fetchMetadataByURI = async (uri: string) => {
     if (uri.startsWith('ipfs://')) {
       uri = uri.substring(7);
     }
@@ -96,7 +95,6 @@ const useNovaNftMinting = () => {
       name: json.name,
       description: json.description,
       image: `https://ipfs.io/ipfs/${json.image.substring(7)}`,
-      type: Number(tokenId),
     };
     console.log('Metadata:', result);
     return result;
@@ -113,60 +111,13 @@ const useNovaNftMinting = () => {
     return balance;
   };
 
-  const getMintRecordByTokenId = async (address: string, tokenId: string) => {
-    const balance = await readContract(config, {
-      abi: NovaMeMeAxisNft,
-      address: MEME_NFT_CONTRACT as `0x${string}`,
-      functionName: 'mintRecord',
-      args: [address, tokenId],
-      chainId: NOVA_CHAIN_ID,
-    });
-    return balance;
-  };
-
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
         const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
-        const hasMint = await getMintRecordByTokenId(address, tokenId);
-        const nft = await fetchMetadataByURI(tokenURI, tokenId);
-
-        const tokenMap = {
-          '1': { name: 'Linea-Foxy' },
-          '2': { name: 'Base-Degen' },
-          '3': { name: 'Base-Brett' },
-          '4': { name: 'Base-Omni' },
-          '5': { name: 'ZkSync-Meow' },
-          '6': { name: 'Arbitrum-AIdoge' },
-          '7': { name: 'Arbitrum-Omni' },
-        };
-        const test_intro = [
-          { chain: 'Base', coin: 'Omni' },
-          { chain: 'Linea', coin: 'Foxy' },
-          // { chain: 'Base', coin: 'Degen' },
-          // { chain: 'Base', coin: 'Brett' },
-          { chain: 'ZkSync', coin: 'Meow' },
-          { chain: 'Arbitrum', coin: 'AIdoge' },
-          { chain: 'Arbitrum', coin: 'Omni' },
-        ];
-        // Update the `eligible` property in the `tokenMap` based on `test_intro`
-        Object.keys(tokenMap).forEach((key) => {
-          const token = tokenMap[key];
-          token.eligible = test_intro.some((obj) => token.name.includes(obj.coin));
-        });
-
-        console.log(tokenMap, tokenMap[tokenId].eligible, 'tokenMap-omg');
-        return {
-          isEligible: tokenMap[tokenId].eligible,
-          tokenId,
-          balance,
-          hasMint,
-          name: nft.name,
-          description: nft.description,
-          image: nft.image,
-          type: nft.type,
-        };
+        const nft = await fetchMetadataByURI(tokenURI);
+        return { tokenId, balance, nft };
       }),
     );
     return balances;
@@ -226,7 +177,6 @@ const useNovaNftMinting = () => {
       setIsFetchingNfts(true);
       const tokenIds = ['1', '2', '3', '4', '5', '6', '7'];
       const balances = await getAddressBalancesForTokenIds(address, tokenIds);
-      console.log('Meme NFT balances:', balances);
       setMemeNftBalances(balances);
     } catch (error) {
       console.error('Error fetching Meme NFT balances:', error);
@@ -243,7 +193,7 @@ const useNovaNftMinting = () => {
         if (BigNumber.from(balance).eq(0)) {
           return;
         }
-        const tokenId = 4;
+        const tokenId = 4; // await getTokenIdByIndex(address)
         const tokenURI = await getTokenURIByTokenId(tokenId);
         const nft = await fetchMetadataByURI(tokenURI);
         setNovaNft(nft);

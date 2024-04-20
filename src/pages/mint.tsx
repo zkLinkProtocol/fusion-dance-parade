@@ -1,34 +1,20 @@
-import { checkMintEligibility } from 'constants/api';
 import useMintNft from 'features/nft/hooks/useMintNft';
-import { useEffect } from 'react';
-import { useAccount } from 'wagmi';
-import { cn } from 'lib/utils';
-import { Button } from 'components/ui/buttons/button';
 interface MemeAxisNftItemProps {
-  data: any;
+  nft: {
+    image: string;
+  };
+  balance: number;
 }
 
-//http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
-const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
-  const { type, balance, hasMint, isEligible } = item.data;
-  console.log(item, 'item');
+const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = ({ nft, balance }) => {
   return (
-    <div className='max-md:ml-0 max-md:w-full col-span-3 flex flex-col' key={item.type}>
+    <div className='max-md:ml-0 max-md:w-full col-span-3 flex flex-col'>
       <div className='max-md:mt-6 relative flex w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
         <div className='relative flex aspect-[0.93] w-full flex-col overflow-hidden pt-2.5'>
-          <img
-            src={`/assets/imgs/${type}.png`}
-            className={cn('absolute inset-0 object-cover', hasMint && 'opacity-20 cursor-not-allowed')}
-            alt=''
-          />
-          <div className='max-md:mr-2.5 relative h-10 w-10 items-center justify-center self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5'>
-            {balance?.toString()}
+          <img src={nft.image} className='size-full absolute inset-0 object-cover' alt='' />
+          <div className='relative mr-3 h-10 w-10 items-center justify-center self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5'>
+            {balance.toString()}
           </div>
-          {hasMint && 'Minted'}
-          {isEligible && 'Eligible to Mint'}
-          <Button className='absolute inset-0' disabled={!isEligible}>
-            Mint
-          </Button>
         </div>
       </div>
     </div>
@@ -45,170 +31,11 @@ interface MemeNftGridProps {
 }
 
 const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
-  const { address } = useAccount();
-
-  //mintRecord
-  const fetchRes = async (_address: string) => {
-    const res = await checkMintEligibility(_address);
-    console.log(res.result, 'eligibility-res');
-  };
-  // const test = [
-  //   {
-  //     chain: 'Base',
-  //     coin: 'Omni',
-  //   },
-  //   {
-  //     chain: 'Linea',
-  //     coin: 'Foxy',
-  //   },
-  //   {
-  //     chain: 'Base',
-  //     coin: 'Degen',
-  //   },
-  //   {
-  //     chain: 'Base',
-  //     coin: 'Brett',
-  //   },
-  //   {
-  //     chain: 'ZkSync',
-  //     coin: 'Meow',
-  //   },
-  //   {
-  //     chain: 'Arbitrum',
-  //     coin: 'AIdoge',
-  //   },
-  //   {
-  //     chain: 'Arbitrum',
-  //     coin: 'Omni',
-  //   },
-  // ];
-  // const test2 = [
-  //   {
-  //     balance: 0n,
-  //     tokenId: '1',
-  //     nft: {
-  //       name: 'Nova Booster Phase II - 50',
-  //       description: 'The zkLink Nova Booster Phase II NFT',
-  //       image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-  //       type: '1',
-  //     },
-  //   },
-  // ];
-
-  function assignTokenIds(memeNfts, objectArray) {
-    return objectArray.map((obj) => {
-      const matchingNft = memeNfts.find((nft) => nft.name === `${obj.chain}-${obj.coin}`);
-      if (matchingNft) {
-        return {
-          ...obj,
-          tokenId: matchingNft.tokenId,
-        };
-      }
-      return obj;
-    });
-  }
-
-  // Usage
-  const test_intro = [
-    { chain: 'Base', coin: 'Omni' },
-    { chain: 'Linea', coin: 'Foxy' },
-    { chain: 'Base', coin: 'Degen' },
-    { chain: 'Base', coin: 'Brett' },
-    { chain: 'ZkSync', coin: 'Meow' },
-    { chain: 'Arbitrum', coin: 'AIdoge' },
-    { chain: 'Arbitrum', coin: 'Omni' },
-  ];
-
-  // const shit = [
-  //   {
-  //     balance: 1n,
-  //     description: 'The zkLink Nova Booster Phase II NFT',
-  //     hasMint: true,
-  //     image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+1000.png',
-  //     name: 'Nova Booster Phase II - 1000',
-  //     tokenId: '7',
-  //     type: 7,
-  //   },
-  // ];
-
-  const memeNftBalances_intro = [
-    {
-      name: 'Linea-Foxy',
-      address: '0x5FBDF89403270a1846F5ae7D113A989F850d1566',
-      tokenId: '1',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Base-Degen',
-      address: '0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed',
-      tokenId: '2',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Base-Brett',
-      address: '0x532f27101965dd16442E59d40670FaF5eBB142E4',
-      tokenId: '3',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Base-Omni',
-      address: '0xC48E605c7b722a57277e087a6170B9E227e5AC0A',
-      tokenId: '4',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'ZkSync-Meow',
-      address: '0x79db8c67d0c33203da4Efb58F7D325E1e0d4d692',
-      tokenId: '5',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Arbitrum-AIdoge',
-      address: '0x09E18590E8f76b6Cf471b3cd75fE1A1a9D2B2c2b',
-      tokenId: '6',
-      balance: 0,
-      nft: null,
-    },
-    {
-      name: 'Arbitrum-Omni',
-      address: '0x9e20461bc2c4c980f62f1B279D71734207a6A356',
-      tokenId: '7',
-      balance: 0,
-      nft: null,
-    },
-  ];
-
-  const updatedTest = assignTokenIds(memeNftBalances_intro, test_intro);
-  console.log(updatedTest, 'updatedTest');
-
-  // const test5 = [
-  //   {
-  //     balance: 0n,
-  //     tokenId: '1',
-  //     nft: {
-  //       name: 'Nova Booster Phase II - 50',
-  //       description: 'The zkLink Nova Booster Phase II NFT',
-  //       image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-  //       type: '1',
-  //     },
-  //   },
-  // ];
-
-  //mintRecord
-
-  useEffect(() => {
-    if (address) fetchRes(address);
-  }, [address]);
   return (
     <div className='max-md:max-w-full relative mt-10 w-full'>
       <div className='max-md:flex-col max-md:gap-0 grid grid-cols-12 gap-5'>
         {memeNftBalances.map((item, index) => (
-          <MemeAxisNftItem key={index} data={item} />
+          <MemeAxisNftItem key={index} nft={item.nft} balance={item.balance} />
         ))}
       </div>
     </div>
@@ -257,6 +84,7 @@ const Summon: React.FC = () => {
 const Page: React.FC = () => {
   const { memeNftBalances } = useMintNft();
 
+  console.log(memeNftBalances, 'memeNftBalances');
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center pb-[200px]'>
       <div className='mx-auto max-w-[1200px]'>
