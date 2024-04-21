@@ -32,7 +32,7 @@ export const Toast = (props: Props) => {
     }
   };
   return (
-    <div className='flex w-[480px] max-w-[480px] flex-col items-start rounded-2xl bg-zinc-900 p-4 leading-8 tracking-widest'>
+    <div className='flex w-[480px] max-w-[480px] flex-col items-start rounded-2xl bg-[#1A1F24] p-4 leading-8 tracking-widest'>
       <div className='flex items-center gap-3 font-bold'>
         {renderIcon()}
         <div

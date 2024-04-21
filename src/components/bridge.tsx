@@ -21,6 +21,7 @@ import type { Token } from 'types/token';
 import { toast } from 'sonner';
 import { NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { config } from 'config/zklin-networks';
+import { Toast } from './ui/toast';
 
 const AssetTypes = [
   { label: 'ALL', value: 'ALL' },
@@ -70,7 +71,6 @@ export default function Bridge({ data }: { data: any }) {
   const isInvaidChain = useMemo(() => {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
-
 
   const [fromActive, setFromActive] = useState(0);
   const [tokenActive, setTokenActive] = useState(0);
@@ -407,6 +407,7 @@ export default function Bridge({ data }: { data: any }) {
           setFailMessage(e.message);
         } else if (e.message.includes('User rejected the request' || e.message.includes('OKX Wallet Reject'))) {
           setFailMessage('User rejected the request');
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('Internal JSON-RPC error ')) {
           setFailMessage('Internal JSON-RPC error. Please try again');
         } else {
@@ -453,7 +454,7 @@ export default function Bridge({ data }: { data: any }) {
       console.log(e);
       if (e.message) {
         if (e.message.includes('User rejected the request')) {
-          toast.error('User rejected the request');
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('You already have a character')) {
           toast.error('You can mint SBT only once.');
         } else {

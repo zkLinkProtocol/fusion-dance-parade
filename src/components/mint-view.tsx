@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { Button } from './ui/buttons/button';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
+import { Toast } from './ui/toast';
 const Mint = ({ data }: { data: any }) => {
   const { chain, coin } = data;
   const { address, chainId } = useAccount();
@@ -33,7 +34,8 @@ const Mint = ({ data }: { data: any }) => {
       console.log(e);
       if (e.message) {
         if (e.message.includes('User rejected the request')) {
-          toast.error('User rejected the request');
+          // toast.error('User rejected the request');
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('You already have a character')) {
           toast.error('You can mint SBT only once.');
         } else {
