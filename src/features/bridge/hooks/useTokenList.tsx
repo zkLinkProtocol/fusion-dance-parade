@@ -9,6 +9,7 @@ import FromList from 'constants/from-chain-list';
 import { findClosestMultiplier, formatBalance, isSameAddress } from 'utils/time';
 
 import { useBridgeNetworkStore } from './useBridgeNetwork';
+import { NOVA_CHAIN_ID } from 'constants/zklink-config';
 
 export type Token = {
   address: string;
@@ -94,17 +95,29 @@ export const useTokenBalanceList = () => {
             l2Address: item.l2Address,
           });
         }
-        // tokens.push({
-        //   ...token,
-        //   address: '0xE5af0d8e2A327e9486d44CFaE914D643d54b7529',
-        //   decimals: 18,
-        //   icon: 'zkt-icon',
-        //   multiplier: 2,
-        //   networkKey: 'primary',
-        //   networkName: 'Linea Goerli',
-        //   symbol: 'ZKT',
-        //   type: 'Native',
-        // })
+        //TODO: ADD REAL MEME TOKENS
+        tokens.push({
+          ...token,
+          address: '0xC0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
+          decimals: 18,
+          icon: 'omni-icon',
+          multiplier: 2,
+          networkKey: 'base-sepolia',
+          networkName: 'Base Sepolia Testnet',
+          symbol: 'OMNI',
+          type: 'MEME',
+        });
+        tokens.push({
+          ...token,
+          address: '0xG0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
+          decimals: 18,
+          icon: 'brett-icon',
+          multiplier: 2,
+          networkKey: 'base-sepolia',
+          networkName: 'Base Sepolia Testnet',
+          symbol: 'BRETT',
+          type: 'MEME',
+        });
         tokens.push({
           ...token,
           address: '0xE0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
@@ -114,13 +127,13 @@ export const useTokenBalanceList = () => {
           networkKey: 'sepolia',
           networkName: 'Ethereum Sepolia Testnet',
           symbol: 'ZKT',
-          type: 'Native',
+          type: 'MEME',
         });
       }
       // const filteredArray = tokens.filter(
       //   (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
       // );
-      const whitelist = ['ETH', 'ZKT'];
+      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI'];
 
       const filteredArray = tokens.filter(
         (item, index, self) =>
@@ -163,6 +176,40 @@ export const useTokenBalanceList = () => {
       // chainId
     }));
   }, [tokenSource, walletAddress, selectedChainId]);
+  const novaTestArray = [
+    {
+      address: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+      symbol: 'OMNI',
+      decimals: 18,
+      type: 'MEME',
+    },
+  ];
+  const nova_erc20Contracts = useMemo(() => {
+    return novaTestArray.map(({ address }) => ({
+      abi: IERC20.abi,
+      functionName: 'balanceOf',
+      address: address as `0x${string}`,
+      args: [walletAddress as `0x${string}`],
+      chainId: NOVA_CHAIN_ID,
+    }));
+  }, [novaTestArray, walletAddress, selectedChainId]);
+
+  const { data: nova_erc20Balances } = useReadContracts({
+    config: config,
+    contracts: nova_erc20Contracts,
+    query: {
+      queryClient: queryClient,
+      // refetchInterval: 5000, //not working
+      // select: (data) => data.map((item) => item.result),
+    },
+  });
+
+  const { data: nativeTokenBalanceTest } = useBalance({
+    config,
+    address: '0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a',
+    chainId: NOVA_CHAIN_ID,
+    token: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  });
 
   const { data: erc20Balances } = useReadContracts({
     config: config,
@@ -199,7 +246,7 @@ export const useTokenBalanceList = () => {
     return tokenList;
   }, [nativeTokenBalance, erc20Balances, from, tokenSource, networkKey]);
 
-  console.log('wowlist: ', tokenList);
+  console.log('nova_erc20Balances', tokenSource, nova_erc20Balances, nativeTokenBalanceTest);
 
   const refreshTokenBalanceList = () => {
     queryClient.invalidateQueries();

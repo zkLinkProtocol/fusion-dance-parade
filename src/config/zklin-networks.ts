@@ -565,7 +565,7 @@ export const chains: readonly [Chain, ...Chain[]] = (() => {
     case 'nexus-goerli':
       return [goerli, lineaTestnet, mantleTestnet, createEraChain(nexusGoerliNode[0]) as Chain];
     case 'nexus-sepolia':
-      return [sepolia, arbitrumSepolia, createEraChain(nexusSepoliaNode[0]) as Chain];
+      return [sepolia, arbitrumSepolia, baseSepolia, lineaSepolia, createEraChain(nexusSepoliaNode[0]) as Chain];
     default:
       return [
         mainnet,

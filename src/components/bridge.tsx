@@ -20,6 +20,7 @@ import useMemeNft from 'features/nft/hooks/useMemeNft';
 import type { Token } from 'types/token';
 import { toast } from 'sonner';
 import { NOVA_CHAIN_ID } from 'constants/zklink-config';
+import { config } from 'config/zklin-networks';
 
 const AssetTypes = [
   { label: 'ALL', value: 'ALL' },
@@ -58,17 +59,19 @@ export default function Bridge({ data }: { data: any }) {
   const { isConnected, address, chainId } = useAccount();
   const [failMessage, setFailMessage] = useState('');
   // const chainId = useChainId();
-  const { switchChainAsync } = useSwitchChain();
+  // const { switchChainAsync } = useSwitchChain();
   const { sendDepositTx, loading } = useBridgeTx();
-  const [amount, setAmount] = useState('0.01');
+  const [amount, setAmount] = useState('0.001');
 
   const [url, setUrl] = useState('');
-  const { chain, coin } = data;
-  const { switchChain } = useSwitchChain();
+  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance } = data;
+  const { switchChain, switchChainAsync } = useSwitchChain();
   const { mintNovaNft, isMinting } = useMemeNft();
   const isInvaidChain = useMemo(() => {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
+
+  console.log(hasMemeTokenBalance, 'hasMemeTokenBalance');
 
   const [fromActive, setFromActive] = useState(0);
   const [tokenActive, setTokenActive] = useState(0);
@@ -310,7 +313,14 @@ export default function Bridge({ data }: { data: any }) {
     return 'Deposit to Mint';
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20]);
 
-  console.log(amount, tokenFiltered[tokenActive], tokenFiltered[tokenActive]?.formatedBalance, 'status-check');
+  console.log(
+    tokenBalance,
+    // amount && tokenFiltered[tokenActive] && tokenFiltered[tokenActive].formatedBalance,
+    // amount,
+    // tokenFiltered[tokenActive],
+    // tokenFiltered[tokenActive]?.formatedBalance,
+    'status-check',
+  );
 
   const handleInputValue = (v: string) => {
     if (!v) {
@@ -324,8 +334,78 @@ export default function Bridge({ data }: { data: any }) {
     setSwitchChainError('');
   }, [fromActive]);
 
+  useEffect(() => {
+    if (selectedChainId) {
+      setFromActive(fromList.findIndex((item) => item.chainId === selectedChainId));
+    }
+  }, [fromActive, selectedChainId, fromList]);
+
+  //const selectedToken = tokenFiltered.filter((item) => item.symbol === coin?.toUpperCase());
+
+  useEffect(() => {
+    if (coin) {
+      const index = tokenFiltered.findIndex((item) => item.symbol === coin.toUpperCase());
+      console.log(tokenFiltered, coin, index, 'index');
+      if (index > -1) {
+        setTokenActive(index);
+      }
+    }
+  }, [coin, tokenFiltered]);
+
   const handleAction = useCallback(async () => {
     //TODO: add custom chain selection & token selection
+    // const selectedNetwork = fromList.filter((item) => item.chainId === selectedChainId);
+    // const selectedToken = tokenFiltered.filter((item) => item.symbol === coin?.toUpperCase());
+    // const selectedToken = tokenFiltered.filter((item) => item.networkKey === );
+    console.log(tokenFiltered[tokenActive], fromList[fromActive], 'from-chain');
+    // handleFrom(0);
+    if (!address || !nativeTokenBalance || !fromList[fromActive].chainId) return;
+    if (invalidChain) {
+      try {
+        setSwitchLoading(true);
+        await switchChainAsync({ chainId: fromList[fromActive].chainId });
+        setSwitchChainError('');
+        return;
+      } catch (e: any) {
+        console.log(e);
+        if (e.message && e.message.includes('the method now not support')) {
+          // imported wallet in binance not support some chain
+          setSwitchChainError(
+            `The Binance Web3 wallet may not be support ${fromList[fromActive].chainName} if you're using an imported wallet.`,
+          );
+          return;
+        }
+        setSwitchChainError('Switch network failed. Please refresh page and try again.');
+      } finally {
+        setSwitchLoading(false);
+      }
+      return;
+    }
+    if (!amount) {
+      return;
+    }
+
+    refreshTokenBalanceList();
+  }, [
+    address,
+    nativeTokenBalance,
+    invalidChain,
+    amount,
+    refreshTokenBalanceList,
+    switchChainAsync,
+    fromActive,
+    sendDepositTx,
+    tokenFiltered,
+    tokenActive,
+    isMergeSelected,
+    addTxHash,
+    networkKey,
+  ]);
+
+  const handleAction_bp = useCallback(async () => {
+    //TODO: add custom chain selection & token selection
+    const selectedNetwork = fromList.filter((item) => item.chainId === selectedChainId);
+    console.log(fromList, selectedNetwork, selectedChainId, fromActive, 'from-chain');
     handleFrom(0);
     if (!address || !nativeTokenBalance) return;
     if (invalidChain) {
@@ -382,9 +462,6 @@ export default function Bridge({ data }: { data: any }) {
       //   transSuccModal.onClose();
       // }, 5000);
     } catch (e: any) {
-      // transLoadModal.onClose()
-      // dispatch(setDepositStatus(""));
-
       if (e.message) {
         if (e.message.includes('Insufficient Gas Token Balance')) {
           setFailMessage(e.message);
@@ -396,11 +473,6 @@ export default function Bridge({ data }: { data: any }) {
           setFailMessage(e.message);
         }
       }
-
-      // transFailModal.onOpen();
-      // setTimeout(() => {
-      //   transFailModal.onClose();
-      // }, 10000);
       return;
     }
 
@@ -463,34 +535,34 @@ export default function Bridge({ data }: { data: any }) {
       <>
         {isConnected ? (
           <>
-            <Button
-              className='backButton cursor-pointer'
-              style={{ display: 'flex', alignItems: 'center' }}
-              size='lg'
-              onClick={handleAction}
-              loading={loading}
-              disabled={actionBtnDisabled}
-            >
-              {btnText}
-            </Button>
+            {hasMemeTokenBalance ? (
+              <Button onClick={handleMint} loading={isMinting} className='backButton cursor-pointer'>
+                <span>{isInvaidChain ? 'Switch to Nova network' : 'Mint'}</span>
+              </Button>
+            ) : (
+              <Button
+                className='backButton cursor-pointer'
+                style={{ display: 'flex', alignItems: 'center' }}
+                size='lg'
+                onClick={handleAction}
+                loading={loading}
+                // disabled={actionBtnDisabled}
+              >
+                {btnText}
+              </Button>
+            )}
           </>
         ) : (
           <Button className='backButton cursor-pointer' size='lg' color='primary' onClick={() => openConnectModal?.()}>
             Connect Wallet
           </Button>
         )}
-        {unsupportedChainWithConnector && (
+        {/* {unsupportedChainWithConnector && (
           <p className='mt-4 text-[14px] text-[#C57D10]'>{unsupportedChainWithConnector}</p>
-        )}
-
-        <Button
-          onClick={handleMint}
-          loading={isMinting}
-          className='gradient-btn flex h-[58px] w-full items-center justify-center gap-[0.38rem] py-4 text-[1.25rem]  '
-        >
-          <span>{isInvaidChain ? 'Switch to Nova network to mint' : 'Mint Now'}</span>
-        </Button>
+        )} */}
       </>
     </>
   );
 }
+
+
