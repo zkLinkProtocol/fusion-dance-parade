@@ -109,6 +109,17 @@ export const useTokenBalanceList = () => {
         });
         tokens.push({
           ...token,
+          address: '0xM0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
+          decimals: 18,
+          icon: 'meow-icon',
+          multiplier: 2,
+          networkKey: 'zksync-sepolia',
+          networkName: 'Zksync Sepolia Testnet',
+          symbol: 'MEOW',
+          type: 'MEME',
+        });
+        tokens.push({
+          ...token,
           address: '0xG0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
           decimals: 18,
           icon: 'brett-icon',
@@ -133,7 +144,7 @@ export const useTokenBalanceList = () => {
       // const filteredArray = tokens.filter(
       //   (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
       // );
-      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI'];
+      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW'];
 
       const filteredArray = tokens.filter(
         (item, index, self) =>

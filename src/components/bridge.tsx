@@ -71,7 +71,6 @@ export default function Bridge({ data }: { data: any }) {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
 
-  console.log(hasMemeTokenBalance, 'hasMemeTokenBalance');
 
   const [fromActive, setFromActive] = useState(0);
   const [tokenActive, setTokenActive] = useState(0);
@@ -313,15 +312,6 @@ export default function Bridge({ data }: { data: any }) {
     return 'Deposit to Mint';
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20]);
 
-  console.log(
-    tokenBalance,
-    // amount && tokenFiltered[tokenActive] && tokenFiltered[tokenActive].formatedBalance,
-    // amount,
-    // tokenFiltered[tokenActive],
-    // tokenFiltered[tokenActive]?.formatedBalance,
-    'status-check',
-  );
-
   const handleInputValue = (v: string) => {
     if (!v) {
       setAmount(v);
@@ -336,9 +326,12 @@ export default function Bridge({ data }: { data: any }) {
 
   useEffect(() => {
     if (selectedChainId) {
+      // const filterdIndex = fromList.findIndex((item) => item.chainId === selectedChainId);
       setFromActive(fromList.findIndex((item) => item.chainId === selectedChainId));
+      // console.log(fromList[filterdIndex]?.networkKey, selectedChainId, 'networkKey-test');
+      // setNetworkKey(fromList[filterdIndex]?.networkKey);
     }
-  }, [fromActive, selectedChainId, fromList]);
+  }, [fromActive, selectedChainId, fromList, chain]);
 
   //const selectedToken = tokenFiltered.filter((item) => item.symbol === coin?.toUpperCase());
 
@@ -358,6 +351,7 @@ export default function Bridge({ data }: { data: any }) {
       try {
         setSwitchLoading(true);
         await switchChainAsync({ chainId: fromList[fromActive].chainId });
+        setNetworkKey(fromList[fromActive]?.networkKey);
         setSwitchChainError('');
         return;
       } catch (e: any) {
@@ -439,7 +433,6 @@ export default function Bridge({ data }: { data: any }) {
     networkKey,
   ]);
 
-
   const handleMint = useCallback(async () => {
     if (!address) return;
     if (isInvaidChain) {
@@ -475,6 +468,7 @@ export default function Bridge({ data }: { data: any }) {
   //TODO: deposit-> check meme user balance & gas balance -> mint
   //TODO: chain token list
 
+  console.log(fromList, fromActive, networkKey, 'networkKey-test');
   return (
     <>
       <>

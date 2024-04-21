@@ -11,7 +11,7 @@ import {
   optimism,
   zkSync,
 } from '@wagmi/core/chains';
-import { arbitrumSepolia, baseSepolia, blast, lineaSepolia, sepolia } from 'viem/chains';
+import { arbitrumSepolia, baseSepolia, blast, lineaSepolia, sepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 
 import {
   arbitrumIcon,
@@ -305,6 +305,16 @@ const FromListSepolia = [
     chainName: 'Linea Sepolia',
     explorerUrl: lineaSepolia.blockExplorers.default.url,
     rpcUrl: lineaSepolia.rpcUrls.default.http[0],
+  },
+  {
+    label: 'Zksync Sepolia Testnet',
+    icon: zkscyncIcon,
+    chainId: zkSyncSepoliaTestnet.id,
+    networkKey: 'zksync-sepolia',
+    isEthGasToken: true,
+    chainName: 'Zksync Sepolia',
+    explorerUrl: zkSyncSepoliaTestnet.blockExplorers.default.url,
+    rpcUrl: zkSyncSepoliaTestnet.rpcUrls.default.http[0],
   },
 ];
 
