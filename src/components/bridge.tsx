@@ -1,5 +1,3 @@
-import { Tab } from '@headlessui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import BigNumber from 'bignumber.js';
 import { getDepositETHThreshold } from 'constants/api';
@@ -18,7 +16,11 @@ import { useAccount, useSwitchChain } from 'wagmi';
 import { useConnections } from 'wagmi';
 import { ETH_ADDRESS } from 'zksync-web3/build/src/utils';
 import { Button } from './ui/buttons/button';
+import useMemeNft from 'features/nft/hooks/useMemeNft';
 import type { Token } from 'types/token';
+import { toast } from 'sonner';
+import { NOVA_CHAIN_ID } from 'constants/zklink-config';
+
 const AssetTypes = [
   { label: 'ALL', value: 'ALL' },
   {
@@ -51,16 +53,9 @@ export interface IBridgeComponentProps {
   bridgeToken?: string;
 }
 
-export default function Bridge(props: IBridgeComponentProps) {
-  const { onClose, bridgeToken } = props;
+export default function Bridge({ data }: { data: any }) {
   const { openConnectModal } = useConnectModal();
-
   const { isConnected, address, chainId } = useAccount();
-  // const fromModal = useDisclosure();
-  // const tokenModal = useDisclosure();
-  // const transLoadModal = useDisclosure();
-  // const transSuccModal = useDisclosure();
-  // const transFailModal = useDisclosure();
   const [failMessage, setFailMessage] = useState('');
   // const chainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
@@ -68,12 +63,12 @@ export default function Bridge(props: IBridgeComponentProps) {
   const [amount, setAmount] = useState('0.01');
 
   const [url, setUrl] = useState('');
-  // const { isActiveUser } = useSelector((store: RootState) => store.airdrop)
-  const isActiveUser = false;
-
-  const isFirstDeposit = useMemo(() => {
-    return !isActiveUser;
-  }, [isActiveUser]);
+  const { chain, coin } = data;
+  const { switchChain } = useSwitchChain();
+  const { mintNovaNft, isMinting } = useMemeNft();
+  const isInvaidChain = useMemo(() => {
+    return chainId !== NOVA_CHAIN_ID;
+  }, [chainId]);
 
   const [fromActive, setFromActive] = useState(0);
   const [tokenActive, setTokenActive] = useState(0);
@@ -181,6 +176,8 @@ export default function Bridge(props: IBridgeComponentProps) {
       const ezEthItem = arr.splice(ezEthIndex, 1);
       arr.splice(4, 0, ezEthItem[0]);
 
+      console.log(tokenList, 'all token list');
+
       setTokenFiltered(arr);
     } else {
       const tokens = tokenList.filter((item) => item.type?.toUpperCase() === category.toUpperCase());
@@ -208,48 +205,48 @@ export default function Bridge(props: IBridgeComponentProps) {
     return '';
   }, [tokenActive, tokenFiltered, amount, mergeLimitExceeds]);
 
-  useEffect(() => {
-    if (bridgeToken && !bridgeTokenInited) {
-      const token = tokenList.find((item) =>
-        bridgeToken.indexOf('0x') > -1 ? isSameAddress(item.address, bridgeToken) : item.symbol === bridgeToken,
-      );
-      if (token) {
-        const _tokenList = tokenList.filter((item) => item.networkKey === token.networkKey);
-        let index = 0;
-        let fromIndex = fromList.findIndex((item) => item.networkKey === token.networkKey);
-        if (fromIndex < 0) {
-          fromIndex = 0;
-        }
-        const from = fromList[fromIndex];
-        if (token.address !== ETH_ADDRESS) {
-          index = _tokenList.findIndex((item) => item.address === token.address);
-          setTokenActive(index);
-        }
-        setFromActive(fromIndex);
-        setNetworkKey(from.networkKey);
-      } else {
-        setFromActive(0);
-        setTokenActive(0);
-        setNetworkKey(fromList[0].networkKey);
-      }
-      if (tokenList.length > 1) {
-        setBridgeTokenInited(true);
-      }
-    } else {
-      const network = localStorage.getItem(STORAGE_NETWORK_KEY);
-      if (network) {
-        setNetworkKey(network);
-        if (fromList[0].networkKey !== network) {
-          const index = fromList.findIndex((item) => item.networkKey === network);
-          if (index > -1) {
-            setFromActive(index);
-          }
-        }
-      } else if (!network) {
-        setNetworkKey(fromList[0].networkKey);
-      }
-    }
-  }, [setNetworkKey, isFirstDeposit, bridgeToken, tokenList, bridgeTokenInited]);
+  // useEffect(() => {
+  //   if (bridgeToken && !bridgeTokenInited) {
+  //     const token = tokenList.find((item) =>
+  //       bridgeToken.indexOf('0x') > -1 ? isSameAddress(item.address, bridgeToken) : item.symbol === bridgeToken,
+  //     );
+  //     if (token) {
+  //       const _tokenList = tokenList.filter((item) => item.networkKey === token.networkKey);
+  //       let index = 0;
+  //       let fromIndex = fromList.findIndex((item) => item.networkKey === token.networkKey);
+  //       if (fromIndex < 0) {
+  //         fromIndex = 0;
+  //       }
+  //       const from = fromList[fromIndex];
+  //       if (token.address !== ETH_ADDRESS) {
+  //         index = _tokenList.findIndex((item) => item.address === token.address);
+  //         setTokenActive(index);
+  //       }
+  //       setFromActive(fromIndex);
+  //       setNetworkKey(from.networkKey);
+  //     } else {
+  //       setFromActive(0);
+  //       setTokenActive(0);
+  //       setNetworkKey(fromList[0].networkKey);
+  //     }
+  //     if (tokenList.length > 1) {
+  //       setBridgeTokenInited(true);
+  //     }
+  //   } else {
+  //     const network = localStorage.getItem(STORAGE_NETWORK_KEY);
+  //     if (network) {
+  //       setNetworkKey(network);
+  //       if (fromList[0].networkKey !== network) {
+  //         const index = fromList.findIndex((item) => item.networkKey === network);
+  //         if (index > -1) {
+  //           setFromActive(index);
+  //         }
+  //       }
+  //     } else if (!network) {
+  //       setNetworkKey(fromList[0].networkKey);
+  //     }
+  //   }
+  // }, [setNetworkKey, isFirstDeposit, bridgeToken, tokenList, bridgeTokenInited]);
 
   const handleFrom = (index: number) => {
     setFromActive(index);
@@ -408,16 +405,12 @@ export default function Bridge(props: IBridgeComponentProps) {
     }
 
     refreshTokenBalanceList();
-
-    onClose?.();
   }, [
     address,
     nativeTokenBalance,
     invalidChain,
     amount,
-    // transLoadModal,
     refreshTokenBalanceList,
-    onClose,
     switchChainAsync,
     fromActive,
     sendDepositTx,
@@ -425,12 +418,45 @@ export default function Bridge(props: IBridgeComponentProps) {
     tokenActive,
     isMergeSelected,
     addTxHash,
-    // transSuccModal,
     networkKey,
-    // transFailModal,
   ]);
 
   console.log(tokenFiltered, fromList, 'fromList');
+
+  const handleMint = useCallback(async () => {
+    if (!address) return;
+    if (isInvaidChain) {
+      switchChain(
+        { chainId: NOVA_CHAIN_ID },
+        {
+          onError: (e) => {
+            console.log(e);
+          },
+        },
+      );
+      return;
+    }
+    try {
+      await mintNovaNft(address, chain, coin);
+      toast.success('Successfully minted SBT!');
+    } catch (e: any) {
+      console.log(e);
+      if (e.message) {
+        if (e.message.includes('User rejected the request')) {
+          toast.error('User rejected the request');
+        } else if (e.message.includes('You already have a character')) {
+          toast.error('You can mint SBT only once.');
+        } else {
+          toast.error(e.message);
+        }
+      } else {
+        toast.error('Mint SBT failed');
+      }
+    }
+  }, [address, isInvaidChain, switchChain, mintNovaNft]);
+
+  //TODO: deposit-> check meme user balance & gas balance -> mint
+  //TODO: chain token list
 
   return (
     <>
@@ -456,163 +482,15 @@ export default function Bridge(props: IBridgeComponentProps) {
         {unsupportedChainWithConnector && (
           <p className='mt-4 text-[14px] text-[#C57D10]'>{unsupportedChainWithConnector}</p>
         )}
+
+        <Button
+          onClick={handleMint}
+          loading={isMinting}
+          className='gradient-btn flex h-[58px] w-full items-center justify-center gap-[0.38rem] py-4 text-[1.25rem]  '
+        >
+          <span>{isInvaidChain ? 'Switch to Nova network to mint' : 'Mint Now'}</span>
+        </Button>
       </>
-      {/* <Modal
-        classNames={{ closeButton: 'text-[1.5rem]' }}
-        style={{ minHeight: '600px', backgroundColor: 'rgb(38, 43, 51)' }}
-        size='2xl'
-        isOpen={fromModal.isOpen}
-        onOpenChange={fromModal.onOpenChange}
-        scrollBehavior='inside'
-      >
-        <ModalContent className='mb-[3.75rem]'>
-          <ModalHeader className='flex flex-col gap-1 text-[1.25rem] md:text-3xl'>From</ModalHeader>
-          <ModalBody className='pb-8'>
-            {fromList.map((item, index) => (
-              <div
-                className='flex cursor-pointer items-center justify-between p-4'
-                key={index}
-                onClick={() => handleFrom(index)}
-              >
-                <div className='flex items-center'>
-                  <Avatar src={item.icon} className='h-8 w-8 md:h-12 md:w-12' />
-                  <span className='ml-4 text-xl'>{item.label}</span>
-                </div>
-              </div>
-            ))}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-      <Modal
-        classNames={{ closeButton: 'text-[1.5rem]' }}
-        style={{ minHeight: '600px', backgroundColor: 'rgb(38, 43, 51)' }}
-        size='2xl'
-        isOpen={tokenModal.isOpen}
-        onOpenChange={tokenModal.onOpenChange}
-      >
-        <ModalContent className='mb-[3.75rem]'>
-          <ModalHeader className='flex flex-col gap-1 text-[1.25rem] md:text-3xl'>Choose Token</ModalHeader>
-          <ModalBody className='pb-8'>
-            <p>Category</p>
-            <Tabs
-              aria-label='Options'
-              classNames={{ tabList: 'w-full', tab: 'w-auto' }}
-              selectedKey={category}
-              onSelectionChange={(key: React.Key) => setCategory(key as string)}
-            >
-              {AssetTypes.map((item) => (
-                <Tab key={item.value} title={item.label}></Tab>
-              ))}
-            </Tabs>
-            <div className='h-[370px] overflow-scroll md:h-[500px]'>
-              {tokenFiltered.map((item, index) => (
-                <div
-                  className='flex cursor-pointer items-center justify-between p-4'
-                  key={index}
-                  onClick={() => handeToken(index)}
-                >
-                  <div className='flex items-center'>
-                    <Avatar src={item?.icon} className='h-12 w-12' />
-                    <div className='ml-4 text-xl '>
-                      <span>{item?.symbol}</span>
-                    </div>
-                  </div>
-
-                  <span className='text-base'>{item?.formatedBalance}</span>
-                </div>
-              ))}
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <Modal
-        classNames={{ closeButton: 'text-[1.5rem]' }}
-        style={{ minHeight: '300px', backgroundColor: 'rgb(38, 43, 51)' }}
-        size='xl'
-        isOpen={transLoadModal.isOpen}
-        onOpenChange={transLoadModal.onOpenChange}
-        className='trans'
-      >
-        <ModalContent className='mb-[3.75rem]'>
-          <ModalBody className='pb-8'>
-            <>
-              <Button className='statusBut' size='lg' loading={loading} disabled={actionBtnDisabled}></Button>
-              <div className='title'>{!isDepositErc20 ? 'Depositing' : 'Sending Transaction'}</div>
-              <div className='inner'>
-                <p>Please sign the transaction in your wallet.</p>
-                <p className='mt-2'>
-                  If the transaction doesn't show up in your wallet after a minute or if the deposit keeps pending,
-                  please refresh the page and try again.
-                </p>
-              </div>
-            </>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <Modal
-        classNames={{ closeButton: 'text-[1.5rem]' }}
-        style={{ minHeight: '300px', backgroundColor: 'rgb(38, 43, 51)' }}
-        size='xl'
-        isOpen={transSuccModal.isOpen}
-        onOpenChange={transSuccModal.onOpenChange}
-        className='trans'
-      >
-        <ModalContent className='mb-[3.75rem]'>
-          <ModalBody className='pb-8'>
-            <>
-              <img src='/img/transSuccess.png' alt='' className='statusImg' />
-              <div className='title'>Transaction Submitted</div>
-              <div className='inner'>Please allow a few minutes for your deposit to be confirmed on zkLink Nova.</div>
-              <a href={url} target='_blank' className='view' onClick={transSuccModal.onClose}>
-                View in explorer
-              </a>
-            </>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <Modal
-        classNames={{ closeButton: 'text-[1.5rem]' }}
-        style={{ minHeight: '300px', backgroundColor: 'rgb(38, 43, 51)' }}
-        size='xl'
-        isOpen={transFailModal.isOpen}
-        onOpenChange={transFailModal.onOpenChange}
-      >
-        <ModalContent className='mb-[3.75rem]'>
-          <ModalBody className='pb-8'>
-            <>
-              <img src='/img/transFail.png' alt='' className='statusImg' />
-              <div className='title'>Transaction Failed</div>
-              <div className='title'>
-                {failMessage.toLowerCase().includes('missing or invalid parameters')
-                  ? 'User rejected signature'
-                  : failMessage}
-              </div>
-              {failMessage.includes('Insufficient Gas Token Balance') && (
-                <p className='inner'>
-                  If you do have enough gas tokens in your wallet, you could try using a
-                  <a href='https://chainlist.org/' target='_blank' className='view inline'>
-                    VPN
-                  </a>
-                  or switching to a different RPC in your wallet.
-                </p>
-              )}
-              <div className='inner'>
-                If you have any questions regarding this transaction, please{' '}
-                <a
-                  href='https://discord.com/invite/zklink'
-                  target='_blank'
-                  className='view inline'
-                  onClick={transFailModal.onClose}
-                >
-                  contact us
-                </a>
-                for help
-              </div>
-            </>
-          </ModalBody>
-        </ModalContent>
-      </Modal> */}
     </>
   );
 }

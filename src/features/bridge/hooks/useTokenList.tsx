@@ -117,8 +117,14 @@ export const useTokenBalanceList = () => {
           type: 'Native',
         });
       }
+      // const filteredArray = tokens.filter(
+      //   (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
+      // );
+      const whitelist = ['ETH', 'ZKT'];
+
       const filteredArray = tokens.filter(
-        (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
+        (item, index, self) =>
+          whitelist.includes(item.symbol) && index === self.findIndex((t) => t.symbol === item.symbol),
       );
       setTokenSource(filteredArray);
     })();
@@ -177,7 +183,6 @@ export const useTokenBalanceList = () => {
       balance: erc20BalancesValue?.[index],
       formatedBalance: formatBalance(erc20BalancesValue?.[index] ?? 0n, token.decimals),
     }));
-    console.log('tokenList-omg', tokenSource, tokenList);
     const native = {
       ...nativeToken,
       networkKey: networkKey ?? FromList[0].networkKey,
@@ -193,6 +198,8 @@ export const useTokenBalanceList = () => {
     tokenList.unshift(native);
     return tokenList;
   }, [nativeTokenBalance, erc20Balances, from, tokenSource, networkKey]);
+
+  console.log('wowlist: ', tokenList);
 
   const refreshTokenBalanceList = () => {
     queryClient.invalidateQueries();
