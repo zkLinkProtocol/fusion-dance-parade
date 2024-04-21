@@ -345,7 +345,6 @@ export default function Bridge({ data }: { data: any }) {
   useEffect(() => {
     if (coin) {
       const index = tokenFiltered.findIndex((item) => item.symbol === coin.toUpperCase());
-      console.log(tokenFiltered, coin, index, 'index');
       if (index > -1) {
         setTokenActive(index);
       }
@@ -353,61 +352,8 @@ export default function Bridge({ data }: { data: any }) {
   }, [coin, tokenFiltered]);
 
   const handleAction = useCallback(async () => {
-    //TODO: add custom chain selection & token selection
-    // const selectedNetwork = fromList.filter((item) => item.chainId === selectedChainId);
-    // const selectedToken = tokenFiltered.filter((item) => item.symbol === coin?.toUpperCase());
-    // const selectedToken = tokenFiltered.filter((item) => item.networkKey === );
-    console.log(tokenFiltered[tokenActive], fromList[fromActive], 'from-chain');
-    // handleFrom(0);
-    if (!address || !nativeTokenBalance || !fromList[fromActive].chainId) return;
-    if (invalidChain) {
-      try {
-        setSwitchLoading(true);
-        await switchChainAsync({ chainId: fromList[fromActive].chainId });
-        setSwitchChainError('');
-        return;
-      } catch (e: any) {
-        console.log(e);
-        if (e.message && e.message.includes('the method now not support')) {
-          // imported wallet in binance not support some chain
-          setSwitchChainError(
-            `The Binance Web3 wallet may not be support ${fromList[fromActive].chainName} if you're using an imported wallet.`,
-          );
-          return;
-        }
-        setSwitchChainError('Switch network failed. Please refresh page and try again.');
-      } finally {
-        setSwitchLoading(false);
-      }
-      return;
-    }
-    if (!amount) {
-      return;
-    }
-
-    refreshTokenBalanceList();
-  }, [
-    address,
-    nativeTokenBalance,
-    invalidChain,
-    amount,
-    refreshTokenBalanceList,
-    switchChainAsync,
-    fromActive,
-    sendDepositTx,
-    tokenFiltered,
-    tokenActive,
-    isMergeSelected,
-    addTxHash,
-    networkKey,
-  ]);
-
-  const handleAction_bp = useCallback(async () => {
-    //TODO: add custom chain selection & token selection
-    const selectedNetwork = fromList.filter((item) => item.chainId === selectedChainId);
-    console.log(fromList, selectedNetwork, selectedChainId, fromActive, 'from-chain');
-    handleFrom(0);
-    if (!address || !nativeTokenBalance) return;
+    // TODO: remove || !nativeTokenBalance first, add button to notfiy user about their balance
+    if (!address || !fromList[fromActive].chainId) return;
     if (invalidChain) {
       try {
         setSwitchLoading(true);
@@ -493,7 +439,6 @@ export default function Bridge({ data }: { data: any }) {
     networkKey,
   ]);
 
-  console.log(tokenFiltered, fromList, 'fromList');
 
   const handleMint = useCallback(async () => {
     if (!address) return;
