@@ -11,13 +11,14 @@ import {
   optimism,
   zkSync,
 } from '@wagmi/core/chains';
-import { blast, sepolia } from 'viem/chains';
+import { arbitrumSepolia, baseSepolia, blast, lineaSepolia, sepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 
 import {
   arbitrumIcon,
   baseIcon,
   blastIcon,
   ethereumIcon,
+  lineaIcon,
   lineaIcon as LineaIcon,
   mantaIcon,
   mantleIcon,
@@ -274,6 +275,46 @@ const FromListSepolia = [
     chainName: 'Sepolia',
     explorerUrl: sepolia.blockExplorers.default.url,
     rpcUrl: sepolia.rpcUrls.default.http[0],
+  },
+  {
+    label: 'Arbitrum Sepolia Testnet',
+    icon: arbitrumIcon,
+    chainId: arbitrumSepolia.id,
+    networkKey: 'arbitrum-sepolia',
+    isEthGasToken: true,
+    chainName: 'Arbitrum Sepolia',
+    explorerUrl: arbitrumSepolia.blockExplorers.default.url,
+    rpcUrl: arbitrumSepolia.rpcUrls.default.http[0],
+  },
+  {
+    label: 'Base Sepolia Testnet',
+    icon: baseIcon,
+    chainId: baseSepolia.id,
+    networkKey: 'base-sepolia',
+    isEthGasToken: true,
+    chainName: 'Base Sepolia',
+    explorerUrl: baseSepolia.blockExplorers.default.url,
+    rpcUrl: baseSepolia.rpcUrls.default.http[0],
+  },
+  {
+    label: 'Linea Sepolia Testnet',
+    icon: lineaIcon,
+    chainId: lineaSepolia.id,
+    networkKey: 'linea-sepolia',
+    isEthGasToken: true,
+    chainName: 'Linea Sepolia',
+    explorerUrl: lineaSepolia.blockExplorers.default.url,
+    rpcUrl: lineaSepolia.rpcUrls.default.http[0],
+  },
+  {
+    label: 'Zksync Sepolia Testnet',
+    icon: zkscyncIcon,
+    chainId: zkSyncSepoliaTestnet.id,
+    networkKey: 'zksync-sepolia',
+    isEthGasToken: true,
+    chainName: 'Zksync Sepolia',
+    explorerUrl: zkSyncSepoliaTestnet.blockExplorers.default.url,
+    rpcUrl: zkSyncSepoliaTestnet.rpcUrls.default.http[0],
   },
 ];
 
