@@ -28,6 +28,7 @@ import MultiSelectContent from './multi-select-content';
 import { useMintStatus } from 'features/nft/hooks/useMintStatus';
 import { Button } from './ui/buttons/button';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
+import { Toast } from './ui/toast';
 // import { Button } from './ui/button';
 
 //tokenId from api => image id of frontend
@@ -202,7 +203,10 @@ export default function Merge() {
       return;
     }
     try {
-      // trademarkMintModal.onOpen()
+      toast.custom(
+        (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Summoning selected Axis Nft...' />,
+        { duration: Infinity },
+      );
       setTrademarkMintStatus(MintStatus.Minting);
       if (!isTrademarkApproved) {
         await sendTrademarkApproveTx(address);
@@ -210,38 +214,28 @@ export default function Merge() {
       }
       await sendUpgradeSBTTx(address);
       setTrademarkMintStatus(MintStatus.Success);
-      // setMintResult({
-      //   name: `Lynks - ${nft?.name}`,
-      //   img: `/img/img-${nft?.name}-LYNK.png`,
-      // });
       updateRefreshBalanceId();
       setUpdate((update) => update + 1);
     } catch (e: any) {
       console.log(e);
       setTrademarkMintStatus(MintStatus.Failed);
 
-      if (e.message) {
-        if (e.message.includes('User rejected the request')) {
-          setFailMessage('User rejected the request');
-        } else {
-          setFailMessage(e.message);
-        }
-      } else {
-        toast.error('Upgrade SBT failed');
+      if (e?.message.includes('User rejected the request')) {
+        // toast.error('Request rejected');
+        toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
+        return;
       }
+      toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Upgrade Nft failed' />);
     } finally {
-      // upgradeModal.onClose();
+      toast.dismiss();
     }
   }, [
     address,
     isInvaidChain,
     isTrademarkApproved,
-    // nft?.name,
     sendTrademarkApproveTx,
     sendUpgradeSBTTx,
     switchChain,
-    // trademarkMintModal,
-    // upgradeModal,
     updateRefreshBalanceId,
   ]);
 
@@ -292,24 +286,21 @@ export default function Merge() {
       <div className='flex gap-4'>
         <MultiSelectContent tags={tags} onClick={handleClickTag} isSelectedTag={isSelectedTag} />
       </div>
-      <div className='flex flex-col items-center gap-6 p-6'>
+      <div className='flex flex-col items-center'>
         <div className='flex w-full items-center'>
           <Button
             className={classNames(
-              'gradient-btn flex w-[150px]  flex-1 items-center justify-center gap-[0.38rem] py-[1rem] text-[1.25rem] ',
+              'w-full max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white',
+              {
+                'opacity-50 cursor-not-allowed': isInvaidChain || !isReachedLimit || loading,
+              },
             )}
             onClick={handleUpgrade}
-            loading={trademarkMintStatus === MintStatus.Minting}
+            disabled={isInvaidChain || !isReachedLimit || loading}
+            loading={loading}
           >
             Upgrade
           </Button>
-        </div>
-      </div>
-      <div className='flex-col text-white'>
-        <div>{composeNftInfo?.info?.name}</div>
-        <div>{composeNftInfo?.info?.description}</div>
-        <div>
-          <img src={composeNftInfo?.info?.image} />
         </div>
       </div>
     </>

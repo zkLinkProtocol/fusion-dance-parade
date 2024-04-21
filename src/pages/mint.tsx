@@ -2,16 +2,12 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { checkMintEligibility } from 'constants/api';
 import useMintNft from '../features/nft/hooks/useMemeNft';
-import React, { useCallback, useMemo,useState } from 'react';
-import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
-import { Button } from 'components/ui/buttons/button';
 import Bridge from 'components/bridge';
-import Mint from 'components/mint-view';
 import Merge from 'components/merge';
-import Carousel from './index';
+import Carousel from 'components/carousel';
 
 interface MemeAxisNftItemProps {
   data: any;
@@ -29,15 +25,16 @@ const copyAddress = (address: string) => {
 //http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { type, balance, hasMint, isEligible } = item.data;
+  console.log(item.data, 'item-data');
   return (
-    <div className="card-container">
-      <div className="card">
-        <div className={cn(hasMint?'disTranform':'card-inner')}>
-          <div className="card-front">
+    <div className='card-container'>
+      <div className='card'>
+        <div className={cn(hasMint ? 'disTranform' : 'card-inner')}>
+          <div className='card-front'>
             <div className='h-full w-full'>
               <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
                 <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden pt-2.5'>
-                <img
+                  <img
                     src={`/assets/imgs/${type}.png`}
                     className={cn(
                       'absolute inset-0 object-cover rounded-2xl',
@@ -46,8 +43,13 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                     )}
                     alt=''
                   />
-                  <div className={cn('font-normal mr-2.5 relative self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5', !hasMint&&!isEligible&&'hidden')}>
-                    {hasMint?balance?.toString(): isEligible? 'Mintable':''}
+                  <div
+                    className={cn(
+                      'font-normal mr-2.5 relative self-end rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5',
+                      !hasMint && !isEligible && 'hidden',
+                    )}
+                  >
+                    {hasMint ? balance?.toString() : isEligible ? 'Mintable' : ''}
                   </div>
                 </div>
               </div>
@@ -55,7 +57,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
           </div>
           <div className='card-back'>
             <div className='flex flex-col items-center gap-1 p-[20px]'>
-              {/* <Bridge /> */}
               <img src={`/assets/imgs/${type}.png`} className='w-[80px]' alt='' />
               <div className='text-2xl font-bold text-white'>Foxy{/* {nft.name} */}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
@@ -75,8 +76,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               <div className='mb-2 text-[15px] text-slate-400'>
                 Deposit 1 FOXY into Nova Network and mint your NOVA Linea Foxy.
               </div>
-              <Bridge />
-              <Mint />
+              <Bridge data={item.data} />
               {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>
@@ -112,8 +112,8 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
   }, [address]);
 
   return (
-    <div className='max-md:max-w-full relative md:mt-10 mt-4 w-full'>
-      <div className='max-md:flex-col max-md:gap-0 md:flex gap-5 flex-wrap hidden'>
+    <div className='max-md:max-w-full relative mt-4 w-full md:mt-10'>
+      <div className='max-md:flex-col max-md:gap-0 hidden flex-wrap gap-5 md:flex'>
         {memeNftBalances.map((item, index) => (
           <MemeAxisNftItem key={index} data={item} />
         ))}
@@ -126,28 +126,29 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
 const Summon: React.FC = () => {
   return (
     <div className='max-md:max-w-full w-full'>
-      <div className='max-md:mt-10 max-md:max-w-full text-2xl relative mb-5 md:mt-24 mt-6 self-start md:text-5xl font-black leading-[56.16px] tracking-tight text-white'>
+      <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
         Summon The Nova MEMECROSS
       </div>
-      <div className='max-md:flex-col gap-1 flex md:gap-5'>
-        <div className='max-md:ml-0 max-md:w-full flex md:w-[29%] w-[40%] flex-col'>
-          <div className='max-md:mt-8 flex w-full grow flex-col justify-center rounded-2xl md:border-2 md:border-solid md:border-indigo-500 bg-zinc-900'>
+      <div className='max-md:flex-col flex gap-1 md:gap-5'>
+        <div className='max-md:ml-0 max-md:w-full flex w-2/5 flex-col md:w-[29%]'>
+          <div className='max-md:mt-8 flex w-full grow flex-col justify-center rounded-2xl bg-zinc-900 md:border-2 md:border-solid md:border-indigo-500'>
             <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
-        <div className='max-md:ml-0 max-md:w-full md:ml-5 ml-1 flex md:w-[71%] w-[60%] flex-col'>
-          <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col md:px-5 px-1'>
+        <div className='max-md:ml-0 max-md:w-full ml-1 flex w-3/5 flex-col md:ml-5 md:w-[71%]'>
+          <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-            Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova Meme NFTs.  You will have different Nova Meme NFT because you bridge different meme coins.
+              Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova
+              Meme NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
             </div>
-            <div className='max-md:mt-10 md:mt-24 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white mb-4'>
+            <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 5 NFT to Summon</div>
               <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge />
-            <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
+            {/* <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
               Summon Now
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -158,11 +159,18 @@ const Summon: React.FC = () => {
 const Rules: React.FC = () => {
   return (
     <div className='max-md:max-w-full w-full'>
-      <div className='max-md:mt-10 max-md:max-w-full text-2xl relative mb-5 mt-24 self-start  md:text-5xl font-black leading-[56.16px] tracking-tight text-white'>
-      Rules
+      <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-24 self-start text-2xl  font-black leading-[56.16px] tracking-tight text-white md:text-5xl'>
+        Rules
       </div>
-      <div className='w-full p-8 rounded-lg bg-slate-900 text-sm text-slate-400'>
-      Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box. Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box. Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box.
+      <div className='w-full rounded-lg bg-slate-900 p-8 text-sm text-slate-400'>
+        Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of
+        trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on
+        the referral leader-board will be airdrop a Mystery Box. Upon collecting your SBT, you can upgrade it into an
+        ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a
+        trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box.
+        Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of
+        trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on
+        the referral leader-board will be airdrop a Mystery Box.
       </div>
     </div>
   );

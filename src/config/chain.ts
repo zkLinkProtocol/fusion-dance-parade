@@ -131,3 +131,11 @@ export const ChainKey = {
   [ChainId.BLAST]: 'blast',
 } as const;
 export type ChainKey = (typeof ChainKey)[keyof typeof ChainKey];
+
+
+export const SCAN_URLS = {
+  [ChainId.ETHEREUM]: 'https://etherscan.io',
+  [ChainId.SEPOLIA]: 'https://sepolia.etherscan.io',
+  [ChainId.ARBITRUM]: 'https://arbiscan.io',
+  // [ChainId.ARBITRUM_SEPOLIA]: 'https://sepolia.arbiscan.io/',
+};

@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <RootProvider dehydratedState={pageProps.dehydratedState} pageProps={pageProps}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>
-            <SonnerToast position='bottom-center' className='w-full sm:min-w-[600px]' />
+            <SonnerToast position='top-right' className='w-[480px]' expand visibleToasts={3} />
             <DefaultSeo {...SEO} />
             <BaseLayout>
               <Component {...pageProps} />

@@ -37,11 +37,21 @@ export const checkMintEligibility = (address: string): Promise<Response> => {
   });
 };
 
-export const getMemeMintSignature = (address: string): Promise<Response> => {
+export const getMemeMintSignature = ({
+  address,
+  chain,
+  coin,
+}: {
+  address: string;
+  chain: string;
+  coin: string;
+}): Promise<Response> => {
   return axiosInstance.post(`${TEST_MEME_API}/meme/mint/meme/nft`, {
     address,
-    chain: 'Linea',
-    coin: 'Foxy',
+    chain,
+    coin,
+    // chain: 'Linea',
+    // coin: 'Foxy',
   });
 };
 export const bindInviteCodeWithAddress = (data: BindInviteCodeWithAddressParams): Promise<Response> => {

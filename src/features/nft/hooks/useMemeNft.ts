@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { readContract } from '@wagmi/core';
 import { config, nodeType } from 'config/zklin-networks';
@@ -48,18 +49,6 @@ const useMemeNft = () => {
       chainId: NOVA_CHAIN_ID,
     });
 
-    const batchBalances = await readContract(config, {
-      abi: NovaMeMeAxisNft,
-      address: MEME_NFT_CONTRACT as `0x${string}`,
-      functionName: 'balanceOfBatch',
-      args: [
-        [address, address, address, address, address, address, address],
-        [1, 2, 3, 4, 5, 6, 7],
-      ],
-      chainId: NOVA_CHAIN_ID,
-    });
-
-    console.log('Meme NFT balance:', balance, batchBalances);
     return balance;
   }, []);
 
@@ -127,7 +116,6 @@ const useMemeNft = () => {
 
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
     const eligibilityRes = await checkMintEligibility(address);
-    console.log(eligibilityRes.result, 'eligibility-res');
     const test_intro = eligibilityRes.result || [];
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
@@ -137,13 +125,13 @@ const useMemeNft = () => {
         const nft = await fetchMetadataByURI(tokenURI, tokenId);
 
         const tokenMap = {
-          '1': { name: 'Linea-Foxy' },
-          '2': { name: 'Base-Degen' },
-          '3': { name: 'Base-Brett' },
-          '4': { name: 'Base-Omni' },
-          '5': { name: 'ZkSync-Meow' },
-          '6': { name: 'Arbitrum-AIdoge' },
-          '7': { name: 'Arbitrum-Omni' },
+          '1': { name: 'Linea-Foxy', chain: 'Linea', coin: 'Foxy' },
+          '2': { name: 'Base-Degen', chain: 'Base', coin: 'Degen' },
+          '3': { name: 'Base-Brett', chain: 'Base', coin: 'Brett' },
+          '4': { name: 'Base-Omni', chain: 'Base', coin: 'Omni' },
+          '5': { name: 'ZkSync-Meow', chain: 'ZkSync', coin: 'Meow' },
+          '6': { name: 'Arbitrum-AIdoge', chain: 'Arbitrum', coin: 'AIdoge' },
+          '7': { name: 'Arbitrum-Omni', chain: 'Arbitrum', coin: 'Omni' },
         };
         // const test_intro = [
         //   { chain: 'Base', coin: 'Omni' },
@@ -157,11 +145,12 @@ const useMemeNft = () => {
         // Update the `eligible` property in the `tokenMap` based on `test_intro`
         Object.keys(tokenMap).forEach((key) => {
           const token = tokenMap[key];
-          token.eligible = test_intro.some((obj) => token.name.includes(obj.coin));
+          token.eligible = test_intro.some((obj: any) => token.name.includes(obj.coin));
         });
-        console.log(tokenMap[tokenId].eligible, 'tokenMap[tokenId].eligible');
         return {
           isEligible: tokenMap[tokenId].eligible,
+          chain: tokenMap[tokenId].chain,
+          coin: tokenMap[tokenId].coin,
           tokenId,
           balance,
           hasMint,
@@ -248,7 +237,7 @@ const useMemeNft = () => {
         }
         const tokenId = 4;
         const tokenURI = await getTokenURIByTokenId(tokenId);
-        const nft = await fetchMetadataByURI(tokenURI);
+        const nft = await fetchMetadataByURI(tokenURI, tokenId.toString());
         setNovaNft(nft);
         return nft;
       } catch (error) {
@@ -260,11 +249,11 @@ const useMemeNft = () => {
     [getMemeNftBalance, getTokenIdByIndex, getTokenURIByTokenId],
   );
 
-  const mintNovaNft = async (address: string, type: NovaNftType) => {
+  const mintNovaNft = async (address: string, chain: string, coin: string) => {
     if (!address) return;
     try {
       setIsMinting(true);
-      const params = await getMemeMintSignature(address);
+      const params = await getMemeMintSignature({ address, chain, coin });
       const amount = 1;
       const signature = params.result?.signature;
       if (!signature) {
@@ -332,11 +321,6 @@ const useMemeNft = () => {
     }
   };
 
-  const fetchUserEligibility = async (address: string) => {
-    const eligibilityRes = await checkMintEligibility(address);
-    console.log(eligibilityRes.result, 'eligibility-res');
-  };
-
   useEffect(() => {
     if (address) {
       fetchMemeNftBalances(address);
@@ -347,7 +331,6 @@ const useMemeNft = () => {
     if (address) {
       fetchNovaNft(address);
       fetchComposeNftInfo(address);
-      // fetchUserEligibility(address);
     }
   }, [address, fetchNovaNft]);
 
