@@ -17,12 +17,12 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             onClick(tag);
           }}
           className={cx(
-            'md:h-[90px] h-[40px] w-[90px] cursor-pointer bg-[#1A1F24] text-lg font-bold hover:opacity-70 dark:border-white dark:bg-transparent dark:text-white',
+            'md:h-[90px] h-[40px] w-[90px] cursor-pointer bg-[#1A1F24] text-lg rounded-xl font-bold hover:opacity-70 dark:border-white dark:bg-transparent dark:text-white relative',
             
             {
               '!cursor-not-allowed opacity-30': tag?.balance?.toString() === '0',
-              'text-primary hover:border-primary hover:text-primary bg-white hover:bg-white': !isSelectedTag(tag),
-              'text-primary bg-whitebg-white border-2 border-solid border-indigo-500': isSelectedTag(tag),
+              'text-primary hover:text-primary bg-white hover:bg-white': !isSelectedTag(tag),
+              'text-primary bg-whitebg-white border-4 border-solid border-indigo-500': isSelectedTag(tag),
 
             },
           )}
@@ -33,6 +33,9 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             backgroundSize: 'cover',
           }}
         >
+          <div className={cx('font-normal absolute rounded-lg border top-1 right-2 text-sm border-solid border-indigo-400 bg-zinc-900 px-2', !tag.hasMint&&!tag.isEligible&&'hidden')}>
+            {tag.hasMint?tag.balance?.toString(): tag.isEligible? 'Mintable':''}
+          </div>
         </li>
       ))}
     </>
