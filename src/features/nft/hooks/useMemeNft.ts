@@ -39,6 +39,7 @@ const tokenMap = {
     coin: 'Foxy',
     chainId: lineaSepolia.id,
     tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    chainTokenAddress: '0x6E715cb02d9AFA3Fb95608e75A291e83b8dBf179',
   },
   '2': {
     name: 'Base-Degen',
@@ -46,6 +47,7 @@ const tokenMap = {
     coin: 'Degen',
     chainId: baseSepolia.id,
     tokenAddress: '0x1b7b96405BD6C0c9265072D27fb1810e9FC2e456',
+    chainTokenAddress: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
   },
   '3': {
     name: 'Base-Brett',
@@ -53,6 +55,7 @@ const tokenMap = {
     coin: 'Brett',
     chainId: baseSepolia.id,
     tokenAddress: '0x1b7b96405BD6C0c9265072D27fb1810e9FC2e456',
+    chainTokenAddress: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
   },
   '4': {
     name: 'Base-Omni',
@@ -60,6 +63,7 @@ const tokenMap = {
     coin: 'Omni',
     chainId: baseSepolia.id,
     tokenAddress: '0x1b7b96405BD6C0c9265072D27fb1810e9FC2e456',
+    chainTokenAddress: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
   },
   '5': {
     name: 'ZkSync-Meow',
@@ -67,6 +71,7 @@ const tokenMap = {
     coin: 'Meow',
     chainId: zkSyncSepoliaTestnet.id,
     tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    chainTokenAddress: '0xBadb2cdC5085bf70B085f2c8052cD5A74fbFaEb0',
   },
   '6': {
     name: 'Arbitrum-AIdoge',
@@ -74,6 +79,7 @@ const tokenMap = {
     coin: 'AIdoge',
     chainId: arbitrumSepolia.id,
     tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    chainTokenAddress: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
   },
   '7': {
     name: 'Arbitrum-Omni',
@@ -81,6 +87,7 @@ const tokenMap = {
     coin: 'Omni',
     chainId: arbitrumSepolia.id,
     tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    chainTokenAddress: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
   },
 };
 
@@ -206,6 +213,7 @@ const useMemeNft = () => {
           chain: tokenMap[tokenId].chain,
           chainId: tokenMap[tokenId].chainId,
           coin: tokenMap[tokenId].coin,
+          chainTokenAddress: tokenMap[tokenId].chainTokenAddress,
           tokenId,
           balance,
           hasMint,
