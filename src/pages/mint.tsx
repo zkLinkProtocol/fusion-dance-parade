@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
 import { checkMintEligibility } from 'constants/api';
-import useMintNft from '../features/nft/hooks/useMemeNft';
-import { useEffect,useState,useCallback } from 'react';
+import useMintNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
+import { useEffect, useState, useCallback } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
@@ -34,8 +34,8 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
         <div className={cn(hasMint ? 'disTranform' : 'card-inner')}>
           <div className='card-front'>
             <div className='h-full w-full'>
-              <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl gradientBorder bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
-                <div className='relative flex aspect-[0.93] h-full w-full flex-col rounded-2xl overflow-hidden pt-2.5'>
+              <div className='max-md:mt-6 gradientBorder relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
+                <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden rounded-2xl pt-2.5'>
                   <img
                     src={`/assets/imgs/${tokenId}.png`}
                     className={cn(
@@ -100,27 +100,29 @@ interface MemeNftGridProps {
     balance: number;
   }>;
 }
-const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
-  const { address } = useAccount();
+const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
+  // const { address } = useAccount();
+  const { batchBalances } = useBatchBalancesStore();
 
   //mintRecord
-  const fetchRes = async (_address: string) => {
-    const res = await checkMintEligibility(_address);
-    console.log(res.result, 'eligibility-res');
-  };
+  // const fetchRes = async (_address: string) => {
+  //   const res = await checkMintEligibility(_address);
+  //   console.log(res.result, 'eligibility-res');
+  // };
 
-  useEffect(() => {
-    if (address) fetchRes(address);
-  }, [address]);
+  // useEffect(() => {
+  //   if (address) fetchRes(address);
+  // }, [address]);
 
+  console.log(batchBalances, 'batchBalances');
   return (
     <div className='max-md:max-w-full relative mt-4 w-full md:mt-10'>
       <div className='max-md:flex-col max-md:gap-0 hidden flex-wrap gap-5 md:flex'>
-        {memeNftBalances.map((item, index) => (
+        {batchBalances.map((item, index) => (
           <MemeAxisNftItem key={index} data={item} />
         ))}
       </div>
-      <Carousel lists={memeNftBalances}></Carousel>
+      <Carousel lists={batchBalances}></Carousel>
     </div>
   );
 };
@@ -133,7 +135,7 @@ const Summon: React.FC = (props) => {
       </div>
       <div className='max-md:flex-col flex gap-1 md:gap-5'>
         <div className='max-md:ml-0 max-md:w-full flex w-2/5 flex-col md:w-[29%]'>
-          <div className='md:mt-0 mt-4 flex w-full grow flex-col md:justify-center rounded-2xl md:bg-zinc-900 md:border-2 md:border-solid md:border-indigo-500'>
+          <div className='mt-4 flex w-full grow flex-col rounded-2xl md:mt-0 md:justify-center md:border-2 md:border-solid md:border-indigo-500 md:bg-zinc-900'>
             <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
@@ -147,7 +149,7 @@ const Summon: React.FC = (props) => {
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
               <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
-            <Merge sendStatus={props.sendStatus}/>
+            <Merge sendStatus={props.sendStatus} />
             {/* <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
               Summon Now
             </div> */}
@@ -178,10 +180,9 @@ const Rules: React.FC = () => {
   );
 };
 const Page: React.FC = () => {
-  const { memeNftBalances, fetchMemeNftBalances } = useMintNft();
   const [isSuccess, setIsSuccess] = useState(false);
-  const  sendStatus = (data) => {
-    setIsSuccess(data)
+  const sendStatus = (data) => {
+    setIsSuccess(data);
   };
   const { address } = useAccount();
   return (
@@ -196,26 +197,31 @@ const Page: React.FC = () => {
             NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
           </div>
         </div>
-        <MemeNftGrid memeNftBalances={memeNftBalances} />
-        <Summon sendStatus={sendStatus}/>
+        <MemeNftGrid />
+        <Summon sendStatus={sendStatus} />
         <Rules />
-        <Model isSuccess={isSuccess} sendStatus={sendStatus}/>
+        <Model isSuccess={isSuccess} sendStatus={sendStatus} />
       </div>
     </section>
   );
 };
 
 const Model: React.FC = (props) => {
-  let {isSuccess, sendStatus} = props
+  const { isSuccess, sendStatus } = props;
   const setStatus = () => {
-    sendStatus(false)
-  }
+    sendStatus(false);
+  };
   return (
-    <div className={cn(!isSuccess&&'!hidden','w-full h-full mask')}>
-      <div className='rounded-2xl p-8 bg-black flex flex-col items-center'>
-        <div className='text-5xl font-bold text-center text-white mb-2'>Congratulations</div>
-        <div className='text-2xl text-center text-white mb-6'>You’ve summoned</div>
-        <img loading='lazy' src='/assets/ball.svg' className='mb-6 aspect-[0.93] w-[100%] rounded-2xl bg-zinc-900 border-2 border-solid border-indigo-500' alt='' />
+    <div className={cn(!isSuccess && '!hidden', 'w-full h-full mask')}>
+      <div className='flex flex-col items-center rounded-2xl bg-black p-8'>
+        <div className='mb-2 text-center text-5xl font-bold text-white'>Congratulations</div>
+        <div className='mb-6 text-center text-2xl text-white'>You’ve summoned</div>
+        <img
+          loading='lazy'
+          src='/assets/ball.svg'
+          className='mb-6 aspect-[0.93] w-full rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
+          alt=''
+        />
         <Button className='backButton cursor-pointer' onClick={setStatus}>
           <span>Confirm</span>
         </Button>

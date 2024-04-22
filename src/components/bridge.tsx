@@ -62,7 +62,7 @@ export default function Bridge({ data }: { data: any }) {
   // const chainId = useChainId();
   // const { switchChainAsync } = useSwitchChain();
   const { sendDepositTx, loading } = useBridgeTx();
-  const [amount, setAmount] = useState('0.001');
+  const [amount, setAmount] = useState('1');
 
   const [url, setUrl] = useState('');
   const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
@@ -310,6 +310,12 @@ export default function Bridge({ data }: { data: any }) {
     } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
       return 'Insufficient Gas Token';
     } else if (amount && tokenFiltered[tokenActive]) {
+      console.log(
+        tokenActive,
+        tokenFiltered[tokenActive],
+        tokenFiltered[tokenActive].symbol,
+        'tokenFiltered[tokenActive]',
+      );
       if (Number(amount) > Number(tokenFiltered[tokenActive].formatedBalance)) {
         return `Insufficient ${tokenFiltered[tokenActive].symbol} balance`;
       }
@@ -319,13 +325,6 @@ export default function Bridge({ data }: { data: any }) {
     return 'Deposit to Mint';
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20, isEligible]);
 
-  console.log(
-    !!amount && !!tokenFiltered[tokenActive],
-    Number(amount) > Number(tokenFiltered[tokenActive]?.formatedBalance),
-    Number(amount),
-    Number(tokenFiltered[tokenActive]?.formatedBalance),
-    'final',
-  );
   const handleInputValue = (v: string) => {
     if (!v) {
       setAmount(v);
@@ -349,6 +348,7 @@ export default function Bridge({ data }: { data: any }) {
   useEffect(() => {
     if (coin) {
       const index = tokenFiltered.findIndex((item) => item.symbol === coin.toUpperCase());
+      console.log(tokenFiltered, coin, 'final-wow');
       if (index > -1) {
         setTokenActive(index);
       }
@@ -356,7 +356,13 @@ export default function Bridge({ data }: { data: any }) {
   }, [coin, tokenFiltered]);
 
   const handleAction = useCallback(async () => {
-    console.log(amount, !address || !fromList[fromActive].chainId, fromList[fromActive]?.networkKey, 'amount');
+    console.log(
+      amount,
+      !address || !fromList[fromActive].chainId,
+      fromList[fromActive]?.networkKey,
+      fromList[fromActive],
+      'omg-wow',
+    );
     // TODO: remove || !nativeTokenBalance first, add button to notfiy user about their balance
     if (!address || !fromList[fromActive].chainId) return;
     setNetworkKey(fromList[fromActive]?.networkKey);
@@ -410,9 +416,10 @@ export default function Bridge({ data }: { data: any }) {
       // transLoadModal.onClose()
       // dispatch(setDepositStatus("pending"));
       // transSuccModal.onOpen();
-      // setTimeout(() => {
-      //   transSuccModal.onClose();
-      // }, 5000);
+      setTimeout(() => {
+        console.log('addTxHash');
+      }, 5000);
+      fetchMemeNftBalances(address);
     } catch (e: any) {
       if (e.message) {
         if (e.message.includes('Insufficient Gas Token Balance')) {
@@ -429,6 +436,7 @@ export default function Bridge({ data }: { data: any }) {
       return;
     }
 
+    fetchMemeNftBalances(address);
     refreshTokenBalanceList();
   }, [
     address,
