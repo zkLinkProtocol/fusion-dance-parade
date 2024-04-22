@@ -227,6 +227,7 @@ const useMemeNft = () => {
         };
       }),
     );
+    console.log('fetching.....________________________________', balances);
     return balances;
   };
 

@@ -9,6 +9,7 @@ import Bridge from 'components/bridge';
 import Merge from 'components/merge';
 import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
+import { Button } from 'components/ui/buttons/button';
 
 interface MemeAxisNftItemProps {
   data: any;
@@ -177,7 +178,9 @@ const Rules: React.FC = () => {
   );
 };
 const Page: React.FC = () => {
-  const { memeNftBalances } = useMintNft();
+  const { memeNftBalances, fetchMemeNftBalances } = useMintNft();
+  const { address } = useAccount();
+  console.log(memeNftBalances, 'page------memeNftBalances');
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
       <div className='mx-auto max-w-[1200px]'>
