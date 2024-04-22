@@ -3,24 +3,20 @@ import BigNumber from 'bignumber.js';
 import { getDepositETHThreshold } from 'constants/api';
 import fromList from 'constants/from-chain-list';
 import FromList from 'constants/from-chain-list';
-import { STORAGE_NETWORK_KEY } from 'constants/zklink-config';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 import { useBridgeNetworkStore } from 'features/bridge/hooks/useBridgeNetwork';
 import useTokenBalanceList from 'features/bridge/hooks/useTokenList';
 import { SourceTokenInfo, useMergeToken } from 'features/nft/hooks/useMergeToken';
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isSameAddress } from 'utils/time';
 import { parseUnits } from 'viem';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { useConnections } from 'wagmi';
 import { ETH_ADDRESS } from 'zksync-web3/build/src/utils';
 import { Button } from './ui/buttons/button';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
 import type { Token } from 'types/token';
 import { toast } from 'sonner';
 import { NOVA_CHAIN_ID } from 'constants/zklink-config';
-import { config } from 'config/zklin-networks';
 import { Toast } from './ui/toast';
 
 const AssetTypes = [
@@ -80,8 +76,8 @@ export default function Bridge({ data }: { data: any }) {
   const [minDepositValue, setMinDepositValue] = useState(0.1);
   const [category, setCategory] = useState(AssetTypes[0].value);
   const [tokenFiltered, setTokenFiltered] = useState<Token[]>([]);
-  const [bridgeTokenInited, setBridgeTokenInited] = useState(false);
-  const connections = useConnections();
+  // const [bridgeTokenInited, setBridgeTokenInited] = useState(false);
+  // const connections = useConnections();
   const [connectorName, setConnectorName] = useState('');
   const [switchLoading, setSwitchLoading] = useState(false);
   const [switchChainError, setSwitchChainError] = useState('');
@@ -250,18 +246,6 @@ export default function Bridge({ data }: { data: any }) {
   //   }
   // }, [setNetworkKey, isFirstDeposit, bridgeToken, tokenList, bridgeTokenInited]);
 
-  const handleFrom = (index: number) => {
-    setFromActive(index);
-    setTokenActive(0);
-    setNetworkKey(fromList[index]?.networkKey);
-    // fromModal.onClose();
-  };
-
-  const handeToken = (index: number) => {
-    setTokenActive(index);
-    // tokenModal.onClose();
-  };
-
   const invalidChain = useMemo(() => {
     return chainId !== fromList[fromActive]?.chainId;
   }, [chainId, fromActive]);
@@ -310,12 +294,6 @@ export default function Bridge({ data }: { data: any }) {
     } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
       return 'Insufficient Gas Token';
     } else if (amount && tokenFiltered[tokenActive]) {
-      console.log(
-        tokenActive,
-        tokenFiltered[tokenActive],
-        tokenFiltered[tokenActive].symbol,
-        'tokenFiltered[tokenActive]',
-      );
       if (Number(amount) > Number(tokenFiltered[tokenActive].formatedBalance)) {
         return `Insufficient ${tokenFiltered[tokenActive].symbol} balance`;
       }
@@ -324,14 +302,6 @@ export default function Bridge({ data }: { data: any }) {
     }
     return 'Deposit to Mint';
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20, isEligible]);
-
-  const handleInputValue = (v: string) => {
-    if (!v) {
-      setAmount(v);
-    } else if (/^[0-9]*\.?[0-9]*$/.test(v)) {
-      setAmount(v);
-    }
-  };
 
   useEffect(() => {
     setSwitchChainError('');
@@ -345,10 +315,11 @@ export default function Bridge({ data }: { data: any }) {
 
   //const selectedToken = tokenFiltered.filter((item) => item.symbol === coin?.toUpperCase());
 
+  console.log('tokenFiltered', tokenFiltered);
+
   useEffect(() => {
     if (coin) {
       const index = tokenFiltered.findIndex((item) => item.symbol === coin.toUpperCase());
-      console.log(tokenFiltered, coin, 'final-wow');
       if (index > -1) {
         setTokenActive(index);
       }
@@ -356,13 +327,6 @@ export default function Bridge({ data }: { data: any }) {
   }, [coin, tokenFiltered]);
 
   const handleAction = useCallback(async () => {
-    console.log(
-      amount,
-      !address || !fromList[fromActive].chainId,
-      fromList[fromActive]?.networkKey,
-      fromList[fromActive],
-      'omg-wow',
-    );
     // TODO: remove || !nativeTokenBalance first, add button to notfiy user about their balance
     if (!address || !fromList[fromActive].chainId) return;
     setNetworkKey(fromList[fromActive]?.networkKey);
@@ -397,6 +361,10 @@ export default function Bridge({ data }: { data: any }) {
       clearTimeout(i);
     }
     try {
+      toast.custom(
+        (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Depositing Fund...' />,
+        { duration: Infinity },
+      );
       const hash = await sendDepositTx(
         tokenFiltered[tokenActive]?.address as `0x${string}`,
         // utils.parseEther(String(amount))
@@ -416,9 +384,8 @@ export default function Bridge({ data }: { data: any }) {
       // transLoadModal.onClose()
       // dispatch(setDepositStatus("pending"));
       // transSuccModal.onOpen();
-      setTimeout(() => {
-        console.log('addTxHash');
-      }, 5000);
+      console.log('addTxHash', hash);
+      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully deposit to Nova' />);
       fetchMemeNftBalances(address);
     } catch (e: any) {
       if (e.message) {
@@ -433,11 +400,12 @@ export default function Bridge({ data }: { data: any }) {
           setFailMessage(e.message);
         }
       }
-      return;
+      // return;
+    } finally {
+      fetchMemeNftBalances(address);
+      refreshTokenBalanceList();
+      toast.dismiss();
     }
-
-    fetchMemeNftBalances(address);
-    refreshTokenBalanceList();
   }, [
     address,
     nativeTokenBalance,
@@ -470,7 +438,7 @@ export default function Bridge({ data }: { data: any }) {
     try {
       await mintNovaNft(address, chain, coin);
       await fetchMemeNftBalances(address);
-      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully minted SBT!' />);
+      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully minted Axis NFT!' />);
     } catch (e: any) {
       console.log(e);
       if (e.message) {
@@ -478,12 +446,12 @@ export default function Bridge({ data }: { data: any }) {
           toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('You already have a character')) {
           // toast.error('You can mint SBT only once.');
-          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='You can mint SBT only once.' />);
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='You can mint NFT only once.' />);
         } else {
           toast.custom((t) => <Toast type='error' id={t} title='Failed' description={e.message} />);
         }
       } else {
-        toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Mint SBT failed' />);
+        toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Mint NFT failed' />);
         // toast.error('Mint SBT failed');
       }
     }
@@ -494,6 +462,16 @@ export default function Bridge({ data }: { data: any }) {
   return (
     <>
       <>
+        {/* <Button
+          className='backButton cursor-pointer'
+          style={{ display: 'flex', alignItems: 'center' }}
+          size='lg'
+          onClick={handleAction}
+          loading={loading}
+          disabled={actionBtnDisabled}
+        >
+          {btnText}
+        </Button> */}
         {isConnected ? (
           <>
             {hasMemeTokenBalance ? (
