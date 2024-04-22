@@ -92,3 +92,65 @@ p {
   line-height: 24px; /* 150% */
   letter-spacing: -0.08px;
 }
+
+.gradientBorder {
+  // position: relative;
+}
+
+.gradientBorder:before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  border-radius: 16px; /* 圆角 */
+  background: linear-gradient(45deg, #3333ff, #ff00cc);
+  animation: gradientBorder 1s infinite linear;
+}
+
+@keyframes gradientBorder {
+  0% {
+    background: linear-gradient(45deg, #3333ff, #ff00cc);
+  }
+  10% {
+    background: linear-gradient(81deg, #3333ff, #ff00cc);
+  }
+  20% {
+    background: linear-gradient(117deg, #3333ff, #ff00cc);
+  }
+  30% {
+    background: linear-gradient(153deg, #3333ff, #ff00cc);
+  }
+  40% {
+    background: linear-gradient(189deg, #3333ff, #ff00cc);
+  }
+  50% {
+    background: linear-gradient(225deg, #3333ff, #ff00cc);
+  }
+  60% {
+    background: linear-gradient(261deg, #3333ff, #ff00cc);
+  }
+  70% {
+    background: linear-gradient(297deg, #3333ff, #ff00cc);
+  }
+  80% {
+    background: linear-gradient(333deg, #3333ff, #ff00cc);
+  }
+  90% {
+    background: linear-gradient(9deg, #3333ff, #ff00cc);
+  }
+  100% {
+    background: linear-gradient(45deg, #3333ff, #ff00cc);
+  }
+}
+.mask{
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,.3);
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}

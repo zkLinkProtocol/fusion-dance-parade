@@ -47,7 +47,7 @@ const TRADEMARK_TOKEN_ID_MAP: Record<number, string> = {
 const getDrawIndexWithPrizeTokenId = (tokenId: number) => {
   return Object.keys(TRADEMARK_TOKEN_ID_MAP).findIndex((key) => Number(key) === tokenId);
 };
-export default function Merge() {
+export default function Merge({sendStatus}) {
   // const mintModal = useDisclosure();
   // const drawModal = useDisclosure();
   // const trademarkMintModal = useDisclosure();
@@ -218,6 +218,7 @@ export default function Merge() {
       updateRefreshBalanceId();
       setUpdate((update) => update + 1);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
+      sendStatus(true)
     } catch (e: any) {
       console.log(e);
       setTrademarkMintStatus(MintStatus.Failed);
@@ -286,7 +287,7 @@ export default function Merge() {
 
   return (
     <>
-      <div className='flex gap-4'>
+      <div className='flex md:gap-4 gap-2 flex-wrap'>
         <MultiSelectContent tags={tags} onClick={handleClickTag} isSelectedTag={isSelectedTag} />
       </div>
       <div className='flex flex-col items-center'>

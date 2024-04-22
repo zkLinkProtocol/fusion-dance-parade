@@ -17,7 +17,7 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             onClick(tag);
           }}
           className={cx(
-            'md:h-[90px] h-[40px] w-[90px] cursor-pointer bg-[#1A1F24] text-lg rounded-xl font-bold hover:opacity-70 dark:border-white dark:bg-transparent dark:text-white relative',
+            'md:h-[90px] h-[40px] md:w-[90px] w-[40px] cursor-pointer bg-[#1A1F24] text-lg rounded-xl font-bold hover:opacity-70 dark:border-white dark:bg-transparent dark:text-white relative',
 
             {
               '!cursor-not-allowed opacity-30': tag?.balance?.toString() === '0',
@@ -32,13 +32,8 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             backgroundSize: 'cover',
           }}
         >
-          <div
-            className={cx(
-              'font-normal absolute rounded-lg border top-1 right-2 text-sm border-solid border-indigo-400 bg-zinc-900 px-2',
-              !tag.hasMint && !tag.isEligible && 'hidden',
-            )}
-          >
-            {tag.hasMint ? tag.balance?.toString() : tag.isEligible ? '' : ''}
+          <div className={cx('font-normal absolute rounded-lg border md:top-1 top-0 md:right-2 right-1 md:text-sm text-xs border-solid border-indigo-400 bg-zinc-900 md:px-2 px-1', !tag.hasMint&&'hidden')}>
+            {tag.hasMint?tag.balance?.toString():''}
           </div>
         </li>
       ))}
