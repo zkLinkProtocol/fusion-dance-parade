@@ -142,6 +142,7 @@ const useMemeNft = () => {
       uri = uri.substring(7);
     }
     const response = await fetch(`https://ipfs.io/ipfs/${uri}`);
+    console.log(`https://ipfs.io/ipfs/${uri}`, 'ipfs');
     const json = await response.json();
     const result: NovaNft = {
       name: json.name,
@@ -193,9 +194,9 @@ const useMemeNft = () => {
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
-        const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
+        // const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
         const hasMint = await getMintRecordByTokenId(address, tokenId);
-        const nft = await fetchMetadataByURI(tokenURI, tokenId);
+        // const nft = await fetchMetadataByURI(tokenURI, tokenId);
 
         const tokeBalance_nova = await readContract(config, {
           abi: IERC20.abi,
@@ -219,10 +220,10 @@ const useMemeNft = () => {
           hasMint,
           tokenBalance: tokeBalance_nova,
           hasMemeTokenBalance: tokeBalance_nova > 0,
-          name: nft.name,
-          description: nft.description,
-          image: nft.image,
-          type: nft.type,
+          // name: nft.name,
+          // description: nft.description,
+          // image: nft.image,
+          // type: nft.type,
         };
       }),
     );
@@ -395,7 +396,7 @@ const useMemeNft = () => {
   useEffect(() => {
     if (address) {
       fetchNovaNft(address);
-      fetchComposeNftInfo(address);
+      // fetchComposeNftInfo(address);
     }
   }, [address, fetchNovaNft]);
 
