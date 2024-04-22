@@ -19,7 +19,8 @@ export const BASE_URL_TWITTER = `${BASE_URL}/twitter`;
 export const BASE_URL_LRT_POINTS = `${BASE_URL}/lrt-points`;
 export const BASE_URL_QUEST = `${BASE_URL}/quest-api`;
 
-export const TEST_MEME_API = 'http://3.114.68.110:8097';
+export const TEST_MEME_API = 'https://goerli.app.zklink.io/api';
+//'http://3.114.68.110:8097';
 //'http://localhost:3050';
 //'http://3.114.68.110:8097'
 

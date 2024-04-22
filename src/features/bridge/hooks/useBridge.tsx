@@ -158,7 +158,7 @@ export const useBridgeTx = () => {
 
   const getTxGasPrice = async () => {
     const contractAddress = nodeConfig.find((item) => item.key === networkKey)?.mainContract;
-    console.log(contractAddress, 'contractAddress');
+    console.log(contractAddress, networkKey, 'contractAddress');
     if (!contractAddress) {
       throw new Error('Invalid network key');
     }
@@ -324,6 +324,7 @@ export const useBridgeTx = () => {
     isMergeSelected?: boolean,
   ) => {
     const network = nodeConfig.find((item) => item.key === networkKey);
+    console.log('sendDepositTx-network: ', network, networkKey);
     if (!address || !network) {
       return;
     }
