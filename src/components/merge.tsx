@@ -29,6 +29,7 @@ import { useMintStatus } from 'features/nft/hooks/useMintStatus';
 import { Button } from './ui/buttons/button';
 import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
+import { useModalStore } from 'pages/mint';
 // import { Button } from './ui/button';
 
 //tokenId from api => image id of frontend
@@ -57,6 +58,8 @@ export default function Merge({ sendStatus }) {
   const { switchChain, isPending } = useSwitchChain();
 
   const { refreshBalanceId, updateRefreshBalanceId } = useMintStatus();
+
+  const { isOpen, toggleModal } = useModalStore();
 
   const { batchBalances } = useBatchBalancesStore();
 
@@ -220,6 +223,7 @@ export default function Merge({ sendStatus }) {
       updateRefreshBalanceId();
       setUpdate((update) => update + 1);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
+      toggleModal(true);
       sendStatus(true);
     } catch (e: any) {
       console.log(e);
