@@ -29,6 +29,7 @@ const copyAddress = (address: string) => {
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress } = item.data;
   console.log(item.data, 'item-data');
+  // card-bcak loading style
   return (
     <div className='card-container'>
       <div className='card'>
@@ -215,7 +216,7 @@ export const useModalStore = create((set) => ({
 const Model: React.FC = (props) => {
   const { isOpen, toggleModal } = useModalStore();
   return (
-    <div className={cn(!isOpen && '!hidden', 'w-full h-full mask')}>
+    <div className={cn(!isOpen && '!hidden', 'w-full h-full mask z-50')}>
       <div className='flex flex-col items-center rounded-2xl bg-black p-8'>
         <div className='mb-2 text-center text-5xl font-bold text-white'>Congratulations</div>
         <div className='mb-6 text-center text-2xl text-white'>You’ve summoned</div>
