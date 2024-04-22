@@ -5,6 +5,7 @@ import { config, nodeType } from 'config/zklin-networks';
 import NovaMeMeAxisNft from 'constants/contracts/abis/NovaMemeAxisNFT.json';
 import NovaComposeNFT from 'constants/contracts/abis/NovaMemeCrossNFT.json';
 import NovaNFT from 'constants/contracts/abis/NovaNFT.json';
+import IERC20 from 'constants/contracts/abis/IERC20.json';
 import { getMemeMintSignature } from 'constants/api';
 import {
   MEME_COMPOSE_NFT_CONTRACT,
@@ -21,6 +22,7 @@ import { encodeFunctionData } from 'viem';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { sleep } from 'zksync-web3/build/src/utils';
 import { checkMintEligibility } from 'constants/api';
+import { arbitrumSepolia, baseSepolia, lineaSepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 
 export type NovaNftType = 'ISTP' | 'ESFJ' | 'INFJ' | 'ENTP';
 export type NovaNft = {
@@ -28,6 +30,58 @@ export type NovaNft = {
   description: string;
   image: string;
   type: number;
+};
+
+const tokenMap = {
+  '1': {
+    name: 'Linea-Foxy',
+    chain: 'Linea',
+    coin: 'Foxy',
+    chainId: lineaSepolia.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
+  '2': {
+    name: 'Base-Degen',
+    chain: 'Base',
+    coin: 'Degen',
+    chainId: baseSepolia.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
+  '3': {
+    name: 'Base-Brett',
+    chain: 'Base',
+    coin: 'Brett',
+    chainId: baseSepolia.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
+  '4': {
+    name: 'Base-Omni',
+    chain: 'Base',
+    coin: 'Omni',
+    chainId: baseSepolia.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
+  '5': {
+    name: 'ZkSync-Meow',
+    chain: 'ZkSync',
+    coin: 'Meow',
+    chainId: zkSyncSepoliaTestnet.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
+  '6': {
+    name: 'Arbitrum-AIdoge',
+    chain: 'Arbitrum',
+    coin: 'AIdoge',
+    chainId: arbitrumSepolia.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
+  '7': {
+    name: 'Arbitrum-Omni',
+    chain: 'Arbitrum',
+    coin: 'Omni',
+    chainId: arbitrumSepolia.id,
+    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  },
 };
 
 const useMemeNft = () => {
@@ -114,9 +168,21 @@ const useMemeNft = () => {
     return balance;
   };
 
+  //  const getTokenURIByTokenId = useCallback(async (tokenId: number) => {
+  //    const tokenURI = await readContract(config, {
+  //      abi: NovaNFT.abi,
+  //      address: NOVA_NFT_CONTRACT as `0x${string}`,
+  //      functionName: 'tokenURI',
+  //      args: [tokenId],
+  //      chainId: NOVA_CHAIN_ID,
+  //    });
+  //    console.log('tokenURI: ', tokenURI);
+  //    return tokenURI as string;
+  //  }, []);
+
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
     const eligibilityRes = await checkMintEligibility(address);
-    const test_intro = eligibilityRes.result || [];
+    const eligibileChainData = eligibilityRes.result || [];
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
@@ -124,36 +190,27 @@ const useMemeNft = () => {
         const hasMint = await getMintRecordByTokenId(address, tokenId);
         const nft = await fetchMetadataByURI(tokenURI, tokenId);
 
-        const tokenMap = {
-          '1': { name: 'Linea-Foxy', chain: 'Linea', coin: 'Foxy' },
-          '2': { name: 'Base-Degen', chain: 'Base', coin: 'Degen' },
-          '3': { name: 'Base-Brett', chain: 'Base', coin: 'Brett' },
-          '4': { name: 'Base-Omni', chain: 'Base', coin: 'Omni' },
-          '5': { name: 'ZkSync-Meow', chain: 'ZkSync', coin: 'Meow' },
-          '6': { name: 'Arbitrum-AIdoge', chain: 'Arbitrum', coin: 'AIdoge' },
-          '7': { name: 'Arbitrum-Omni', chain: 'Arbitrum', coin: 'Omni' },
-        };
-        // const test_intro = [
-        //   { chain: 'Base', coin: 'Omni' },
-        //   { chain: 'Linea', coin: 'Foxy' },
-        //   { chain: 'Base', coin: 'Degen' },
-        //   { chain: 'Base', coin: 'Brett' },
-        //   { chain: 'ZkSync', coin: 'Meow' },
-        //   { chain: 'Arbitrum', coin: 'AIdoge' },
-        //   { chain: 'Arbitrum', coin: 'Omni' },
-        // ];
-        // Update the `eligible` property in the `tokenMap` based on `test_intro`
+        const tokeBalance_nova = await readContract(config, {
+          abi: IERC20.abi,
+          address: tokenMap[tokenId].tokenAddress as `0x${string}`,
+          functionName: 'balanceOf',
+          args: [address as `0x${string}`],
+          chainId: NOVA_CHAIN_ID,
+        });
         Object.keys(tokenMap).forEach((key) => {
           const token = tokenMap[key];
-          token.eligible = test_intro.some((obj: any) => token.name.includes(obj.coin));
+          token.eligible = eligibileChainData.some((obj: any) => token.name.includes(obj.coin));
         });
         return {
           isEligible: tokenMap[tokenId].eligible,
           chain: tokenMap[tokenId].chain,
+          chainId: tokenMap[tokenId].chainId,
           coin: tokenMap[tokenId].coin,
           tokenId,
           balance,
           hasMint,
+          tokenBalance: tokeBalance_nova,
+          hasMemeTokenBalance: tokeBalance_nova > 0,
           name: nft.name,
           description: nft.description,
           image: nft.image,

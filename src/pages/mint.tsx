@@ -189,7 +189,45 @@ const Page: React.FC = () => {
             NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
           </div>
         </div>
-        <MemeNftGrid memeNftBalances={memeNftBalances} />
+        <MemeNftGrid memeNftBalances={[
+    {
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 1,
+    },{
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 2,
+    },{
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 3,
+    },{
+      balance: 0n,
+      description: 'The zkLink Nova Booster Phase II NFT',
+      hasMint: false,
+      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
+      isEligible: true,
+      name: 'Nova Booster Phase II - 50',
+      tokenId: '1',
+      type: 4,
+    },
+  ]} />
         <Summon />
         <Rules />
       </div>
