@@ -27,7 +27,7 @@ import { sleep } from 'zksync-web3/build/src/utils';
 import MultiSelectContent from './multi-select-content';
 import { useMintStatus } from 'features/nft/hooks/useMintStatus';
 import { Button } from './ui/buttons/button';
-import useMemeNft from 'features/nft/hooks/useMemeNft';
+import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
 // import { Button } from './ui/button';
 
@@ -47,7 +47,7 @@ const TRADEMARK_TOKEN_ID_MAP: Record<number, string> = {
 const getDrawIndexWithPrizeTokenId = (tokenId: number) => {
   return Object.keys(TRADEMARK_TOKEN_ID_MAP).findIndex((key) => Number(key) === tokenId);
 };
-export default function Merge({sendStatus}) {
+export default function Merge({ sendStatus }) {
   // const mintModal = useDisclosure();
   // const drawModal = useDisclosure();
   // const trademarkMintModal = useDisclosure();
@@ -58,7 +58,9 @@ export default function Merge({sendStatus}) {
 
   const { refreshBalanceId, updateRefreshBalanceId } = useMintStatus();
 
-  const { memeNftBalances, fetchMemeNftBalances } = useMemeNft();
+  const { batchBalances } = useBatchBalancesStore();
+
+  const { fetchMemeNftBalances } = useMemeNft();
 
   const [mintType, setMintType] = useState<any>('ISTP');
   const [remainDrawCount, setRemainDrawCount] = useState<number>(0);
@@ -218,7 +220,7 @@ export default function Merge({sendStatus}) {
       updateRefreshBalanceId();
       setUpdate((update) => update + 1);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
-      sendStatus(true)
+      sendStatus(true);
     } catch (e: any) {
       console.log(e);
       setTrademarkMintStatus(MintStatus.Failed);
@@ -244,7 +246,7 @@ export default function Merge({sendStatus}) {
   ]);
 
   const maxAllowed = 2;
-  const tags = memeNftBalances;
+  const tags = batchBalances;
   const isReachedLimit = selectedTags?.length >= maxAllowed;
 
   const isSelectedTag = (t: any) => !!selectedTags?.find((sTag) => sTag.tokenId === t.tokenId);
@@ -287,7 +289,7 @@ export default function Merge({sendStatus}) {
 
   return (
     <>
-      <div className='flex md:gap-4 gap-2 flex-wrap'>
+      <div className='flex flex-wrap gap-2 md:gap-4'>
         <MultiSelectContent tags={tags} onClick={handleClickTag} isSelectedTag={isSelectedTag} />
       </div>
       <div className='flex flex-col items-center'>

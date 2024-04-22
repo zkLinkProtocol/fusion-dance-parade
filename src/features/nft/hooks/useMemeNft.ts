@@ -23,6 +23,7 @@ import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { sleep } from 'zksync-web3/build/src/utils';
 import { checkMintEligibility } from 'constants/api';
 import { arbitrumSepolia, baseSepolia, lineaSepolia, zkSyncSepoliaTestnet } from 'viem/chains';
+import { create } from 'zustand';
 
 export type NovaNftType = 'ISTP' | 'ESFJ' | 'INFJ' | 'ENTP';
 export type NovaNft = {
@@ -38,7 +39,7 @@ const tokenMap = {
     chain: 'Linea',
     coin: 'Foxy',
     chainId: lineaSepolia.id,
-    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    tokenAddress: '0x5f728Ab5E5860b4951AFaF865e9bE27043f407ec',
     chainTokenAddress: '0x6E715cb02d9AFA3Fb95608e75A291e83b8dBf179',
   },
   '2': {
@@ -70,7 +71,7 @@ const tokenMap = {
     chain: 'ZkSync',
     coin: 'Meow',
     chainId: zkSyncSepoliaTestnet.id,
-    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    tokenAddress: '0xA126F1a0bC5f5AC8c7b349e39b4b62623e8EFC4D',
     chainTokenAddress: '0xBadb2cdC5085bf70B085f2c8052cD5A74fbFaEb0',
   },
   '6': {
@@ -78,7 +79,7 @@ const tokenMap = {
     chain: 'Arbitrum',
     coin: 'AIdoge',
     chainId: arbitrumSepolia.id,
-    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    tokenAddress: '0x8310551a5d200F9bc7fa2E0F08E2915156A1FBD0',
     chainTokenAddress: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
   },
   '7': {
@@ -86,20 +87,28 @@ const tokenMap = {
     chain: 'Arbitrum',
     coin: 'Omni',
     chainId: arbitrumSepolia.id,
-    tokenAddress: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+    tokenAddress: '0x8310551a5d200F9bc7fa2E0F08E2915156A1FBD0',
     chainTokenAddress: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
   },
 };
 
+interface ActiveIndexState {
+  batchBalances: any[];
+  setBatchBalances: (value: any[]) => void;
+}
+
+export const useBatchBalancesStore = create<ActiveIndexState>((set) => ({
+  batchBalances: [], // Set the default value here
+  setBatchBalances: (value: any) => set({ batchBalances: value }),
+}));
+
 const useMemeNft = () => {
   const publicClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { data: walletClient } = useWalletClient();
-  const [novaNft, setNovaNft] = useState<NovaNft>();
   const { address } = useAccount();
   const [isMinting, setIsMinting] = useState(false);
   const [isFetchingNfts, setIsFetchingNfts] = useState(false);
-  const [memeNftBalances, setMemeNftBalances] = useState<any[]>([]);
-  const [composeNftInfo, setComposeNftInfo] = useState<any>({});
+  const { setBatchBalances } = useBatchBalancesStore();
 
   const getMemeNftBalance = useCallback(async (address: string) => {
     const balance = await readContract(config, {
@@ -286,7 +295,7 @@ const useMemeNft = () => {
       const tokenIds = ['1', '2', '3', '4', '5', '6', '7'];
       const balances = await getAddressBalancesForTokenIds(address, tokenIds);
       console.log('Meme NFT balances:', balances);
-      setMemeNftBalances(balances);
+      setBatchBalances(balances);
     } catch (error) {
       console.error('Error fetching Meme NFT balances:', error);
     } finally {
@@ -399,8 +408,6 @@ const useMemeNft = () => {
     fetchMemeNftBalances,
     getMemeNftBalance,
     mintNovaNft,
-    composeNftInfo,
-    memeNftBalances,
     isMinting,
     isFetchingNfts,
   };

@@ -153,20 +153,31 @@ export const useTokenBalanceList = () => {
         });
         tokens.push({
           ...token,
-          address: '0xE0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
+          address: '0x6E715cb02d9AFA3Fb95608e75A291e83b8dBf179',
           decimals: 18,
-          icon: 'zkt-icon',
+          icon: 'foxy-icon',
           multiplier: 2,
-          networkKey: 'sepolia',
-          networkName: 'Ethereum Sepolia Testnet',
-          symbol: 'ZKT',
+          networkKey: PRIMARY_CHAIN_KEY,
+          networkName: 'Linea Sepolia Testnet',
+          symbol: 'FOXY',
           type: 'MEME',
         });
+        // tokens.push({
+        //   ...token,
+        //   address: '0xE0DCD8cc7DB8bAB361b2aF2208bA10e3d7a1Ef31',
+        //   decimals: 18,
+        //   icon: 'zkt-icon',
+        //   multiplier: 2,
+        //   networkKey: 'sepolia',
+        //   networkName: 'Ethereum Sepolia Testnet',
+        //   symbol: 'ZKT',
+        //   type: 'MEME',
+        // });
       }
       // const filteredArray = tokens.filter(
       //   (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
       // );
-      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW', 'DEGEN', 'AIDOGE'];
+      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW', 'DEGEN', 'AIDOGE', 'FOXY'];
 
       const filteredArray = tokens.filter(
         (item, index, self) =>
@@ -186,6 +197,8 @@ export const useTokenBalanceList = () => {
     return FromList.find((item) => item.networkKey === (networkKey || FromList[0].networkKey))?.chainId;
   }, [networkKey]);
 
+  console.log(selectedChainId, 'selectedChainId');
+
   // const tokens = useMemo(() => {
   //   return Tokens.filter(
   //     (item) => item.networkKey === (networkKey || FromList[0].networkKey)
@@ -199,6 +212,8 @@ export const useTokenBalanceList = () => {
     query: { queryClient: queryClient },
   });
 
+  console.log(nativeTokenBalance, 'nativeTokenBalance');
+
   const erc20Contracts = useMemo(() => {
     return tokenSource.map(({ address }) => ({
       abi: IERC20.abi,
@@ -209,33 +224,14 @@ export const useTokenBalanceList = () => {
       // chainId
     }));
   }, [tokenSource, walletAddress, selectedChainId]);
-  const novaTestArray = [
-    {
-      address: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
-      symbol: 'OMNI',
-      decimals: 18,
-      type: 'MEME',
-    },
-  ];
-  const nova_erc20Contracts = useMemo(() => {
-    return novaTestArray.map(({ address }) => ({
-      abi: IERC20.abi,
-      functionName: 'balanceOf',
-      address: address as `0x${string}`,
-      args: [walletAddress as `0x${string}`],
-      chainId: NOVA_CHAIN_ID,
-    }));
-  }, [novaTestArray, walletAddress, selectedChainId]);
-
-  const { data: nova_erc20Balances } = useReadContracts({
-    config: config,
-    contracts: nova_erc20Contracts,
-    query: {
-      queryClient: queryClient,
-      // refetchInterval: 5000, //not working
-      // select: (data) => data.map((item) => item.result),
-    },
-  });
+  // const novaTestArray = [
+  //   {
+  //     address: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  //     symbol: 'OMNI',
+  //     decimals: 18,
+  //     type: 'MEME',
+  //   },
+  // ];
 
   const { data: nativeTokenBalanceTest } = useBalance({
     config,
@@ -278,8 +274,6 @@ export const useTokenBalanceList = () => {
     tokenList.unshift(native);
     return tokenList;
   }, [nativeTokenBalance, erc20Balances, from, tokenSource, networkKey]);
-
-  console.log('nova_erc20Balances', tokenSource, nova_erc20Balances, nativeTokenBalanceTest);
 
   const refreshTokenBalanceList = () => {
     queryClient.invalidateQueries();

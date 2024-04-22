@@ -358,6 +358,7 @@ export const useBridgeTx = () => {
       if (overrides.gasPrice && overrides.maxFeePerGas) {
         overrides.gasPrice = undefined;
       }
+      console.log('pass-here');
 
       // const l1GasLimit = await getDepositEstimateGasForUseFee();
       let tx: WriteContractParameters;
@@ -419,6 +420,7 @@ export const useBridgeTx = () => {
           }
         }
       } else {
+        console.log(network, 'network.mainContract');
         const bridgeContract = network.erc20BridgeL1;
         tx = {
           address: bridgeContract,
@@ -443,7 +445,9 @@ export const useBridgeTx = () => {
           address,
         ]) as `0x${string}`;
         if (isZkSyncChain) {
-          const fee = await zkSyncProvider.attachEstimateFee()({
+          console.log('pass-zkysync-chain', network.rpcUrl);
+          //TODO: Remmber to update sepolia & mainnet condition config
+          const fee = await zkSyncProvider.attachEstimateFee('https://sepolia.era.zksync.dev')({
             from: address,
             to: bridgeContract,
             value: BigNumber.from(tx.value).toHexString(),
@@ -472,9 +476,9 @@ export const useBridgeTx = () => {
         if (isArbitrum) {
           const provider = walletClientToProvider(walletClient!);
           const gasPrice = await provider.getGasPrice();
-          overrides.gasPrice = gasPrice;
-          delete overrides.maxFeePerGas;
-          delete overrides.maxPriorityFeePerGas;
+          // overrides.gasPrice = gasPrice;
+          // delete overrides.maxFeePerGas;
+          // delete overrides.maxPriorityFeePerGas;
         }
       }
       if (overrides.maxFeePerGas && overrides.maxPriorityFeePerGas) {
