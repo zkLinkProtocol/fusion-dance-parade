@@ -2,13 +2,14 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { checkMintEligibility } from 'constants/api';
 import useMintNft from '../features/nft/hooks/useMemeNft';
-import { useEffect } from 'react';
+import { useEffect,useState,useCallback } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
 import Merge from 'components/merge';
 import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
+import { Button } from '../components/ui/buttons/button';
 
 interface MemeAxisNftItemProps {
   data: any;
@@ -33,8 +34,8 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
         <div className={cn(hasMint ? 'disTranform' : 'card-inner')}>
           <div className='card-front'>
             <div className='h-full w-full'>
-              <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
-                <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden pt-2.5'>
+              <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl gradientBorder bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
+                <div className='relative flex aspect-[0.93] h-full w-full flex-col rounded-2xl overflow-hidden pt-2.5'>
                   <img
                     src={`/assets/imgs/${type}.png`}
                     className={cn(
@@ -124,7 +125,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = ({ memeNftBalances }) => {
   );
 };
 
-const Summon: React.FC = () => {
+const Summon: React.FC = (props) => {
   return (
     <div className='max-md:max-w-full w-full'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
@@ -132,7 +133,7 @@ const Summon: React.FC = () => {
       </div>
       <div className='max-md:flex-col flex gap-1 md:gap-5'>
         <div className='max-md:ml-0 max-md:w-full flex w-2/5 flex-col md:w-[29%]'>
-          <div className='max-md:mt-8 flex w-full grow flex-col justify-center rounded-2xl bg-zinc-900 md:border-2 md:border-solid md:border-indigo-500'>
+          <div className='md:mt-0 mt-4 flex w-full grow flex-col md:justify-center rounded-2xl md:bg-zinc-900 md:border-2 md:border-solid md:border-indigo-500'>
             <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
@@ -146,7 +147,7 @@ const Summon: React.FC = () => {
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
               <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
-            <Merge />
+            <Merge sendStatus={props.sendStatus}/>
             {/* <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
               Summon Now
             </div> */}
@@ -178,6 +179,10 @@ const Rules: React.FC = () => {
 };
 const Page: React.FC = () => {
   const { memeNftBalances } = useMintNft();
+  const [isSuccess, setIsSuccess] = useState(false);
+  const  sendStatus = (data) => {
+    setIsSuccess(data)
+  };
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
       <div className='mx-auto max-w-[1200px]'>
@@ -190,50 +195,31 @@ const Page: React.FC = () => {
             NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
           </div>
         </div>
-        <MemeNftGrid memeNftBalances={[
-    {
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 1,
-    },{
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 2,
-    },{
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 3,
-    },{
-      balance: 0n,
-      description: 'The zkLink Nova Booster Phase II NFT',
-      hasMint: false,
-      image: 'https://ipfs.io/ipfs/QmfJEDNsdPzBh5yXZfD1Yezgj1TKFTmKt3akxJDXwL1ffW/+50.png',
-      isEligible: true,
-      name: 'Nova Booster Phase II - 50',
-      tokenId: '1',
-      type: 4,
-    },
-  ]} />
-        <Summon />
+        <MemeNftGrid memeNftBalances={memeNftBalances} />
+        <Summon sendStatus={sendStatus}/>
         <Rules />
+        <Model isSuccess={isSuccess} sendStatus={sendStatus}/>
       </div>
     </section>
   );
 };
 
+const Model: React.FC = (props) => {
+  let {isSuccess, sendStatus} = props
+  const setStatus = () => {
+    sendStatus(false)
+  }
+  return (
+    <div className={cn(!isSuccess&&'!hidden','w-full h-full mask')}>
+      <div className='rounded-2xl p-8 bg-black flex flex-col items-center'>
+        <div className='text-5xl font-bold text-center text-white mb-2'>Congratulations</div>
+        <div className='text-2xl text-center text-white mb-6'>You’ve summoned</div>
+        <img loading='lazy' src='/assets/ball.svg' className='mb-6 aspect-[0.93] w-[100%] rounded-2xl bg-zinc-900 border-2 border-solid border-indigo-500' alt='' />
+        <Button className='backButton cursor-pointer' onClick={setStatus}>
+          <span>Confirm</span>
+        </Button>
+      </div>
+    </div>
+  );
+};
 export default Page;

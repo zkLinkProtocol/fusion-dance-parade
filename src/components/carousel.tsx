@@ -5,23 +5,13 @@ import { Button } from 'components/ui/buttons/button';
 import classNames from 'classnames';
 import Bridge from 'components/bridge';
 
-const IMAGES_DATA = [
-  { id: 1, src: '/images/carousel/1.jpg' },
-  { id: 2, src: '/images/carousel/2.jpg' },
-  { id: 3, src: '/images/carousel/3.jpg' },
-  { id: 4, src: '/images/carousel/4.jpg' },
-  { id: 5, src: '/images/carousel/5.jpg' },
-  { id: 6, src: '/images/carousel/6.jpg' },
-  { id: 7, src: '/images/carousel/7.jpg' },
-];
-
 export default function Carousel({ lists }) {
   const [index, setIndex] = useState(0);
   const [list, setList] = useState(lists);
-
+  // lists.length > 0 && setList(lists)
   const handleMove = (direction) => {
     // Create a shallow copy of the images array
-    const imgArrCopy = [...list];
+    const imgArrCopy = list.length> 0?[...list]:[...lists];
 
     // If Next Click -> ie handleMove(1)
     if (direction > 0) {
@@ -67,17 +57,16 @@ export default function Carousel({ lists }) {
       zIndex: 1,
     }),
   };
-  console.log(list, 'list');
   return (
     <div className='block md:hidden'>
       <div className='relative mx-auto flex h-96 w-[90%] items-center justify-center md:hidden'>
-        {list?.map((image, i) => {
+        {(list.length>0? list:lists)?.map((image, i) => {
           let position = 0;
           if (i === 0) {
             position = 0;
           } else if (i === 1) {
             position = 1;
-          } else if (i === list.length - 1) {
+          } else if (i === lists.length - 1) {
             position = -1;
           } else {
             position = 2;
@@ -87,12 +76,13 @@ export default function Carousel({ lists }) {
             <motion.div
               key={image.type}
               initial={false}
-              className={`absolute left-1/2 aspect-[3/2] h-80 flex-none overflow-hidden rounded-2xl border border-solid border-indigo-500 bg-zinc-900 text-white shadow-md`}
+              className={`absolute left-1/2 aspect-[3/2] h-[19rem] flex-none rounded-2xl gradientBorder bg-zinc-900 text-white shadow-md`}
               animate={imgLevel}
               custom={position}
               variants={variants}
               transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
             >
+              <div className='relative flex aspect-[0.93] h-full w-full flex-col rounded-2xl overflow-hidden bg-black'>
               <img
                 src={`/assets/imgs/${image.type}.png`}
                 className={cn(
@@ -109,6 +99,7 @@ export default function Carousel({ lists }) {
                 )}
               >
                 {image.hasMint ? image.balance?.toString() : image.isEligible ? 'Mintable' : ''}
+              </div>
               </div>
             </motion.div>
           );
