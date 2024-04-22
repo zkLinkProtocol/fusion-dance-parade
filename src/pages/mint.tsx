@@ -25,7 +25,7 @@ const copyAddress = (address: string) => {
 };
 //http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
-  const { type, balance, hasMint, isEligible, coin, chainTokenAddress } = item.data;
+  const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress } = item.data;
   console.log(item.data, 'item-data');
   return (
     <div className='card-container'>
@@ -36,7 +36,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
                 <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden pt-2.5'>
                   <img
-                    src={`/assets/imgs/${type}.png`}
+                    src={`/assets/imgs/${tokenId}.png`}
                     className={cn(
                       'absolute inset-0 object-cover rounded-2xl',
                       !isEligible && 'opacity-20 cursor-not-allowed',
@@ -58,7 +58,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
           </div>
           <div className='card-back'>
             <div className='flex flex-col items-center gap-1 p-[20px]'>
-              <img src={`/assets/imgs/${type}.png`} className='w-[80px]' alt='' />
+              <img src={`/assets/imgs/${tokenId}.png`} className='w-[80px]' alt='' />
               <div className='text-2xl font-bold text-white'>{coin}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
                 {shortenAddress(chainTokenAddress)}
