@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
+import { create } from 'zustand';
 import { checkMintEligibility } from 'constants/api';
 import useMintNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
 import { useEffect, useState, useCallback } from 'react';
@@ -200,19 +201,21 @@ const Page: React.FC = () => {
         <MemeNftGrid />
         <Summon sendStatus={sendStatus} />
         <Rules />
-        <Model isSuccess={isSuccess} sendStatus={sendStatus} />
+        <Model />
       </div>
     </section>
   );
 };
 
+export const useModalStore = create((set) => ({
+  isOpen: false,
+  toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
+}));
+
 const Model: React.FC = (props) => {
-  const { isSuccess, sendStatus } = props;
-  const setStatus = () => {
-    sendStatus(false);
-  };
+  const { isOpen, toggleModal } = useModalStore();
   return (
-    <div className={cn(!isSuccess && '!hidden', 'w-full h-full mask')}>
+    <div className={cn(!isOpen && '!hidden', 'w-full h-full mask')}>
       <div className='flex flex-col items-center rounded-2xl bg-black p-8'>
         <div className='mb-2 text-center text-5xl font-bold text-white'>Congratulations</div>
         <div className='mb-6 text-center text-2xl text-white'>You’ve summoned</div>
@@ -222,7 +225,12 @@ const Model: React.FC = (props) => {
           className='mb-6 aspect-[0.93] w-full rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
           alt=''
         />
-        <Button className='backButton cursor-pointer' onClick={setStatus}>
+        <Button
+          className='backButton cursor-pointer'
+          onClick={() => {
+            toggleModal(false);
+          }}
+        >
           <span>Confirm</span>
         </Button>
       </div>
