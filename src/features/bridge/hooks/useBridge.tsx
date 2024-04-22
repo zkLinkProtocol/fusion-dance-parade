@@ -332,7 +332,6 @@ export const useBridgeTx = () => {
     isMergeSelected?: boolean,
   ) => {
     const network = nodeConfig.find((item) => item.key === networkKey);
-    console.log('sendDepositTx-network: ', network, networkKey);
     if (!address || !network) {
       return;
     }
@@ -499,17 +498,11 @@ export const useBridgeTx = () => {
       }
       const hash = (await walletClient?.writeContract(tx)) as `0x${string}`;
       console.log('tx hash: ', hash);
-      //set a timeout
-      await sleep(1000);
-      try {
-        const res = await publicClient?.waitForTransactionReceipt({ hash });
-        console.log('tx res: ', res);
-      } catch (e) {
-        // maybe not found. But tx is sent and will succeed
-        console.error('tx errpr: ', e);
-      }
-
-      return hash;
+      const res = await publicClient?.waitForTransactionReceipt({ hash });
+      console.log(res, 'waitForTransactionReceipt');
+      const l2hash = await getDepositL2TxHash(res.transactionHash);
+      console.log(l2hash, 'l2hash');
+      return res.transactionHash;
     } catch (e) {
       console.log(e);
       return Promise.reject(e);

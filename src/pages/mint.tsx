@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
 import { create } from 'zustand';
-import { checkMintEligibility } from 'constants/api';
-import useMintNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
-import { useEffect, useState, useCallback } from 'react';
+import { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
+import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
@@ -25,13 +24,13 @@ const copyAddress = (address: string) => {
       console.error('Unable to copy text to clipboard: ', error);
     });
 };
-//http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
-  const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress } = item.data;
+  const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
   console.log(item.data, 'item-data');
   // card-bcak loading style
   return (
     <div className='card-container'>
+      {/* <Bridge data={item.data} /> */}
       <div className='card'>
         <div className={cn(hasMint ? 'disTranform' : 'card-inner')}>
           <div className='card-front'>
@@ -62,7 +61,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
           <div className='card-back'>
             <div className='flex flex-col items-center gap-1 p-[20px]'>
               <img src={`/assets/imgs/${tokenId}.png`} className='w-[80px]' alt='' />
-              <div className='text-2xl font-bold text-white'>{coin}</div>
+              <div className='text-2xl font-bold text-white'>{coin?.toUpperCase() === 'OMNI2' ? 'Omni' : coin}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
                 {shortenAddress(chainTokenAddress)}
                 {/* {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)} */}
@@ -78,30 +77,19 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
               </div>
               <div className='mb-2 text-[15px] text-slate-400'>
-                Deposit 1 FOXY into Nova Network and mint your NOVA Linea Foxy.
+                Deposit 1 {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network and mint
+                your NOVA {chain} {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()}.
               </div>
               <Bridge data={item.data} />
               {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>
-          {/* <Button className='absolute inset-0' disabled={!isEligible}>
-            {hasMint && 'Minted'} Mint {isEligible && 'Eligible to Mint'}
-          </Button> */}
         </div>
       </div>
     </div>
   );
 };
-interface MemeNftGridProps {
-  memeNftBalances: Array<{
-    nft: {
-      image: string;
-      name: string;
-      address: string;
-    };
-    balance: number;
-  }>;
-}
+interface MemeNftGridProps {}
 const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
   // const { address } = useAccount();
   const { batchBalances } = useBatchBalancesStore();

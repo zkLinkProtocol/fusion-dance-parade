@@ -60,7 +60,7 @@ export default function Carousel({ lists }) {
   return (
     <div className='block md:hidden'>
       <div className='relative mx-auto flex h-96 w-[90%] items-center justify-center md:hidden'>
-        {(list.length>0? list:lists)?.map((image, i) => {
+        {(list.length > 0 ? list : lists)?.map((image, i) => {
           let position = 0;
           if (i === 0) {
             position = 0;
@@ -76,30 +76,30 @@ export default function Carousel({ lists }) {
             <motion.div
               key={image.tokenId}
               initial={false}
-              className={`absolute left-1/2 aspect-[3/2] h-[19rem] flex-none rounded-2xl gradientBorder bg-zinc-900 text-white shadow-md`}
+              className={`gradientBorder absolute left-1/2 aspect-[3/2] h-[19rem] flex-none rounded-2xl bg-zinc-900 text-white shadow-md`}
               animate={imgLevel}
               custom={position}
               variants={variants}
               transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
             >
-              <div className='relative flex aspect-[0.93] h-full w-full flex-col rounded-2xl overflow-hidden bg-black'>
-              <img
-                src={`/assets/imgs/${image.tokenId}.png`}
-                className={cn(
-                  'absolute inset-0 object-cover rounded-2xl',
-                  !image.isEligible && 'opacity-20 cursor-not-allowed',
-                  !image.hasMint && image.isEligible && 'cursor-pointer !opacity-80',
-                )}
-                alt=''
-              />
-              <div
-                className={cn(
-                  'font-normal mr-2.5 absolute top-[10px] right-[10px] rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5',
-                  !image.hasMint && !image.isEligible && 'hidden',
-                )}
-              >
-                {image.hasMint ? image.balance?.toString() : image.isEligible ? 'Mintable' : ''}
-              </div>
+              <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden rounded-2xl bg-black'>
+                <img
+                  src={`/assets/imgs/${image.tokenId}.png`}
+                  className={cn(
+                    'absolute inset-0 object-cover rounded-2xl',
+                    !image.isEligible && 'opacity-20 cursor-not-allowed',
+                    !image.hasMint && image.isEligible && 'cursor-pointer !opacity-80',
+                  )}
+                  alt=''
+                />
+                <div
+                  className={cn(
+                    'font-normal mr-2.5 absolute top-[10px] right-[10px] rounded-lg border-2 border-solid border-indigo-500 bg-zinc-900 px-2.5',
+                    !image.hasMint && !image.isEligible && 'hidden',
+                  )}
+                >
+                  {image.hasMint ? image.balance?.toString() : image.isEligible ? 'Mintable' : ''}
+                </div>
               </div>
             </motion.div>
           );
@@ -135,7 +135,6 @@ export default function Carousel({ lists }) {
           </svg>
         </button>
       </div>
-      {/* <Bridge data={} /> */}
     </div>
   );
 }

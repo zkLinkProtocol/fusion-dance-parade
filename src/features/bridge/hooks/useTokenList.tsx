@@ -109,6 +109,17 @@ export const useTokenBalanceList = () => {
         });
         tokens.push({
           ...token,
+          address: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
+          decimals: 18,
+          icon: 'omni2-icon',
+          multiplier: 2,
+          networkKey: 'arbitrum',
+          networkName: 'Arbitrum Sepolia Testnet',
+          symbol: 'OMNI2',
+          type: 'MEME',
+        });
+        tokens.push({
+          ...token,
           address: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
           decimals: 18,
           icon: 'degen-icon',
@@ -177,7 +188,7 @@ export const useTokenBalanceList = () => {
       // const filteredArray = tokens.filter(
       //   (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
       // );
-      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW', 'DEGEN', 'AIDOGE', 'FOXY'];
+      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW', 'DEGEN', 'AIDOGE', 'FOXY', 'OMNI2'];
 
       const filteredArray = tokens.filter(
         (item, index, self) =>
