@@ -142,6 +142,7 @@ const useMemeNft = () => {
       uri = uri.substring(7);
     }
     const response = await fetch(`https://ipfs.io/ipfs/${uri}`);
+    console.log(`https://ipfs.io/ipfs/${uri}`, 'ipfs');
     const json = await response.json();
     const result: NovaNft = {
       name: json.name,
@@ -193,9 +194,9 @@ const useMemeNft = () => {
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
-        const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
+        // const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
         const hasMint = await getMintRecordByTokenId(address, tokenId);
-        const nft = await fetchMetadataByURI(tokenURI, tokenId);
+        // const nft = await fetchMetadataByURI(tokenURI, tokenId);
 
         const tokeBalance_nova = await readContract(config, {
           abi: IERC20.abi,
@@ -219,64 +220,64 @@ const useMemeNft = () => {
           hasMint,
           tokenBalance: tokeBalance_nova,
           hasMemeTokenBalance: tokeBalance_nova > 0,
-          name: nft.name,
-          description: nft.description,
-          image: nft.image,
-          type: nft.type,
+          // name: nft.name,
+          // description: nft.description,
+          // image: nft.image,
+          // type: nft.type,
         };
       }),
     );
     return balances;
   };
 
-  const getMemeComposeNftBalance = async (address: string) => {
-    const balance = await readContract(config, {
-      address: MEME_COMPOSE_NFT_CONTRACT as Hash,
-      abi: NovaComposeNFT,
-      functionName: 'balanceOf',
-      args: [address],
-      chainId: NOVA_CHAIN_ID,
-    });
-    return balance;
-  };
+  // const getMemeComposeNftBalance = async (address: string) => {
+  //   const balance = await readContract(config, {
+  //     address: MEME_COMPOSE_NFT_CONTRACT as Hash,
+  //     abi: NovaComposeNFT,
+  //     functionName: 'balanceOf',
+  //     args: [address],
+  //     chainId: NOVA_CHAIN_ID,
+  //   });
+  //   return balance;
+  // };
 
-  const getComposeTokenIdByIndex = useCallback(async (address: string) => {
-    const tokenId = await readContract(config, {
-      address: MEME_COMPOSE_NFT_CONTRACT as Hash,
-      abi: NovaComposeNFT,
-      functionName: 'tokenOfOwnerByIndex',
-      args: [address, 0],
-      chainId: NOVA_CHAIN_ID,
-    });
-    return tokenId as number;
-  }, []);
+  // const getComposeTokenIdByIndex = useCallback(async (address: string) => {
+  //   const tokenId = await readContract(config, {
+  //     address: MEME_COMPOSE_NFT_CONTRACT as Hash,
+  //     abi: NovaComposeNFT,
+  //     functionName: 'tokenOfOwnerByIndex',
+  //     args: [address, 0],
+  //     chainId: NOVA_CHAIN_ID,
+  //   });
+  //   return tokenId as number;
+  // }, []);
 
-  const getComposeTokenURIByTokenId = useCallback(async (tokenId: number) => {
-    const tokenURI = await readContract(config, {
-      address: MEME_COMPOSE_NFT_CONTRACT as Hash,
-      abi: NovaComposeNFT,
-      functionName: 'tokenURI',
-      args: [tokenId],
-      chainId: NOVA_CHAIN_ID,
-    });
-    return tokenURI as string;
-  }, []);
+  // const getComposeTokenURIByTokenId = useCallback(async (tokenId: number) => {
+  //   const tokenURI = await readContract(config, {
+  //     address: MEME_COMPOSE_NFT_CONTRACT as Hash,
+  //     abi: NovaComposeNFT,
+  //     functionName: 'tokenURI',
+  //     args: [tokenId],
+  //     chainId: NOVA_CHAIN_ID,
+  //   });
+  //   return tokenURI as string;
+  // }, []);
 
-  const fetchComposeNftInfo = async (address: string) => {
-    try {
-      setIsFetchingNfts(true);
-      const tokenId = await getComposeTokenIdByIndex(address);
-      const tokenURI = await getComposeTokenURIByTokenId(tokenId);
-      const balance = await getMemeComposeNftBalance(address);
-      const nft = await fetchMetadataByURI(tokenURI, tokenId.toString());
-      const composeNftInfo = { tokenId, balance, info: nft };
-      setComposeNftInfo(composeNftInfo);
-    } catch (error) {
-      console.error('Error fetching compose NFT info:', error);
-    } finally {
-      setIsFetchingNfts(false);
-    }
-  };
+  // const fetchComposeNftInfo = async (address: string) => {
+  //   try {
+  //     setIsFetchingNfts(true);
+  //     const tokenId = await getComposeTokenIdByIndex(address);
+  //     const tokenURI = await getComposeTokenURIByTokenId(tokenId);
+  //     const balance = await getMemeComposeNftBalance(address);
+  //     const nft = await fetchMetadataByURI(tokenURI, tokenId.toString());
+  //     const composeNftInfo = { tokenId, balance, info: nft };
+  //     setComposeNftInfo(composeNftInfo);
+  //   } catch (error) {
+  //     console.error('Error fetching compose NFT info:', error);
+  //   } finally {
+  //     setIsFetchingNfts(false);
+  //   }
+  // };
 
   const fetchMemeNftBalances = async (address: string) => {
     try {
@@ -292,27 +293,27 @@ const useMemeNft = () => {
     }
   };
 
-  const fetchNovaNft = useCallback(
-    async (address: string): Promise<NovaNft | undefined> => {
-      try {
-        setIsFetchingNfts(true);
-        const balance = await getMemeNftBalance(address);
-        if (BigNumber.from(balance).eq(0)) {
-          return;
-        }
-        const tokenId = 4;
-        const tokenURI = await getTokenURIByTokenId(tokenId);
-        const nft = await fetchMetadataByURI(tokenURI, tokenId.toString());
-        setNovaNft(nft);
-        return nft;
-      } catch (error) {
-        console.error('Error fetching Nova NFT:', error);
-      } finally {
-        setIsFetchingNfts(false);
-      }
-    },
-    [getMemeNftBalance, getTokenIdByIndex, getTokenURIByTokenId],
-  );
+  // const fetchNovaNft = useCallback(
+  //   async (address: string): Promise<NovaNft | undefined> => {
+  //     try {
+  //       setIsFetchingNfts(true);
+  //       const balance = await getMemeNftBalance(address);
+  //       if (BigNumber.from(balance).eq(0)) {
+  //         return;
+  //       }
+  //       const tokenId = 4;
+  //       const tokenURI = await getTokenURIByTokenId(tokenId);
+  //       const nft = await fetchMetadataByURI(tokenURI, tokenId.toString());
+  //       setNovaNft(nft);
+  //       return nft;
+  //     } catch (error) {
+  //       console.error('Error fetching Nova NFT:', error);
+  //     } finally {
+  //       setIsFetchingNfts(false);
+  //     }
+  //   },
+  //   [getMemeNftBalance, getTokenIdByIndex, getTokenURIByTokenId],
+  // );
 
   const mintNovaNft = async (address: string, chain: string, coin: string) => {
     if (!address) return;
@@ -372,17 +373,18 @@ const useMemeNft = () => {
         hash,
       });
       console.log('Transaction receipt:', receipt);
-      await fetchNovaNft(address);
+      await fetchMemeNftBalances(address);
     } catch (error) {
       console.error('Error minting Nova NFT:', error);
       if (error.message && error.message?.includes('not found')) {
         // View not found. Try fetchNovaNft again.
-        await fetchNovaNft(address);
+        await fetchMemeNftBalances(address);
         return;
       }
       throw error;
     } finally {
       setIsMinting(false);
+      fetchMemeNftBalances(address);
     }
   };
 
@@ -392,18 +394,10 @@ const useMemeNft = () => {
     }
   }, [address]);
 
-  useEffect(() => {
-    if (address) {
-      fetchNovaNft(address);
-      fetchComposeNftInfo(address);
-    }
-  }, [address, fetchNovaNft]);
-
   return {
+    fetchMemeNftBalances,
     getMemeNftBalance,
-    fetchNovaNft,
     mintNovaNft,
-    novaNft,
     composeNftInfo,
     memeNftBalances,
     isMinting,

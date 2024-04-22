@@ -26,7 +26,7 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             },
           )}
           style={{
-            backgroundImage: `url(${`/assets/imgs/${tag.type}.png`})`,
+            backgroundImage: `url(${`/assets/imgs/${tag.tokenId}.png`})`,
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',

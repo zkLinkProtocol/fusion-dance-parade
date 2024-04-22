@@ -54,11 +54,11 @@ export default function Merge({sendStatus}) {
   // const upgradeModal = useDisclosure();
   const { address, chainId } = useAccount();
   // const chainId = useChainId({ config });
-  const { switchChain } = useSwitchChain();
+  const { switchChain, isPending } = useSwitchChain();
 
   const { refreshBalanceId, updateRefreshBalanceId } = useMintStatus();
 
-  const { memeNftBalances, composeNftInfo } = useMemeNft();
+  const { memeNftBalances, fetchMemeNftBalances } = useMemeNft();
 
   const [mintType, setMintType] = useState<any>('ISTP');
   const [remainDrawCount, setRemainDrawCount] = useState<number>(0);
@@ -180,6 +180,7 @@ export default function Merge({sendStatus}) {
       const res = await publicClient?.waitForTransactionReceipt({
         hash,
       });
+      fetchMemeNftBalances(address);
       console.log(res);
     } catch (e) {
       console.error(e);
@@ -210,12 +211,13 @@ export default function Merge({sendStatus}) {
       setTrademarkMintStatus(MintStatus.Minting);
       if (!isTrademarkApproved) {
         await sendTrademarkApproveTx(address);
-        toast.success('Congrats! Approve completed!');
+        toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Approve completed!' />);
       }
       await sendUpgradeSBTTx(address);
       setTrademarkMintStatus(MintStatus.Success);
       updateRefreshBalanceId();
       setUpdate((update) => update + 1);
+      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
       sendStatus(true)
     } catch (e: any) {
       console.log(e);
@@ -228,6 +230,7 @@ export default function Merge({sendStatus}) {
       }
       toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Upgrade Nft failed' />);
     } finally {
+      setSelectedTags([]);
       toast.dismiss();
     }
   }, [
@@ -293,14 +296,14 @@ export default function Merge({sendStatus}) {
             className={classNames(
               'w-full max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white',
               {
-                'opacity-50 cursor-not-allowed': isInvaidChain || !isReachedLimit || loading,
+                'opacity-50 cursor-not-allowed': !isReachedLimit || loading,
               },
             )}
             onClick={handleUpgrade}
-            disabled={isInvaidChain || !isReachedLimit || loading}
-            loading={loading}
+            disabled={!isReachedLimit || loading}
+            loading={loading || isPending}
           >
-            Upgrade
+            {isInvaidChain ? 'Switch to Nova Chain' : 'Summon Now'}
           </Button>
         </div>
       </div>

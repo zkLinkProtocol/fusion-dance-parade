@@ -74,7 +74,7 @@ export default function Carousel({ lists }) {
           const imgLevel = position === 0 ? 'active' : position === -1 || position === 1 ? 'level1' : 'level2';
           return (
             <motion.div
-              key={image.type}
+              key={image.tokenId}
               initial={false}
               className={`absolute left-1/2 aspect-[3/2] h-[19rem] flex-none rounded-2xl gradientBorder bg-zinc-900 text-white shadow-md`}
               animate={imgLevel}
@@ -84,7 +84,7 @@ export default function Carousel({ lists }) {
             >
               <div className='relative flex aspect-[0.93] h-full w-full flex-col rounded-2xl overflow-hidden bg-black'>
               <img
-                src={`/assets/imgs/${image.type}.png`}
+                src={`/assets/imgs/${image.tokenId}.png`}
                 className={cn(
                   'absolute inset-0 object-cover rounded-2xl',
                   !image.isEligible && 'opacity-20 cursor-not-allowed',
