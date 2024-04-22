@@ -290,7 +290,7 @@ const FromListSepolia = [
     label: 'Base Sepolia Testnet',
     icon: baseIcon,
     chainId: baseSepolia.id,
-    networkKey: 'base-sepolia',
+    networkKey: 'base',
     isEthGasToken: true,
     chainName: 'Base Sepolia',
     explorerUrl: baseSepolia.blockExplorers.default.url,

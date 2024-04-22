@@ -345,13 +345,14 @@ export default function Bridge({ data }: { data: any }) {
   }, [coin, tokenFiltered]);
 
   const handleAction = useCallback(async () => {
+    console.log(amount, !address || !fromList[fromActive].chainId, fromList[fromActive]?.networkKey, 'amount');
     // TODO: remove || !nativeTokenBalance first, add button to notfiy user about their balance
     if (!address || !fromList[fromActive].chainId) return;
+    setNetworkKey(fromList[fromActive]?.networkKey);
     if (invalidChain) {
       try {
         setSwitchLoading(true);
         await switchChainAsync({ chainId: fromList[fromActive].chainId });
-        setNetworkKey(fromList[fromActive]?.networkKey);
         setSwitchChainError('');
         return;
       } catch (e: any) {

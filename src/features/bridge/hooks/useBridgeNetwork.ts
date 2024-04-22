@@ -8,15 +8,22 @@ export type NetworkStore = {
   setNetworkKey: (networkKey: string) => void;
 };
 
+const getNetworkKey = () => {
+  if (typeof window === 'undefined') {
+    return 'ethereum';
+  }
+
+  const storedNetworkKey = localStorage.getItem(STORAGE_NETWORK_KEY);
+  if (storedNetworkKey) {
+    return storedNetworkKey;
+  }
+
+  return nodeType === 'nexus-sepolia' ? 'sepolia' : 'ethereum';
+};
+console.log('getNetworkKey', getNetworkKey());
+
 export const useBridgeNetworkStore = create<NetworkStore>()((set) => ({
-  networkKey:
-    typeof window !== 'undefined'
-      ? localStorage.getItem(STORAGE_NETWORK_KEY)
-        ? localStorage.getItem(STORAGE_NETWORK_KEY)!
-        : nodeType === 'nexus-sepolia'
-        ? 'sepolia'
-        : 'ethereum'
-      : 'ethereum',
+  networkKey: getNetworkKey(),
   setNetworkKey: (networkKey: string) => {
     localStorage.setItem(STORAGE_NETWORK_KEY, networkKey);
     set({

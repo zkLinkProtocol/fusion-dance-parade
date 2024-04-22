@@ -142,7 +142,7 @@ const Summon: React.FC = () => {
               Meme NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
-              <div className='my-auto flex-auto'>Select 5 NFT to Summon</div>
+              <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
               <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge />
