@@ -307,6 +307,8 @@ export default function Bridge({ data }: { data: any }) {
     }
     if (invalidChain) {
       return 'Switch Network';
+    } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
+      return 'Insufficient Gas Token';
     } else if (amount && tokenFiltered[tokenActive] && tokenFiltered[tokenActive].formatedBalance) {
       if (Number(amount) > Number(tokenFiltered[tokenActive].formatedBalance)) {
         return 'Insufficient balance';
@@ -463,12 +465,14 @@ export default function Bridge({ data }: { data: any }) {
         if (e.message.includes('User rejected the request')) {
           toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('You already have a character')) {
-          toast.error('You can mint SBT only once.');
+          // toast.error('You can mint SBT only once.');
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='You can mint SBT only once.' />);
         } else {
-          toast.error(e.message);
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description={e.message} />);
         }
       } else {
-        toast.error('Mint SBT failed');
+        toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Mint SBT failed' />);
+        // toast.error('Mint SBT failed');
       }
     }
   }, [address, isInvaidChain, switchChain, mintNovaNft]);
