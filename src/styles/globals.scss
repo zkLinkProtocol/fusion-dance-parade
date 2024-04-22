@@ -154,7 +154,8 @@ svg {
 }
 
 .gradient-btn {
-  background: linear-gradient(to right, #48ebae, #3d51fc, #49e9b0);
+  border-radius: 4px;
+  background: var(--MEMECOIN, linear-gradient(90deg, #6276E7 0%, #E884FE 100%));
   color: #fff;
   border-radius: 6px;
   font-size: 16px;

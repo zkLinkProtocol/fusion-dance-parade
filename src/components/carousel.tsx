@@ -106,7 +106,7 @@ export default function Carousel({ lists }) {
         })}
         <button
           onClick={() => handleMove(-1)}
-          className='absolute -left-12 grid h-14 w-14 place-content-center text-3xl text-white transition-colors'
+          className='absolute -left-8 grid h-14 w-8 place-content-center text-3xl text-white transition-colors'
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -121,7 +121,7 @@ export default function Carousel({ lists }) {
         </button>
         <button
           onClick={() => handleMove(1)}
-          className='absolute -right-12 grid h-14 w-14 place-content-center text-3xl text-white transition-colors'
+          className='absolute -right-8 grid h-14 w-8 place-content-center text-3xl text-white transition-colors'
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
