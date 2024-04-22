@@ -8,6 +8,7 @@ import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
 import Merge from 'components/merge';
 import Carousel from 'components/carousel';
+import { shortenAddress } from 'utils/format';
 
 interface MemeAxisNftItemProps {
   data: any;
@@ -24,7 +25,7 @@ const copyAddress = (address: string) => {
 };
 //http://3.114.68.110:8097/meme/check/address?address=0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
-  const { type, balance, hasMint, isEligible } = item.data;
+  const { type, balance, hasMint, isEligible, coin, chainTokenAddress } = item.data;
   console.log(item.data, 'item-data');
   return (
     <div className='card-container'>
@@ -58,17 +59,17 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
           <div className='card-back'>
             <div className='flex flex-col items-center gap-1 p-[20px]'>
               <img src={`/assets/imgs/${type}.png`} className='w-[80px]' alt='' />
-              <div className='text-2xl font-bold text-white'>Foxy{/* {nft.name} */}</div>
+              <div className='text-2xl font-bold text-white'>{coin}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
-                0x5FBD....1566
+                {shortenAddress(chainTokenAddress)}
                 {/* {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)} */}
                 <img
                   src='/assets/copy.svg'
                   alt=''
                   className='mt-[3px] h-[9px] w-[9px] cursor-pointer'
-                  // onClick={() => {
-                  //   copyAddress(nft.address);
-                  // }}
+                  onClick={() => {
+                    copyAddress(chainTokenAddress);
+                  }}
                 />
                 <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
                 <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
@@ -142,7 +143,7 @@ const Summon: React.FC = () => {
               Meme NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
-              <div className='my-auto flex-auto'>Select 5 NFT to Summon</div>
+              <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
               <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge />
