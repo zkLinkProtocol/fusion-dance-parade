@@ -109,13 +109,13 @@ export const useTokenBalanceList = () => {
         });
         tokens.push({
           ...token,
-          address: '0xBadb2cdC5085bf70B085f2c8052cD5A74fbFaEb0',
+          address: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
           decimals: 18,
-          icon: 'meow-icon',
+          icon: 'degen-icon',
           multiplier: 2,
-          networkKey: 'zksync',
-          networkName: 'Zksync Sepolia Testnet',
-          symbol: 'MEOW',
+          networkKey: 'base',
+          networkName: 'Base Sepolia Testnet',
+          symbol: 'DEGEN',
           type: 'MEME',
         });
         tokens.push({
@@ -127,6 +127,28 @@ export const useTokenBalanceList = () => {
           networkKey: 'base',
           networkName: 'Base Sepolia Testnet',
           symbol: 'BRETT',
+          type: 'MEME',
+        });
+        tokens.push({
+          ...token,
+          address: '0xBadb2cdC5085bf70B085f2c8052cD5A74fbFaEb0',
+          decimals: 18,
+          icon: 'meow-icon',
+          multiplier: 2,
+          networkKey: 'zksync',
+          networkName: 'Zksync Sepolia Testnet',
+          symbol: 'MEOW',
+          type: 'MEME',
+        });
+        tokens.push({
+          ...token,
+          address: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
+          decimals: 18,
+          icon: 'aidoge-icon',
+          multiplier: 2,
+          networkKey: 'arbitrum',
+          networkName: 'Arbitrum Sepolia Testnet',
+          symbol: 'AIDOGE',
           type: 'MEME',
         });
         tokens.push({
@@ -144,7 +166,7 @@ export const useTokenBalanceList = () => {
       // const filteredArray = tokens.filter(
       //   (item, index, self) => index === self.findIndex((t) => t.symbol === item.symbol),
       // );
-      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW'];
+      const whitelist = ['ETH', 'ZKT', 'BRETT', 'OMNI', 'MEOW', 'DEGEN', 'AIDOGE'];
 
       const filteredArray = tokens.filter(
         (item, index, self) =>

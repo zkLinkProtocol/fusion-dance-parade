@@ -25,6 +25,9 @@ import { applyL1ToL2Alias, isETH, scaleGasLimit, sleep } from 'zksync-web3/build
 
 import { useBridgeNetworkStore } from './useBridgeNetwork';
 import { useZksyncProvider, nodeConfig, walletClientToProvider, l1EthDepositAbi } from '../utils';
+import { Toast } from 'components/ui/toast';
+import { toast } from 'sonner';
+import useMemeNft from 'features/nft/hooks/useMemeNft';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
 const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
@@ -33,6 +36,7 @@ export const useBridgeTx = () => {
   const networkKey = useBridgeNetworkStore.getState().networkKey;
   const publicClient = usePublicClient({ config, chainId });
   const { address } = useAccount();
+  const { fetchMemeNftBalances } = useMemeNft();
   const { data: walletClient } = useWalletClient();
   const [loading, setLoading] = useState(false);
   const { provider: providerL2, getDefaultBridgeAddresses } = useZksyncProvider();
@@ -232,6 +236,10 @@ export const useBridgeTx = () => {
     const baseCost = await getBaseCost(l2GasLimit);
     const selfBalanceETH = await publicClient?.getBalance({ address });
     if (baseCost.gte(selfBalanceETH ?? 0n)) {
+      //
+      toast.custom((t) => (
+        <Toast type='error' id={t} title='Failed' description='Not enough ETH balance for deposit' />
+      ));
       throw new Error(`Not enough balance for deposit`);
     }
 
@@ -503,6 +511,7 @@ export const useBridgeTx = () => {
       return Promise.reject(e);
     } finally {
       setLoading(false);
+      fetchMemeNftBalances(address);
     }
   };
 

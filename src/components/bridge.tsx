@@ -65,9 +65,9 @@ export default function Bridge({ data }: { data: any }) {
   const [amount, setAmount] = useState('0.001');
 
   const [url, setUrl] = useState('');
-  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance } = data;
+  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
   const { switchChain, switchChainAsync } = useSwitchChain();
-  const { mintNovaNft, isMinting } = useMemeNft();
+  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
   const isInvaidChain = useMemo(() => {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
@@ -267,6 +267,7 @@ export default function Bridge({ data }: { data: any }) {
   }, [chainId, fromActive]);
 
   const actionBtnDisabled = useMemo(() => {
+    if (!isEligible) return true;
     if (!invalidChain && mergeLimitExceeds) {
       return true;
     } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
@@ -294,12 +295,16 @@ export default function Bridge({ data }: { data: any }) {
     amount,
     errorInputMsg,
     mergeLimitExceeds,
+    isEligible,
   ]);
 
   const isDepositErc20 = useMemo(() => {
     return tokenFiltered[tokenActive] && tokenFiltered[tokenActive].address !== ETH_ADDRESS;
   }, [tokenActive, tokenFiltered]);
   const btnText = useMemo(() => {
+    if (!isEligible) {
+      return 'Unqualified';
+    }
     if (invalidChain) {
       return 'Switch Network';
     } else if (amount && tokenFiltered[tokenActive] && tokenFiltered[tokenActive].formatedBalance) {
@@ -310,7 +315,7 @@ export default function Bridge({ data }: { data: any }) {
       return 'Approve and Deposit';
     }
     return 'Deposit to Mint';
-  }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20]);
+  }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20, isEligible]);
 
   const handleInputValue = (v: string) => {
     if (!v) {
@@ -450,7 +455,8 @@ export default function Bridge({ data }: { data: any }) {
     }
     try {
       await mintNovaNft(address, chain, coin);
-      toast.success('Successfully minted SBT!');
+      await fetchMemeNftBalances(address);
+      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully minted SBT!' />);
     } catch (e: any) {
       console.log(e);
       if (e.message) {
@@ -477,8 +483,13 @@ export default function Bridge({ data }: { data: any }) {
         {isConnected ? (
           <>
             {hasMemeTokenBalance ? (
-              <Button onClick={handleMint} loading={isMinting} className='backButton cursor-pointer'>
-                <span>{isInvaidChain ? 'Switch to Nova network' : 'Mint'}</span>
+              <Button
+                onClick={handleMint}
+                loading={isMinting}
+                className='backButton cursor-pointer'
+                disabled={!isEligible}
+              >
+                <span>{isInvaidChain ? 'Switch to Nova network' : !isEligible ? 'Unqualified' : 'Mint'}</span>
               </Button>
             ) : (
               <Button
@@ -487,7 +498,7 @@ export default function Bridge({ data }: { data: any }) {
                 size='lg'
                 onClick={handleAction}
                 loading={loading}
-                // disabled={actionBtnDisabled}
+                disabled={actionBtnDisabled}
               >
                 {btnText}
               </Button>
