@@ -309,9 +309,9 @@ export default function Bridge({ data }: { data: any }) {
       return 'Switch Network';
     } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
       return 'Insufficient Gas Token';
-    } else if (amount && tokenFiltered[tokenActive] && tokenFiltered[tokenActive].formatedBalance) {
+    } else if (amount && tokenFiltered[tokenActive]) {
       if (Number(amount) > Number(tokenFiltered[tokenActive].formatedBalance)) {
-        return 'Insufficient balance';
+        return `Insufficient ${tokenFiltered[tokenActive].symbol} balance`;
       }
     } else if (isDepositErc20) {
       return 'Approve and Deposit';
@@ -319,6 +319,13 @@ export default function Bridge({ data }: { data: any }) {
     return 'Deposit to Mint';
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20, isEligible]);
 
+  console.log(
+    !!amount && !!tokenFiltered[tokenActive],
+    Number(amount) > Number(tokenFiltered[tokenActive]?.formatedBalance),
+    Number(amount),
+    Number(tokenFiltered[tokenActive]?.formatedBalance),
+    'final',
+  );
   const handleInputValue = (v: string) => {
     if (!v) {
       setAmount(v);
@@ -333,10 +340,7 @@ export default function Bridge({ data }: { data: any }) {
 
   useEffect(() => {
     if (selectedChainId) {
-      // const filterdIndex = fromList.findIndex((item) => item.chainId === selectedChainId);
       setFromActive(fromList.findIndex((item) => item.chainId === selectedChainId));
-      // console.log(fromList[filterdIndex]?.networkKey, selectedChainId, 'networkKey-test');
-      // setNetworkKey(fromList[filterdIndex]?.networkKey);
     }
   }, [fromActive, selectedChainId, fromList, chain]);
 
@@ -479,8 +483,6 @@ export default function Bridge({ data }: { data: any }) {
 
   //TODO: deposit-> check meme user balance & gas balance -> mint
   //TODO: chain token list
-
-  console.log(fromList, fromActive, networkKey, 'networkKey-test');
   return (
     <>
       <>
