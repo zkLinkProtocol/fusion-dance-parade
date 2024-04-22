@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { BottomGradient, SpinCarousel } from 'components/svgs';
 import { Button } from 'components/ui/buttons/button';
 import { checkMintEligibility } from 'constants/api';
+import { cn } from 'lib/utils';
 
 const formSchema = z.object({
   address: z.string().min(1, 'Address is required'),
@@ -21,28 +22,50 @@ const Page = () => {
   });
   const { errors, isSubmitted } = formState;
   const [isEligible, setIsEligible] = useState<boolean | null>(null);
+  const [type, setType] = useState('connect');
 
   const onSubmit = useCallback(async (data: CollectableCreateFormValue) => {
     const res = await checkMintEligibility(data.address);
     setIsEligible(res.result.length > 0);
   }, []);
-
+  const changeType = () => {
+    if (type === 'connect') {
+      setType('check')
+    } else if (type === 'check') {
+      // setType('connect')
+    }
+  }
   return (
     <>
       <section className='h-screen w-full bg-dunes bg-cover bg-center'>
-        <div className='max-md:max-w-full relative flex w-full flex-col overflow-hidden pt-6'>
+        <div className='max-md:max-w-full relative flex w-full h-screen flex-col overflow-hidden pt-6'>
           <BottomGradient className='absolute bottom-[30px] z-10 h-[580px] w-full object-cover' />
-          <div className='max-md:mb-2.5 max-md:mt-10 max-md:px-5 relative mb-0 mt-11 flex min-h-[850px] w-[891px] max-w-full flex-col items-center justify-center self-center overflow-hidden px-16 py-20 tracking-tight'>
+          <div className='max-md:mb-2.5 max-md:mt-10 max-md:px-5 relative mb-0 mt-11 flex min-h-[775px] w-[891px] max-w-full flex-col items-center justify-center self-center overflow-hidden px-16 pt-20 tracking-tight'>
             <SpinCarousel className='absolute inset-0 object-cover' />
-            <div className='max-md:my-10 relative z-[99] mb-24 mt-52 flex w-[585px] max-w-full flex-col items-center'>
+            <div className='max-md:my-10 relative z-[99] mb-6 mt-16 flex w-[585px] max-w-full flex-col items-center'>
               <div className='max-md:text-4xl max-md:leading-[52px] w-[417px] text-center text-5xl font-black leading-[56px] text-white'>
                 Brave MEME Coin Hodlers, welcome to Nova!
               </div>
-              <div className='max-md:mt-10 max-md:max-w-full mt-12 w-[425px] text-center text-base leading-6 text-neutral-400'>
+              <div className='max-md:mt-10 max-md:max-w-full mt-12 w-[450px] text-center text-base leading-6 text-neutral-400 mb-4'>
                 You will earn one of the six Nova Meme NFT once you bridge any amount of meme coin into zkLink Nova from
                 different layers.
               </div>
-
+              <Button className={cn('backButton cursor-pointer !w-[280px] mb-2',type !== 'connect' && 'hidden')}>
+                <span>Connect Your Wallet</span>
+              </Button>
+              <div className='text-slate-400 flex gap-4 cursor-pointer' onClick={changeType()}>
+                {type === 'connect'?'Check your eligibility':'Connect Your Wallet'}
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-6 w-6'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='m8.25 4.5 7.5 7.5-7.5 7.5' />
+                </svg>
+              </div>
               <div className='max-md:flex-wrap mt-9 flex items-start gap-5 self-stretch'>
                 <div
                   className={classNames(
@@ -84,6 +107,12 @@ const Page = () => {
                   Input Address to Check Mint Eligibility
                 </Button>
               </div>
+            </div>
+            <div className='absolute text-white text-base z-50 bottom-14'>
+                Number of eligibility addresses
+            </div>
+            <div className='absolute bottom-2 text-white text-4xl z-50 tracking-[1.5rem]'>
+                2306600
             </div>
           </div>
         </div>
