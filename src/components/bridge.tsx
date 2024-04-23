@@ -436,7 +436,8 @@ export default function Bridge({ data }: { data: any }) {
       return;
     }
     try {
-      await mintNovaNft(address, chain, coin);
+      const filterCoin = coin?.toUpperCase() === 'OMNI2' ? 'Omni' : coin;
+      await mintNovaNft(address, chain, filterCoin);
       await fetchMemeNftBalances(address);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully minted Axis NFT!' />);
     } catch (e: any) {
@@ -462,16 +463,6 @@ export default function Bridge({ data }: { data: any }) {
   return (
     <>
       <>
-        {/* <Button
-          className='backButton cursor-pointer'
-          style={{ display: 'flex', alignItems: 'center' }}
-          size='lg'
-          onClick={handleAction}
-          loading={loading}
-          disabled={actionBtnDisabled}
-        >
-          {btnText}
-        </Button> */}
         {isConnected ? (
           <>
             {hasMemeTokenBalance ? (
