@@ -118,7 +118,7 @@ const Page = () => {
                 </div>
               )}
               <div className='text-slate-400 flex gap-4 cursor-pointer' onClick={()=>changeType()}>
-                {type === 'check'?'Check your eligibility':'Connect Your Wallet'}
+                {type === 'connect'?'Check your eligibility':'Connect Your Wallet'}
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
