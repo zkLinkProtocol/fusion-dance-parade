@@ -5,7 +5,7 @@ import useMemeNft, { useBatchBalancesStore } from '../features/nft/hooks/useMeme
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
-import Bridge from 'components/bridge';
+import Bridge, { useMintStatus } from 'components/bridge';
 import Merge from 'components/merge';
 import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
@@ -28,12 +28,12 @@ const copyAddress = (address: string) => {
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
   const { sendDepositTx, loading } = useBridgeTx();
+  // const { refreshBalanceId } = useMintStatus();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
-  console.log(item.data, 'item-data');
+  // console.log(refreshBalanceId === 'pending', item.data, 'item-data');
   // card-bcak loading style
   return (
     <div className='card-container'>
-      {/* <Bridge data={item.data} /> */}
       <div className='card'>
         <div
           className={cn(hasMint ? 'disTranform' : 'card-inner', {
@@ -188,7 +188,6 @@ const Page: React.FC = () => {
   const sendStatus = (data) => {
     setIsSuccess(data);
   };
-  const { address } = useAccount();
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
       <div className='mx-auto max-w-[1200px]'>
