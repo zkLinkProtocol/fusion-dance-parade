@@ -233,3 +233,17 @@ svg {
 .bg-transparent {
   background: transparent !important;
 }
+
+.btn-mobile {
+  min-width: auto;
+  padding: 0 10px;
+  gap: 0;
+  border-radius: 8px;
+  background: #000;
+}
+.btn-mobile:hover {
+  background: #000!important;
+}
+.btn-mobile:focus {
+  background: #000!important;
+}
