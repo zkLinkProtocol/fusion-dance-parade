@@ -13,11 +13,23 @@ import { parseUnits } from 'viem';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { ETH_ADDRESS } from 'zksync-web3/build/src/utils';
 import { Button } from './ui/buttons/button';
-import useMemeNft from 'features/nft/hooks/useMemeNft';
 import type { Token } from 'types/token';
 import { toast } from 'sonner';
 import { NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { Toast } from './ui/toast';
+import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
+
+import { create } from 'zustand';
+
+export type MintStatus = {
+  refreshBalanceId: string;
+  updateRefreshBalanceId: (status: string) => void;
+};
+
+export const useMintStatus = create<MintStatus>((set) => ({
+  refreshBalanceId: '',
+  updateRefreshBalanceId: (status: string) => set({ refreshBalanceId: status }),
+}));
 
 const AssetTypes = [
   { label: 'ALL', value: 'ALL' },
@@ -52,25 +64,16 @@ export interface IBridgeComponentProps {
 }
 
 export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalances, sendDepositTx, loading }: any) {
-  //  mintNovaNft={mintNovaNft}
-  // isMinting={isMinting}
-  // fetchMemeNftBalances={fetchMemeNftBalances}
-  // data={item.data}
-  // sendDepositTx={sendDepositTx}
-  // loading={loading}
-  // const { txhashes } = useVerifyStore();
   const { openConnectModal } = useConnectModal();
   const { isConnected, address, chainId } = useAccount();
+  // const [status, setStatus] = useState('');
   const [failMessage, setFailMessage] = useState('');
-  // const chainId = useChainId();
-  // const { switchChainAsync } = useSwitchChain();
-  // const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
-  //   const { sendDepositTx, loading } = useBridgeTx();
-    const [amount, setAmount] = useState('1');
+  const [amount, setAmount] = useState('1');
 
-    const [url, setUrl] = useState('');
-    const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
-    const { switchChain, switchChainAsync } = useSwitchChain();
+  const [url, setUrl] = useState('');
+  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
+  const { getDepositL2TxHash } = useBridgeTx();
+  const { switchChain, switchChainAsync } = useSwitchChain();
   const isInvaidChain = useMemo(() => {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
@@ -92,6 +95,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
 
   // const dispatch = useDispatch()
 
+  const { addPrecheckTxHash, precheckTxhashes, removePrecheckTxHash } = usePreCheckTxStore();
   const { addTxHash, txhashes } = useVerifyStore();
 
   const inputRef1 = useRef<HTMLInputElement>(null);
@@ -211,49 +215,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     return '';
   }, [tokenActive, tokenFiltered, amount, mergeLimitExceeds]);
 
-  // useEffect(() => {
-  //   if (bridgeToken && !bridgeTokenInited) {
-  //     const token = tokenList.find((item) =>
-  //       bridgeToken.indexOf('0x') > -1 ? isSameAddress(item.address, bridgeToken) : item.symbol === bridgeToken,
-  //     );
-  //     if (token) {
-  //       const _tokenList = tokenList.filter((item) => item.networkKey === token.networkKey);
-  //       let index = 0;
-  //       let fromIndex = fromList.findIndex((item) => item.networkKey === token.networkKey);
-  //       if (fromIndex < 0) {
-  //         fromIndex = 0;
-  //       }
-  //       const from = fromList[fromIndex];
-  //       if (token.address !== ETH_ADDRESS) {
-  //         index = _tokenList.findIndex((item) => item.address === token.address);
-  //         setTokenActive(index);
-  //       }
-  //       setFromActive(fromIndex);
-  //       setNetworkKey(from.networkKey);
-  //     } else {
-  //       setFromActive(0);
-  //       setTokenActive(0);
-  //       setNetworkKey(fromList[0].networkKey);
-  //     }
-  //     if (tokenList.length > 1) {
-  //       setBridgeTokenInited(true);
-  //     }
-  //   } else {
-  //     const network = localStorage.getItem(STORAGE_NETWORK_KEY);
-  //     if (network) {
-  //       setNetworkKey(network);
-  //       if (fromList[0].networkKey !== network) {
-  //         const index = fromList.findIndex((item) => item.networkKey === network);
-  //         if (index > -1) {
-  //           setFromActive(index);
-  //         }
-  //       }
-  //     } else if (!network) {
-  //       setNetworkKey(fromList[0].networkKey);
-  //     }
-  //   }
-  // }, [setNetworkKey, isFirstDeposit, bridgeToken, tokenList, bridgeTokenInited]);
-
   const invalidChain = useMemo(() => {
     return chainId !== fromList[fromActive]?.chainId;
   }, [chainId, fromActive]);
@@ -321,10 +282,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     }
   }, [fromActive, selectedChainId, fromList, chain]);
 
-  //const selectedToken = tokenFiltered.filter((item) => item.symbol === coin?.toUpperCase());
-
-  console.log('tokenFiltered', tokenFiltered);
-
   useEffect(() => {
     if (coin) {
       const index = tokenFiltered.findIndex((item) => item.symbol === coin.toUpperCase());
@@ -362,13 +319,8 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     if (!amount) {
       return;
     }
-
-    // transLoadModal.onOpen()
-    const time = setTimeout(() => {}, 100);
-    for (let i = 0; i <= Number(time); i++) {
-      clearTimeout(i);
-    }
     try {
+      const rpcUrl = FromList.find((item) => item.networkKey === networkKey)?.rpcUrl;
       toast.custom(
         (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Depositing Fund...' />,
         { duration: Infinity },
@@ -379,12 +331,14 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
         parseUnits(String(amount), tokenFiltered[tokenActive]?.decimals),
         nativeTokenBalance,
         mergeSupported && isMergeSelected,
+        coin,
+        chain,
+        rpcUrl!,
       );
       if (!l1TransactionHash) {
         return;
       }
       //save tx hash
-      const rpcUrl = FromList.find((item) => item.networkKey === networkKey)?.rpcUrl;
       addTxHash(address, l1TransactionHash, l2TransactionHash, rpcUrl!, coin, chain);
 
       setUrl(`${fromList[fromActive].explorerUrl}/tx/${l1TransactionHash}`);
@@ -472,9 +426,53 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const hasNativeTokenBalance = novaNativeTokenBalance && novaNativeTokenBalance > 0.00001;
   const hasMatchingCoin = txhashes[address]?.some((item) => item.coin === coin);
   const hasEligbleForMint = hasNativeTokenBalance && hasMatchingCoin;
-  console.log(txhashes, hasMatchingCoin, hasEligbleForMint, 'txhashes_______________');
+  const l1matchedTx = precheckTxhashes[address]?.find((item) => item.coin === coin);
+
+  useEffect(() => {
+    // if (!address || !precheckTxhashes?.length) return;
+    let intervalId: NodeJS.Timeout | null = null;
+
+    const checkStatus = async () => {
+      if (!l1matchedTx?.l1TransactionHash) {
+        // updateRefreshBalanceId('');
+        return;
+      }
+
+      const l2hash = await getDepositL2TxHash(l1matchedTx.l1TransactionHash as `0x${string}`);
+      console.log(l2hash, 'l2hash-result');
+
+      if (l2hash) {
+        // updateRefreshBalanceId('success');
+        removePrecheckTxHash(address, l1matchedTx.l1TransactionHash);
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      }
+    };
+
+    // updateRefreshBalanceId('pending');
+    intervalId = setInterval(checkStatus, 3000); // Check status every 5 seconds
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [l1matchedTx, address]);
+
+  // console.log(l1matchedTx?.coin, refreshBalanceId, 'refreshBalanceId');
   return (
     <>
+      {/* <Button
+        className='backButton cursor-pointer'
+        style={{ display: 'flex', alignItems: 'center' }}
+        size='lg'
+        onClick={handleAction}
+        loading={loading || (l1matchedTx?.coin === coin && l1matchedTx?.chain === chain)}
+        disabled={actionBtnDisabled}
+      >
+        {btnText}
+      </Button> */}
       <>
         {isConnected ? (
           <>
@@ -493,7 +491,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
                 style={{ display: 'flex', alignItems: 'center' }}
                 size='lg'
                 onClick={handleAction}
-                loading={loading}
+                loading={loading || (l1matchedTx?.coin === coin && l1matchedTx?.chain === chain)}
                 disabled={actionBtnDisabled}
               >
                 {btnText}

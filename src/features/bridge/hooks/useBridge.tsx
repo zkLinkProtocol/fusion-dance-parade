@@ -28,11 +28,13 @@ import { useZksyncProvider, nodeConfig, walletClientToProvider, l1EthDepositAbi 
 import { Toast } from 'components/ui/toast';
 import { toast } from 'sonner';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
+import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
 const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
 export const useBridgeTx = () => {
   const { chainId } = useAccount();
+  const { addPrecheckTxHash, precheckTxhashes } = usePreCheckTxStore();
   const networkKey = useBridgeNetworkStore.getState().networkKey;
   const publicClient = usePublicClient({ config, chainId });
   const { address } = useAccount();
@@ -330,6 +332,9 @@ export const useBridgeTx = () => {
     amount: BigNumberish,
     nativeBalance: BigNumberish,
     isMergeSelected?: boolean,
+    coin: string,
+    chain: string,
+    rpcUrl: string,
   ) => {
     const network = nodeConfig.find((item) => item.key === networkKey);
     if (!address || !network) {
@@ -500,6 +505,10 @@ export const useBridgeTx = () => {
       console.log('tx hash: ', hash);
       const res = await publicClient?.waitForTransactionReceipt({ hash });
       console.log(res, 'waitForTransactionReceipt');
+
+      addPrecheckTxHash(address, res?.transactionHash, rpcUrl, coin, chain);
+      //addPrecheckTxHash: (address: string, l1TransactionHash: string, rpcUrl: string, coin: string, chain: string) => void;
+
       const l2hash = await getDepositL2TxHash(res.transactionHash);
       console.log(l2hash, 'l2hash');
       return {
@@ -636,6 +645,8 @@ export const useBridgeTx = () => {
     },
     [getDepositL2TransactionHash, getDepositL2TransactionHashForSecondary, networkKey],
   );
+
+  console.log(precheckTxhashes, 'precheckTxhashes');
 
   return {
     sendDepositTx,
