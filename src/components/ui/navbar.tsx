@@ -17,27 +17,27 @@ export const Navbar = () => {
   const { openChainModal } = useChainModal();
   const router = useRouter();
   return (
-    <div className='sticky flex flex-col items-center bg-transparent px-14'>
+    <div className='sticky flex flex-col items-center bg-transparent md:px-14 px-4'>
       <div className='max-md:flex-wrap flex w-full justify-between gap-5 py-3 font-medium'>
         <div className='max-md:max-w-full max-md:flex-wrap my-auto flex items-center gap-5 whitespace-nowrap text-base leading-6 text-slate-500'>
           <Link href='/'>
             <Logo className='flex aspect-[3.7] w-[150px] shrink-0' />
           </Link>
-          <div className='max-md:flex-wrap my-auto flex flex-auto items-center gap-7 px-5'>
+          <div className='max-md:flex-wrap my-auto md:flex hidden flex-auto items-center gap-7 px-5'>
             <Link className={cn('grow',router.pathname==='/' ? 'text-white' : 'text-zinc-500')} href='/'>
               Overview
             </Link>
-            <Link className={cn(router.pathname==='/mint' ? 'text-white' : 'text-zinc-500')} href='/mint'>
+            <Link className={cn(router.pathname==='/mint' ? 'text-white' : 'text-zinc-500')} href=''>
               Mint
             </Link>
           </div>
         </div>
         <div className='flex justify-between gap-5 px-5 text-center text-lg leading-5'>
-          <HeaderNetworkSelector networks={SUPPORTED_CHAIN_IDS} />
+          {/* <HeaderNetworkSelector networks={SUPPORTED_CHAIN_IDS} /> */}
           <ConnectButton.Custom>
             {({ chain }) => (
               <Button
-                className='padX btn-default flex items-center justify-center text-white md:gap-3 md:bg-[#1D4138] md:px-4 md:text-[#03D498]'
+                className='padX md:btn-default btn-mobile flex items-center justify-center text-white md:gap-3 md:bg-[#1D4138] md:px-4 md:text-[#03D498]'
                 onClick={() => {
                   if (chain?.unsupported) {
                     openChainModal?.();
