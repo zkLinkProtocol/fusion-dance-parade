@@ -223,7 +223,16 @@ export const useTokenBalanceList = () => {
     query: { queryClient: queryClient },
   });
 
-  console.log(nativeTokenBalance, 'nativeTokenBalance');
+  const { data: novaNativeTokenBalance } = useBalance({
+    config,
+    address: walletAddress as `0x${string}`,
+    chainId: NOVA_CHAIN_ID,
+    token: undefined,
+    query: { queryClient: queryClient },
+  });
+  // console.log(novaNativeTokenBalance, 'novaNativeTokenBalance-intro');
+
+  console.log(formatBalance(novaNativeTokenBalance?.value ?? 0n, 18), 'novaNativeTokenBalance-intro');
 
   const erc20Contracts = useMemo(() => {
     return tokenSource.map(({ address }) => ({
@@ -244,12 +253,12 @@ export const useTokenBalanceList = () => {
   //   },
   // ];
 
-  const { data: nativeTokenBalanceTest } = useBalance({
-    config,
-    address: '0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a',
-    chainId: NOVA_CHAIN_ID,
-    token: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
-  });
+  // const { data: nativeTokenBalanceTest } = useBalance({
+  //   config,
+  //   address: '0x9ff88A1f4f8b06C63e52724d1055e44acEFDa45a',
+  //   chainId: NOVA_CHAIN_ID,
+  //   token: '0x9a97593259201eA35036fD1c168BEE39fe33929f',
+  // });
 
   const { data: erc20Balances } = useReadContracts({
     config: config,
@@ -294,6 +303,7 @@ export const useTokenBalanceList = () => {
     tokenList,
     refreshTokenBalanceList,
     allTokens,
+    novaNativeTokenBalance: formatBalance(novaNativeTokenBalance?.value ?? 0n, 18),
     nativeTokenBalance: nativeTokenBalance?.value,
   };
 };

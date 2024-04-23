@@ -502,7 +502,10 @@ export const useBridgeTx = () => {
       console.log(res, 'waitForTransactionReceipt');
       const l2hash = await getDepositL2TxHash(res.transactionHash);
       console.log(l2hash, 'l2hash');
-      return res.transactionHash;
+      return {
+        l1TransactionHash: res.transactionHash,
+        l2TransactionHash: l2hash,
+      };
     } catch (e) {
       console.log(e);
       return Promise.reject(e);
