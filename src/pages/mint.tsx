@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
 import { create } from 'zustand';
-import { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
+import useMemeNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
@@ -10,6 +10,7 @@ import Merge from 'components/merge';
 import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
 import { Button } from 'components/ui/buttons/button';
+import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 
 interface MemeAxisNftItemProps {
   data: any;
@@ -25,6 +26,8 @@ const copyAddress = (address: string) => {
     });
 };
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
+  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  const { sendDepositTx, loading } = useBridgeTx();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
   console.log(item.data, 'item-data');
   // card-bcak loading style
@@ -32,7 +35,11 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
     <div className='card-container'>
       {/* <Bridge data={item.data} /> */}
       <div className='card'>
-        <div className={cn(hasMint ? 'disTranform' : 'card-inner')}>
+        <div
+          className={cn(hasMint ? 'disTranform' : 'card-inner', {
+            'card-bcak': loading || isMinting,
+          })}
+        >
           <div className='card-front'>
             <div className='h-full w-full'>
               <div className='max-md:mt-6 gradientBorder relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
@@ -80,7 +87,14 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 Deposit 1 {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network and mint
                 your NOVA {chain} {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()}.
               </div>
-              <Bridge data={item.data} />
+              <Bridge
+                mintNovaNft={mintNovaNft}
+                isMinting={isMinting}
+                fetchMemeNftBalances={fetchMemeNftBalances}
+                data={item.data}
+                sendDepositTx={sendDepositTx}
+                loading={loading}
+              />
               {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>

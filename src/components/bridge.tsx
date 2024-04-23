@@ -51,19 +51,26 @@ export interface IBridgeComponentProps {
   bridgeToken?: string;
 }
 
-export default function Bridge({ data }: { data: any }) {
+export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalances, sendDepositTx, loading }: any) {
+  //  mintNovaNft={mintNovaNft}
+  // isMinting={isMinting}
+  // fetchMemeNftBalances={fetchMemeNftBalances}
+  // data={item.data}
+  // sendDepositTx={sendDepositTx}
+  // loading={loading}
+  // const { txhashes } = useVerifyStore();
   const { openConnectModal } = useConnectModal();
   const { isConnected, address, chainId } = useAccount();
   const [failMessage, setFailMessage] = useState('');
   // const chainId = useChainId();
   // const { switchChainAsync } = useSwitchChain();
-  const { sendDepositTx, loading } = useBridgeTx();
-  const [amount, setAmount] = useState('1');
+  // const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  //   const { sendDepositTx, loading } = useBridgeTx();
+    const [amount, setAmount] = useState('1');
 
-  const [url, setUrl] = useState('');
-  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
-  const { switchChain, switchChainAsync } = useSwitchChain();
-  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+    const [url, setUrl] = useState('');
+    const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
+    const { switchChain, switchChainAsync } = useSwitchChain();
   const isInvaidChain = useMemo(() => {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
@@ -71,7 +78,8 @@ export default function Bridge({ data }: { data: any }) {
   const [fromActive, setFromActive] = useState(0);
   const [tokenActive, setTokenActive] = useState(0);
   const { setNetworkKey, networkKey } = useBridgeNetworkStore();
-  const { tokenList, refreshTokenBalanceList, allTokens, nativeTokenBalance } = useTokenBalanceList();
+  const { tokenList, refreshTokenBalanceList, allTokens, nativeTokenBalance, novaNativeTokenBalance } =
+    useTokenBalanceList();
 
   const [minDepositValue, setMinDepositValue] = useState(0.1);
   const [category, setCategory] = useState(AssetTypes[0].value);
@@ -365,26 +373,26 @@ export default function Bridge({ data }: { data: any }) {
         (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Depositing Fund...' />,
         { duration: Infinity },
       );
-      const hash = await sendDepositTx(
+      const { l1TransactionHash, l2TransactionHash } = await sendDepositTx(
         tokenFiltered[tokenActive]?.address as `0x${string}`,
         // utils.parseEther(String(amount))
         parseUnits(String(amount), tokenFiltered[tokenActive]?.decimals),
         nativeTokenBalance,
         mergeSupported && isMergeSelected,
       );
-      if (!hash) {
+      if (!l1TransactionHash) {
         return;
       }
       //save tx hash
       const rpcUrl = FromList.find((item) => item.networkKey === networkKey)?.rpcUrl;
-      addTxHash(address, hash, rpcUrl!);
+      addTxHash(address, l1TransactionHash, l2TransactionHash, rpcUrl!, coin, chain);
 
-      setUrl(`${fromList[fromActive].explorerUrl}/tx/${hash}`);
+      setUrl(`${fromList[fromActive].explorerUrl}/tx/${l1TransactionHash}`);
       // dispatch(setDepositL1TxHash(hash!))
       // transLoadModal.onClose()
       // dispatch(setDepositStatus("pending"));
       // transSuccModal.onOpen();
-      console.log('addTxHash', hash);
+      console.log('addTxHash', l1TransactionHash, l2TransactionHash);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully deposit to Nova' />);
       fetchMemeNftBalances(address);
     } catch (e: any) {
@@ -460,12 +468,17 @@ export default function Bridge({ data }: { data: any }) {
 
   //TODO: deposit-> check meme user balance & gas balance -> mint
   //TODO: chain token list
+
+  const hasNativeTokenBalance = novaNativeTokenBalance && novaNativeTokenBalance > 0.00001;
+  const hasMatchingCoin = txhashes[address]?.some((item) => item.coin === coin);
+  const hasEligbleForMint = hasNativeTokenBalance && hasMatchingCoin;
+  console.log(txhashes, hasMatchingCoin, hasEligbleForMint, 'txhashes_______________');
   return (
     <>
       <>
         {isConnected ? (
           <>
-            {hasMemeTokenBalance ? (
+            {hasEligbleForMint ? (
               <Button
                 onClick={handleMint}
                 loading={isMinting}

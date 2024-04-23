@@ -19,11 +19,12 @@ import { zkSyncProvider } from 'providers/zksync-provider';
 import { useCallback, useEffect, useState } from 'react';
 import type { Hash, WriteContractParameters } from 'viem';
 import { encodeFunctionData } from 'viem';
-import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
+import { useAccount, useBalance, usePublicClient, useWalletClient } from 'wagmi';
 import { sleep } from 'zksync-web3/build/src/utils';
 import { checkMintEligibility } from 'constants/api';
 import { arbitrumSepolia, baseSepolia, lineaSepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 import { create } from 'zustand';
+import { getBalance } from 'viem/actions';
 
 export type NovaNftType = 'ISTP' | 'ESFJ' | 'INFJ' | 'ENTP';
 export type NovaNft = {
@@ -106,6 +107,7 @@ const useMemeNft = () => {
   const publicClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
+
   const [isMinting, setIsMinting] = useState(false);
   const [isFetchingNfts, setIsFetchingNfts] = useState(false);
   const { setBatchBalances } = useBatchBalancesStore();
@@ -199,6 +201,10 @@ const useMemeNft = () => {
 
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
     const eligibilityRes = await checkMintEligibility(address);
+    // const navtiveBalance = await getBalance(config, {
+    //   address: '0x000000000000000000000000000000000000800A',
+    //   chainId: NOVA_CHAIN_ID,
+    // });
     const eligibileChainData = eligibilityRes.result || [];
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
