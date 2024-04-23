@@ -8,7 +8,7 @@ import IL1Bridge from 'constants/contracts/abis/IL1Bridge.json';
 import IZkSync from 'constants/contracts/abis/IZkSync.json';
 import WrappedMNTAbi from 'constants/contracts/abis/WrappedMNT.json';
 import secondaryAbi from 'constants/contracts/abis/ZkLink.json';
-import { WRAPPED_MNT } from 'constants/zklink-config';
+import { L2_ETH_TOKEN_ADDRESS, NOVA_CHAIN_ID, WRAPPED_MNT } from 'constants/zklink-config';
 import type { BigNumberish } from 'ethers';
 import { BigNumber, ethers, utils, VoidSigner } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
@@ -29,14 +29,18 @@ import { Toast } from 'components/ui/toast';
 import { toast } from 'sonner';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
+import useTokenBalanceList from './useTokenList';
+import { getBalance, readContract } from 'viem/actions';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
 const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
 export const useBridgeTx = () => {
   const { chainId } = useAccount();
   const { addPrecheckTxHash, precheckTxhashes } = usePreCheckTxStore();
+  const { novaNativeTokenBalance } = useTokenBalanceList();
   const networkKey = useBridgeNetworkStore.getState().networkKey;
   const publicClient = usePublicClient({ config, chainId });
+  const novaClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { address } = useAccount();
   const { fetchMemeNftBalances } = useMemeNft();
   const { data: walletClient } = useWalletClient();
@@ -327,6 +331,50 @@ export const useBridgeTx = () => {
     }
   };
 
+  // const navtiveBalance = await getBalance(config, {
+  //   address: '0x000000000000000000000000000000000000800A',
+  //   chainId: NOVA_CHAIN_ID,
+  // });
+
+  const getBalanceOnAnotherChain = async (address: string): Promise<BigNumber> => {
+    // const navtiveBalance = await getBalance(config, {
+    //   address: '0x000000000000000000000000000000000000800A',
+    //   chainId: NOVA_CHAIN_ID,
+    // });
+    const balance = await novaClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
+    // const balance = await readContract(config, {
+    //   abi: IERC20.abi,
+    //   address: L2_ETH_TOKEN_ADDRESS,
+    //   functionName: 'balanceOf',
+    //   args: [address as `0x${string}`],
+    //   chainId: NOVA_CHAIN_ID,
+    // });
+    //await publicClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
+    console.log(balance, 'getBalanceOnAnotherChain');
+    // const provider = new ethers.providers.JsonRpcProvider(anotherChainRpcUrl);
+    // const balance = await provider.getBalance(address);
+    return balance;
+  };
+
+  const waitForBalanceChange = async (
+    address: string,
+    initialBalance: BigNumber,
+    // anotherChainRpcUrl: string,
+  ): Promise<void> => {
+    let currentBalance = initialBalance;
+    console.log('Initial balance:', currentBalance.toString());
+
+    while (true) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
+      currentBalance = await getBalanceOnAnotherChain(address);
+      console.log('Current balance:', currentBalance.toString());
+
+      if (currentBalance.toString() !== initialBalance.toString()) {
+        console.log('Balance changed!', currentBalance.toString(), initialBalance.toString());
+        break;
+      }
+    }
+  };
   const sendDepositTx = async (
     token: Address,
     amount: BigNumberish,
@@ -342,6 +390,8 @@ export const useBridgeTx = () => {
     }
     try {
       setLoading(true);
+      const initBalance = await novaClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
+      console.log(initBalance, 'initBalance-test');
 
       //TODO: Fixed gas limit
       const l2GasLimit = await estimateDefaultBridgeDepositL2Gas(token, amount, address, isMergeSelected);
@@ -362,7 +412,6 @@ export const useBridgeTx = () => {
       if (overrides.gasPrice && overrides.maxFeePerGas) {
         overrides.gasPrice = undefined;
       }
-      console.log('pass-here');
 
       // const l1GasLimit = await getDepositEstimateGasForUseFee();
       let tx: WriteContractParameters;
@@ -510,6 +559,8 @@ export const useBridgeTx = () => {
       //addPrecheckTxHash: (address: string, l1TransactionHash: string, rpcUrl: string, coin: string, chain: string) => void;
 
       const l2hash = await getDepositL2TxHash(res.transactionHash);
+      //await publicClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
+      await waitForBalanceChange(address, initBalance);
       console.log(l2hash, 'l2hash');
       return {
         l1TransactionHash: res.transactionHash,
@@ -645,8 +696,6 @@ export const useBridgeTx = () => {
     },
     [getDepositL2TransactionHash, getDepositL2TransactionHashForSecondary, networkKey],
   );
-
-  console.log(precheckTxhashes, 'precheckTxhashes');
 
   return {
     sendDepositTx,
