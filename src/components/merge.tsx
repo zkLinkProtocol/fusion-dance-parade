@@ -71,11 +71,6 @@ export default function Merge({ sendStatus }) {
 
   const publicClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { data: walletClient } = useWalletClient();
-  // useEffect(() => {
-  //   console.log('nft: ', nft);
-  //   console.log('upgradable: ', upgradable);
-  // }, [nft, upgradable]);
-
   useEffect(() => {
     if (address) {
       getRemainDrawCount(address).then((res) => {
