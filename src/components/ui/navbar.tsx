@@ -14,7 +14,6 @@ export const Navbar = () => {
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { openChainModal } = useChainModal();
-  const router = useRouter();
   return (
     <div className='sticky flex flex-col items-center bg-transparent px-4 md:px-14'>
       <div className='max-md:flex-wrap flex w-full justify-between gap-5 py-3 font-medium'>
@@ -22,14 +21,6 @@ export const Navbar = () => {
           <Link href='/'>
             <Image src='/assets/imgs/nova-logo.png' alt='logo' width={150} height={50} />
           </Link>
-          <div className='max-md:flex-wrap my-auto hidden flex-auto items-center gap-7 px-5 md:flex'>
-            <Link className={cn('grow', router.pathname === '/' ? 'text-white' : 'text-zinc-500')} href='/'>
-              Overview
-            </Link>
-            <Link className={cn(router.pathname === '/mint' ? 'text-white' : 'text-zinc-500')} href='/mint'>
-              Mint
-            </Link>
-          </div>
         </div>
         <div className='flex justify-between gap-5 px-5 text-center text-lg leading-5'>
           {/* <HeaderNetworkSelector networks={SUPPORTED_CHAIN_IDS} /> */}
