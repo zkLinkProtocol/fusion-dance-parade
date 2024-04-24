@@ -71,7 +71,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const [amount, setAmount] = useState('1');
 
   const [url, setUrl] = useState('');
-  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible } = data;
+  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible, hasMint } = data;
   const { getDepositL2TxHash } = useBridgeTx();
   const { switchChain, switchChainAsync } = useSwitchChain();
   const isInvaidChain = useMemo(() => {
@@ -467,19 +467,8 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     };
   }, [l1matchedTx, address]);
 
-  // console.log(l1matchedTx?.coin, refreshBalanceId, 'refreshBalanceId');
   return (
     <>
-      {/* <Button
-        className='backButton cursor-pointer'
-        style={{ display: 'flex', alignItems: 'center' }}
-        size='lg'
-        onClick={handleAction}
-        loading={loading || (l1matchedTx?.coin === coin && l1matchedTx?.chain === chain)}
-        disabled={actionBtnDisabled}
-      >
-        {btnText}
-      </Button> */}
       <>
         {isConnected ? (
           <>
@@ -488,9 +477,17 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
                 onClick={handleMint}
                 loading={isMinting}
                 className='backButton cursor-pointer'
-                disabled={!isEligible}
+                disabled={!isEligible || (hasMint && !isInvaidChain)}
               >
-                <span>{isInvaidChain ? 'Switch to Nova network' : !isEligible ? 'Unqualified' : 'Mint'}</span>
+                <span>
+                  {isInvaidChain
+                    ? 'Switch to Nova network'
+                    : !isEligible
+                    ? 'Unqualified'
+                    : hasMint && !isInvaidChain
+                    ? 'Minted'
+                    : 'Mint'}
+                </span>
               </Button>
             ) : (
               <Button
