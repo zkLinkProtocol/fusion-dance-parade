@@ -460,7 +460,9 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
 
   const hasNativeTokenBalance = novaNativeTokenBalance && novaNativeTokenBalance > 0.00001;
   const hasMatchingCoin = txhashes[address]?.some((item) => item.coin === coin);
-  const hasEligbleForMint = hasNativeTokenBalance && hasMatchingCoin;
+  const hasEligbleForMint =
+    (hasNativeTokenBalance && hasMatchingCoin && !hasMint && isEligible) ||
+    (novaNativeTokenBalance && !hasMint && isEligible && hasMemeTokenBalance);
   const l1matchedTx = precheckTxhashes[address]?.find((item) => item.coin === coin);
 
   useEffect(() => {
@@ -496,6 +498,8 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       }
     };
   }, [l1matchedTx, address, novaClient]);
+
+  console.log(hasEligbleForMint, hasMatchingCoin, 'hasEligbleForMint');
 
   return (
     <>
