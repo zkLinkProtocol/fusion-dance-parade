@@ -2,7 +2,7 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { create } from 'zustand';
 import useMemeNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
 import Merge from 'components/merge';
@@ -13,6 +13,8 @@ import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
+import { useVerifyStore } from 'hooks/useVerifyStore';
+import { useAccount } from 'wagmi';
 
 const VideoModal = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -85,12 +87,18 @@ const copyAddress = (address: string) => {
     });
 };
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
+  const { address: walletAddr } = useAccount();
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  const { txhashes } = useVerifyStore();
   const { sendDepositTx, loading } = useBridgeTx();
   // const { refreshBalanceId } = useMintStatus();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
-  // console.log(refreshBalanceId === 'pending', item.data, 'item-data');
+  const hasMatchingCoin = useMemo(() => {
+    if (!walletAddr || !txhashes[walletAddr] || !!balance) return false;
+    return txhashes[walletAddr]?.some((tx) => tx.coin === coin);
+  }, [walletAddr, txhashes, coin, balance]);
   // card-bcak loading style
+
   return (
     <motion.div
       className='card-container'
@@ -99,10 +107,10 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ duration: 0.3 }}
     >
-      <div className='card'>
+      <div className='card  h-[480px]'>
         <div
           className={cn('', hasMint ? 'disTranform' : 'card-inner', {
-            'card-bcak': loading || isMinting,
+            'card-bcak': loading || isMinting || (hasMatchingCoin && !hasMint),
           })}
         >
           <div className='card-front card-wrapper'>
@@ -136,7 +144,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               <div className='text-2xl font-bold text-white'>{coin?.toUpperCase() === 'OMNI2' ? 'Omni' : coin}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
                 {shortenAddress(chainTokenAddress)}
-                {/* {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)} */}
                 <img
                   src='/assets/copy.svg'
                   alt=''
@@ -148,7 +155,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
                 <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
               </div>
-              <div className='mb-2 text-[15px] text-slate-400'>
+              <div className='mb-2 h-[70px] text-[15px] text-slate-400'>
                 Deposit 1 {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network and mint
                 your NOVA {chain} {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()}.
               </div>
@@ -160,7 +167,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 sendDepositTx={sendDepositTx}
                 loading={loading}
               />
-              {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>
         </div>
@@ -193,13 +199,13 @@ const Summon: React.FC = (props) => {
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
         Summon The Nova MEMECROSS
       </div>
-      <div className='max-md:flex-col flex gap-1 md:gap-5'>
-        <div className='max-md:ml-0 max-md:w-full flex w-2/5 flex-col md:w-[29%]'>
+      <div className='max-md:flex-col flex flex-col gap-1 md:flex-row md:gap-5'>
+        <div className='max-md:ml-0 max-md:w-full max-md:order-2 flex w-full flex-col md:w-[29%]'>
           <div className='mt-4 flex w-full grow flex-col rounded-2xl md:mt-0 md:justify-center md:border-2 md:border-solid md:border-indigo-500 md:bg-zinc-900'>
             <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
-        <div className='max-md:ml-0 max-md:w-full ml-1 flex w-3/5 flex-col md:ml-5 md:w-[71%]'>
+        <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
           <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
               Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova
@@ -207,12 +213,9 @@ const Summon: React.FC = (props) => {
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
-              <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
+              <img loading='lazy' src='/assets/shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge sendStatus={props.sendStatus} />
-            {/* <div className='max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white'>
-              Summon Now
-            </div> */}
           </div>
         </div>
       </div>
