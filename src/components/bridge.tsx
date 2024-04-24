@@ -322,7 +322,14 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     try {
       const rpcUrl = FromList.find((item) => item.networkKey === networkKey)?.rpcUrl;
       toast.custom(
-        (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Depositing Fund...' />,
+        (t) => (
+          <Toast
+            type='loading'
+            id={t}
+            title='Pending Transaction'
+            description='It will take about  2 minutes to deposit fund......'
+          />
+        ),
         { duration: Infinity },
       );
       const { l1TransactionHash, l2TransactionHash } = await sendDepositTx(

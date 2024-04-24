@@ -5,18 +5,13 @@ import NovaComposeNFT from 'constants/contracts/abis/NovaMemeCrossNFT.json';
 import { getRemainDrawCount } from 'constants/api';
 import {
   IS_MAINNET,
-  LYNKS_NFT_MARKET_URL,
   MEME_COMPOSE_NFT_CONTRACT,
   MEME_NFT_CONTRACT,
   MintStatus,
   NOVA_CHAIN_ID,
-  TRADEMARK_NFT_MARKET_URL,
 } from 'constants/zklink-config';
-// import type { NOVA_NFT_TYPE } from 'hooks/nft/useNft';
-// import useNovaNFT from 'hooks/nft/useNft';
-// import { useMintStatus } from 'hooks/useMintStatus';
 import { zkSyncProvider } from 'providers/zksync-provider';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { formatBalance } from 'utils/time';
 import type { Hash, WriteContractParameters } from 'viem';
@@ -29,7 +24,7 @@ import { useMintStatus } from 'features/nft/hooks/useMintStatus';
 import { Button } from './ui/buttons/button';
 import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
-import { useModalStore } from 'pages/mint';
+import { useModalStore } from 'pages';
 // import { Button } from './ui/button';
 
 //tokenId from api => image id of frontend
@@ -64,18 +59,10 @@ export default function Merge({ sendStatus }) {
   const { batchBalances } = useBatchBalancesStore();
 
   const { fetchMemeNftBalances } = useMemeNft();
-
-  const [mintType, setMintType] = useState<any>('ISTP');
   const [remainDrawCount, setRemainDrawCount] = useState<number>(0);
   const [update, setUpdate] = useState(0);
   const [trademarkMintStatus, setTrademarkMintStatus] = useState<MintStatus | undefined>();
   const [drawedNftId, setDrawedNftId] = useState<number>();
-  const [drawing, setDrawing] = useState(false);
-  const drawRef = useRef<{ start: (target: number) => void }>();
-  const [failMessage, setFailMessage] = useState('');
-  const [upgradable, setUpgradable] = useState(false);
-  const [mintResult, setMintResult] = useState<{ name: string; img: string }>();
-  const [lynksBalance, setLynksBalance] = useState(0);
 
   const [isTrademarkApproved, setIsTrademarkApproved] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
