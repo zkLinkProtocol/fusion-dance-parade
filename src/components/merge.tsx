@@ -288,10 +288,10 @@ export default function Merge({ sendStatus }) {
               },
             )}
             onClick={handleUpgrade}
-            disabled={!isReachedLimit || loading}
-            loading={loading || isPending}
+            disabled={!isReachedLimit || loading || isApproving}
+            loading={loading || isPending || isApproving}
           >
-            {isInvaidChain ? 'Switch to Nova Chain' : 'Summon Now'}
+            {isInvaidChain ? 'Switch to Nova Chain' : isApproving ? 'Approving' : 'Summon Now'}
           </Button>
         </div>
       </div>
