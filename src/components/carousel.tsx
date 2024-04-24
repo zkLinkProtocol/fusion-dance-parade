@@ -85,7 +85,7 @@ export default function Carousel({ lists }) {
               variants={variants}
               transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
             >
-              <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden rounded-2xl bg-black'>
+              <div className='relative flex aspect-[0.5] h-full w-full flex-col overflow-hidden rounded-2xl bg-black'>
                 <img
                   src={`/assets/imgs/${item.tokenId}.png`}
                   className={cn(
