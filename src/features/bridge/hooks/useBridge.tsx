@@ -390,8 +390,6 @@ export const useBridgeTx = () => {
     }
     try {
       setLoading(true);
-      const initBalance = await novaClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
-      console.log(initBalance, 'initBalance-test');
 
       //TODO: Fixed gas limit
       const l2GasLimit = await estimateDefaultBridgeDepositL2Gas(token, amount, address, isMergeSelected);
@@ -555,7 +553,7 @@ export const useBridgeTx = () => {
       const res = await publicClient?.waitForTransactionReceipt({ hash });
       console.log(res, 'waitForTransactionReceipt');
 
-      addPrecheckTxHash(address, res?.transactionHash, rpcUrl, coin, chain);
+      addPrecheckTxHash(address, res?.transactionHash, novaNativeTokenBalance, coin, chain);
       //addPrecheckTxHash: (address: string, l1TransactionHash: string, rpcUrl: string, coin: string, chain: string) => void;
 
       const l2hash = await getDepositL2TxHash(res.transactionHash);
