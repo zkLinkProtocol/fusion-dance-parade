@@ -6,9 +6,7 @@ import { cn } from 'lib/utils';
 
 import { logo as Logo } from 'components/svgs';
 import { Button } from 'components/ui/buttons/button';
-import { SUPPORTED_CHAIN_IDS } from 'constants/evm';
 import { showAccount } from 'utils/format';
-import { HeaderNetworkSelector } from 'components/header-network-selector';
 
 export const Navbar = () => {
   const { address, isConnected } = useAccount();
@@ -17,17 +15,17 @@ export const Navbar = () => {
   const { openChainModal } = useChainModal();
   const router = useRouter();
   return (
-    <div className='sticky flex flex-col items-center bg-transparent md:px-14 px-4'>
+    <div className='sticky flex flex-col items-center bg-transparent px-4 md:px-14'>
       <div className='max-md:flex-wrap flex w-full justify-between gap-5 py-3 font-medium'>
         <div className='max-md:max-w-full max-md:flex-wrap my-auto flex items-center gap-5 whitespace-nowrap text-base leading-6 text-slate-500'>
           <Link href='/'>
-            <Logo className='flex aspect-[3.7] w-[150px] shrink-0' />
+            <Logo className='flex w-[250px] shrink-0' />
           </Link>
-          <div className='max-md:flex-wrap my-auto md:flex hidden flex-auto items-center gap-7 px-5'>
-            <Link className={cn('grow',router.pathname==='/' ? 'text-white' : 'text-zinc-500')} href='/'>
+          <div className='max-md:flex-wrap my-auto hidden flex-auto items-center gap-7 px-5 md:flex'>
+            <Link className={cn('grow', router.pathname === '/' ? 'text-white' : 'text-zinc-500')} href='/'>
               Overview
             </Link>
-            <Link className={cn(router.pathname==='/mint' ? 'text-white' : 'text-zinc-500')} href=''>
+            <Link className={cn(router.pathname === '/mint' ? 'text-white' : 'text-zinc-500')} href=''>
               Mint
             </Link>
           </div>

@@ -133,7 +133,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
 
 const Summon: React.FC = (props) => {
   return (
-    <div className='max-md:max-w-full w-full'>
+    <div className='max-md:max-w-full mt-[60px] w-full'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
         Summon The Nova MEMECROSS
       </div>
