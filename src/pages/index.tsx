@@ -2,7 +2,7 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import { create } from 'zustand';
 import useMemeNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
 import Merge from 'components/merge';
@@ -13,6 +13,8 @@ import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
+import { useVerifyStore } from 'hooks/useVerifyStore';
+import { useAccount } from 'wagmi';
 
 const VideoModal = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -85,12 +87,18 @@ const copyAddress = (address: string) => {
     });
 };
 const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
+  const { address: walletAddr } = useAccount();
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  const { txhashes } = useVerifyStore();
   const { sendDepositTx, loading } = useBridgeTx();
   // const { refreshBalanceId } = useMintStatus();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
-  // console.log(refreshBalanceId === 'pending', item.data, 'item-data');
+  const hasMatchingCoin = useMemo(() => {
+    if (!walletAddr || !txhashes[walletAddr] || !!balance) return false;
+    return txhashes[walletAddr]?.some((tx) => tx.coin === coin);
+  }, [walletAddr, txhashes, coin, balance]);
   // card-bcak loading style
+
   return (
     <motion.div
       className='card-container'
@@ -102,7 +110,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
       <div className='card  h-[480px]'>
         <div
           className={cn('', hasMint ? 'disTranform' : 'card-inner', {
-            'card-bcak': loading || isMinting,
+            'card-bcak': loading || isMinting || (hasMatchingCoin && !hasMint),
           })}
         >
           <div className='card-front card-wrapper'>
