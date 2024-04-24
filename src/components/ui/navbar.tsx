@@ -27,7 +27,7 @@ export const Navbar = () => {
           <ConnectButton.Custom>
             {({ chain }) => (
               <Button
-                className='padX md:btn-default btn-mobile flex items-center justify-center text-white md:gap-3 md:bg-[#1D4138] md:px-4 md:text-[#03D498]'
+                className='flex items-center justify-center bg-[#1D4138] px-4 text-[#03D498] md:gap-3'
                 onClick={() => {
                   if (chain?.unsupported) {
                     openChainModal?.();
@@ -38,8 +38,8 @@ export const Navbar = () => {
                   }
                 }}
               >
-                <div className={`text-white md:text-[#03d498] ${isConnected ? 'ml-2 md:ml-0' : ''}`}>
-                  {isConnected ? showAccount(address) : <span className='hidden md:block'>Connect Wallet</span>}
+                <div className={`text-[#03d498] ${isConnected ? 'ml-2 md:ml-0' : ''}`}>
+                  {isConnected ? showAccount(address) : <span className=''>Connect Wallet</span>}
                 </div>
               </Button>
             )}
