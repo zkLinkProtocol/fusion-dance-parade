@@ -106,10 +106,6 @@ export default function Carousel({ lists }) {
               </div>
               {position === 0 && (
                 <div className='mt-5 flex-col'>
-                  {/* <Button className='backButton mt-5 cursor-pointer'>
-                    Approve {item.tokenId}
-                    {position}
-                  </Button> */}
                   <Bridge
                     mintNovaNft={mintNovaNft}
                     isMinting={isMinting}
