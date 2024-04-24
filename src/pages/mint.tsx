@@ -11,7 +11,21 @@ import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
 import { Button } from 'components/ui/buttons/button';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
+import { motion, AnimatePresence } from 'framer-motion';
 
+// Define the stagger animation variant
+const cardVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: index * 0.1,
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  }),
+};
 interface MemeAxisNftItemProps {
   data: any;
 }
@@ -33,16 +47,22 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   // console.log(refreshBalanceId === 'pending', item.data, 'item-data');
   // card-bcak loading style
   return (
-    <div className='card-container'>
+    <motion.div
+      className='card-container'
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className='card'>
         <div
-          className={cn(hasMint ? 'disTranform' : 'card-inner', {
+          className={cn('', hasMint ? 'disTranform' : 'card-inner', {
             'card-bcak': loading || isMinting,
           })}
         >
-          <div className='card-front'>
-            <div className='h-full w-full'>
-              <div className='max-md:mt-6 gradientBorder relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
+          <div className='card-front card-wrapper'>
+            <div className='card-content h-full w-full'>
+              <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
                 <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden rounded-2xl pt-2.5'>
                   <img
                     src={`/assets/imgs/${tokenId}.png`}
@@ -100,7 +120,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 interface MemeNftGridProps {}
@@ -109,14 +129,16 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
 
   console.log(batchBalances, 'batchBalances');
   return (
-    <div className='max-md:max-w-full relative mt-4 w-full md:mt-10'>
-      <div className='max-md:flex-col max-md:gap-0 hidden flex-wrap gap-5 md:flex'>
+    <motion.div className='max-md:max-w-full relative mt-4 w-full md:mt-10' initial='hidden' animate='visible'>
+      <motion.div className='max-md:flex-col max-md:gap-0 hidden flex-wrap gap-5 md:flex'>
         {batchBalances.map((item, index) => (
-          <MemeAxisNftItem key={index} data={item} />
+          <motion.div key={index} custom={index} variants={cardVariants}>
+            <MemeAxisNftItem data={item} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
       <Carousel lists={batchBalances}></Carousel>
-    </div>
+    </motion.div>
   );
 };
 

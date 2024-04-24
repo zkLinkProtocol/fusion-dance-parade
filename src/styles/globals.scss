@@ -248,3 +248,50 @@ svg {
 .btn-mobile:focus {
   background: #000!important;
 }
+
+
+
+  /* Act as a border */
+  .card-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-image: linear-gradient(90deg, #6276E7 0%, #9e4d9e 100%);
+
+    /* Gradient */
+    &::before {
+      content: '';
+      position: absolute;
+      left: -25%;
+      top: -25%;
+      height: 150%;
+      width: 150%;
+      background: conic-gradient(
+        rgba(244, 114, 182, 0.4) 0deg,
+        rgba(192, 132, 252, 0.4) 0deg,
+        transparent 80deg
+      );
+      animation: border-spin 4s linear infinite;
+    }
+  }
+
+  /* Body */
+  .card-content {
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    height: calc(100% - 3px);
+    width: calc(100% - 3px);
+    border-radius: 1rem;
+    background-image: linear-gradient(to bottom, #1a202c, #ff00cc);
+  }
+
+
+@keyframes border-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
