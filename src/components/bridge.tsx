@@ -10,7 +10,7 @@ import { SourceTokenInfo, useMergeToken } from 'features/nft/hooks/useMergeToken
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { parseUnits } from 'viem';
-import { useAccount, useSwitchChain } from 'wagmi';
+import { useAccount, usePublicClient, useSwitchChain } from 'wagmi';
 import { ETH_ADDRESS } from 'zksync-web3/build/src/utils';
 import { Button } from './ui/buttons/button';
 import type { Token } from 'types/token';
@@ -20,6 +20,8 @@ import { Toast } from './ui/toast';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
 import { create } from 'zustand';
+import { config } from 'config/zklin-networks';
+import { formatBalance } from 'utils/time';
 
 export type MintStatus = {
   refreshBalanceId: string;
@@ -65,6 +67,7 @@ export interface IBridgeComponentProps {
 
 export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalances, sendDepositTx, loading }: any) {
   const { openConnectModal } = useConnectModal();
+  const novaClient = usePublicClient({ config: config, chainId: NOVA_CHAIN_ID });
   const { isConnected, address, chainId } = useAccount();
   // const [status, setStatus] = useState('');
   const [failMessage, setFailMessage] = useState('');
@@ -427,6 +430,31 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     }
   }, [address, isInvaidChain, switchChain, mintNovaNft]);
 
+  const getBalanceOnAnotherChain = async (address: string): Promise<BigNumber> => {
+    const balance = await novaClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
+    return formatBalance(balance ?? 0n, 18);
+  };
+
+  const waitForBalanceChange = async (
+    address: string,
+    initialBalance: BigNumber,
+    // anotherChainRpcUrl: string,
+  ): Promise<void> => {
+    let currentBalance = initialBalance;
+    console.log('Initial balance:', currentBalance.toString());
+
+    while (true) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
+      currentBalance = await getBalanceOnAnotherChain(address);
+      console.log('Pre Current balance:', currentBalance.toString());
+
+      if (currentBalance.toString() !== initialBalance.toString()) {
+        console.log('Pre Balance changed!', currentBalance.toString(), initialBalance.toString());
+        break;
+      }
+    }
+  };
+
   //TODO: deposit-> check meme user balance & gas balance -> mint
   //TODO: chain token list
 
@@ -436,7 +464,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const l1matchedTx = precheckTxhashes[address]?.find((item) => item.coin === coin);
 
   useEffect(() => {
-    // if (!address || !precheckTxhashes?.length) return;
+    if (!address || !precheckTxhashes[address]?.length || !novaClient) return;
     let intervalId: NodeJS.Timeout | null = null;
 
     const checkStatus = async () => {
@@ -449,7 +477,9 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       console.log(l2hash, 'l2hash-result');
 
       if (l2hash) {
-        // updateRefreshBalanceId('success');
+        //TODO: record & compare status
+
+        await waitForBalanceChange(address, l1matchedTx?.balance);
         removePrecheckTxHash(address, l1matchedTx.l1TransactionHash);
         if (intervalId) {
           clearInterval(intervalId);
@@ -465,7 +495,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
         clearInterval(intervalId);
       }
     };
-  }, [l1matchedTx, address]);
+  }, [l1matchedTx, address, novaClient]);
 
   return (
     <>

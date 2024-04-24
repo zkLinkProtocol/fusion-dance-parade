@@ -6,12 +6,12 @@ export type VerifyState = {
   precheckTxhashes: {
     [address: string]: {
       l1TransactionHash: string;
-      rpcUrl: string;
+      balance: string;
       coin: string;
       chain: string;
     }[];
   };
-  addPrecheckTxHash: (address: string, l1TransactionHash: string, rpcUrl: string, coin: string, chain: string) => void;
+  addPrecheckTxHash: (address: string, l1TransactionHash: string, balance: string, coin: string, chain: string) => void;
   removePrecheckTxHash: (address: string, l1TransactionHash: string) => void;
 };
 
@@ -19,9 +19,9 @@ export const usePreCheckTxStore = create<VerifyState>()(
   persist(
     (set, get) => ({
       precheckTxhashes: {},
-      addPrecheckTxHash: (address: string, l1TransactionHash: string, rpcUrl: string, coin: string, chain: string) => {
+      addPrecheckTxHash: (address: string, l1TransactionHash: string, balance: string, coin: string, chain: string) => {
         const addressTxhashes = get().precheckTxhashes[address] || [];
-        addressTxhashes.unshift({ l1TransactionHash, rpcUrl, coin, chain });
+        addressTxhashes.unshift({ l1TransactionHash, balance, coin, chain });
         set({ precheckTxhashes: { ...get().precheckTxhashes, [address]: addressTxhashes } });
       },
       removePrecheckTxHash: (address: string, l1TransactionHash: string) => {
