@@ -2,10 +2,10 @@ import type { DefaultSeoProps } from 'next-seo';
 
 const seo = {
   titleTemplate: '%s | Meme',
-  title: 'zkLink Meme: Aggregated Layer 3 zkEVM network Aggregation Parade',
-  defaultTitle: 'zkLink Meme: Aggregated Layer 3 zkEVM network Aggregation Parade',
+  title: 'Nova MEMECROSS：Exclusive badge for brave meme holders on the Nova',
+  defaultTitle: 'Nova MEMECROSS：Exclusive badge for brave meme holders on the Nova',
   description:
-    'zkLink Meme: A general-purpose Aggregated Layer 3 zkEVM network that allows seamless Ethereum-compatible DApp deployment.',
+    'MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first ZK Aggregated Layer 3, the bridge of the ETH ecosystem.',
   twitter: {
     handle: '@zkLink_Official',
     site: '@zkLink_Official',
@@ -15,7 +15,7 @@ const seo = {
     type: 'website',
     title: 'zkLink Meme',
     description:
-      'zkLink Meme: A general-purpose Aggregated Layer 3 zkEVM network that allows seamless Ethereum-compatible DApp deployment.',
+      'MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first ZK Aggregated Layer 3, the bridge of the ETH ecosystem.',
     images: [
       {
         url: 'https://app.zklink.io/img/preview.png',
