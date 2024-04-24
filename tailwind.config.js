@@ -169,6 +169,11 @@ module.exports = {
         dunes: "url('/banner.svg')",
       }),
       keyframes: {
+        'border-spin': {
+          '100%': {
+            transform: 'rotate(-360deg)',
+          },
+        },
         reveal: {
           '0%, 100%': {
             opacity: 0,
@@ -261,6 +266,7 @@ module.exports = {
         },
       },
       animation: {
+        'border-spin': 'border-spin 7s linear infinite',
         'slide-up-fade': 'slide-up-fade 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         'slide-down-fade': 'slide-down-fade 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         'accordion-down': 'accordion-down 0.2s ease-out',

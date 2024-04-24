@@ -4,9 +4,10 @@ import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
 
-import { logo as Logo } from 'components/svgs';
+// import { logo as Logo } from 'components/svgs';
 import { Button } from 'components/ui/buttons/button';
 import { showAccount } from 'utils/format';
+import Image from 'next/image';
 
 export const Navbar = () => {
   const { address, isConnected } = useAccount();
@@ -19,7 +20,7 @@ export const Navbar = () => {
       <div className='max-md:flex-wrap flex w-full justify-between gap-5 py-3 font-medium'>
         <div className='max-md:max-w-full max-md:flex-wrap my-auto flex items-center gap-5 whitespace-nowrap text-base leading-6 text-slate-500'>
           <Link href='/'>
-            <Logo className='flex w-[250px] shrink-0' />
+            <Image src='/assets/imgs/nova-logo.png' alt='logo' width={150} height={50} />
           </Link>
           <div className='max-md:flex-wrap my-auto hidden flex-auto items-center gap-7 px-5 md:flex'>
             <Link className={cn('grow', router.pathname === '/' ? 'text-white' : 'text-zinc-500')} href='/'>
