@@ -230,11 +230,10 @@ const Rules: React.FC = () => {
         Rules
       </div>
       <div className='w-full rounded-lg bg-slate-900 p-8 text-left text-sm text-slate-400'>
-        1. Connect your wallet and check your whitelist eligibility. If you are qualified, you can bridge any amount of
-        corresponding meme coins to Nova and mint your Meme card. Your corresponding data. <br />
+        1. Connect your wallet and check your whitelist eligibility. <br />
         <br />
         2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
-        chain to Nova and mint your meme card. <br />
+        chain to Nova and mint your MemeAxis. <br />
         <br />
         3. Collect some different cards, then summon your own MEMECROSS, the Nova’s exclusive badges for brave meme
         holders. <br />
@@ -256,10 +255,10 @@ const Page: React.FC = () => {
       <div className='mx-auto max-w-[1200px]'>
         <div className='max-md:max-w-full relative flex grow flex-col tracking-tight md:pt-[100px]'>
           <div className='max-md:max-w-full text-2xl font-black leading-[56.16px] text-white md:text-5xl'>
-            Mint your Meme Card on Nova
+            Mint your MemeAxis on Nova
           </div>
           <div className='max-md:max-w-full text-sm leading-6 text-neutral-400 md:mt-8 md:text-base'>
-            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your Meme Cards!
+            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your MemeAxis!
           </div>
         </div>
         <MemeNftGrid />
