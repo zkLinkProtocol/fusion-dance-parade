@@ -235,7 +235,7 @@ const Rules: React.FC = () => {
         2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
         chain to Nova and mint your MemeAxis. <br />
         <br />
-        3. Collect some different cards, then summon your own MEMECROSS, the Nova’s exclusive badges for brave meme
+        3. Collect some different MemeAxises, then summon your own MEMECROSS, the Nova’s exclusive badges for brave meme
         holders. <br />
         <br />
         <span className='text-left text-xs text-slate-400'>

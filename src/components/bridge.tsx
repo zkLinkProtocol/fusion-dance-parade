@@ -74,7 +74,16 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const [amount, setAmount] = useState('1');
 
   const [url, setUrl] = useState('');
-  const { chain, coin, chainId: selectedChainId, tokenBalance, hasMemeTokenBalance, isEligible, hasMint } = data;
+  const {
+    chain,
+    coin,
+    chainId: selectedChainId,
+    tokenBalance,
+    hasMemeTokenBalance,
+    isEligible,
+    hasMint,
+    balance,
+  } = data;
   const { getDepositL2TxHash } = useBridgeTx();
   const { switchChain, switchChainAsync } = useSwitchChain();
   const isInvaidChain = useMemo(() => {
@@ -514,13 +523,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
                 disabled={!isEligible || (hasMint && !isInvaidChain)}
               >
                 <span>
-                  {isInvaidChain
-                    ? 'Switch to Nova network'
-                    : !isEligible
-                    ? 'Unqualified'
-                    : hasMint && !isInvaidChain
-                    ? 'Minted'
-                    : 'Mint'}
+                  {isInvaidChain ? 'Switch to Nova network' : !isEligible ? 'Unqualified' : hasMint ? 'Minted' : 'Mint'}
                 </span>
               </Button>
             ) : (
@@ -530,9 +533,9 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
                 size='lg'
                 onClick={handleAction}
                 loading={loading || (l1matchedTx?.coin === coin && l1matchedTx?.chain === chain)}
-                disabled={actionBtnDisabled}
+                disabled={actionBtnDisabled || hasMint}
               >
-                {btnText}
+                {hasMint ? 'Minted' : btnText}
               </Button>
             )}
           </>
