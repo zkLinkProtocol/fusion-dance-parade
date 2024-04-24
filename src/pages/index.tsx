@@ -208,12 +208,12 @@ const Summon: React.FC = (props) => {
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
           <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              Bridge any amount of the selected meme tokens to Nova chain, then you can mint a special NFT from Nova
-              Meme NFTs. You will have different Nova Meme NFT because you bridge different meme coins.
+              MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast
+              L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first
+              ZK Aggregated Layer 3, the bridge of the ETH ecosystem.
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
-              <img loading='lazy' src='/assets/shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge sendStatus={props.sendStatus} />
           </div>
@@ -229,15 +229,19 @@ const Rules: React.FC = () => {
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-24 self-start text-2xl  font-black leading-[56.16px] tracking-tight text-white md:text-5xl'>
         Rules
       </div>
-      <div className='w-full rounded-lg bg-slate-900 p-8 text-sm text-slate-400'>
-        Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of
-        trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on
-        the referral leader-board will be airdrop a Mystery Box. Upon collecting your SBT, you can upgrade it into an
-        ERC7221 NFT through collecting 4 different types of trademark NFT through our referral program.  You will get a
-        trademark NFT airdrop for each 3 referrals Top 50 on the referral leader-board will be airdrop a Mystery Box.
-        Upon collecting your SBT, you can upgrade it into an ERC7221 NFT through collecting 4 different types of
-        trademark NFT through our referral program.  You will get a trademark NFT airdrop for each 3 referrals Top 50 on
-        the referral leader-board will be airdrop a Mystery Box.
+      <div className='w-full rounded-lg bg-slate-900 p-8 text-left text-sm text-slate-400'>
+        1. Connect your wallet and check your whitelist eligibility. If you are qualified, you can bridge any amount of
+        corresponding meme coins to Nova and mint your Meme card. Your corresponding data. <br />
+        <br />
+        2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
+        chain to Nova and mint your meme card. <br />
+        <br />
+        3. Collect some different cards, then summon your own MEMECROSS, the Nova’s exclusive badges for brave meme
+        holders. <br />
+        <br />
+        <span className='text-left text-xs text-slate-400'>
+          zk.Link Nova reserve all the right for the final explanation
+        </span>
       </div>
     </div>
   );
@@ -252,10 +256,10 @@ const Page: React.FC = () => {
       <div className='mx-auto max-w-[1200px]'>
         <div className='max-md:max-w-full relative flex grow flex-col tracking-tight md:pt-[100px]'>
           <div className='max-md:max-w-full text-2xl font-black leading-[56.16px] text-white md:text-5xl'>
-            Mint Meme Avater on Nova
+            Mint your Meme Card on Nova
           </div>
           <div className='max-md:max-w-full text-sm leading-6 text-neutral-400 md:mt-8 md:text-base'>
-            My brave holders, bridge any amount of the selected meme tokens to Nova, then mint your Meme Avaters!
+            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your Meme Cards!
           </div>
         </div>
         <MemeNftGrid />

@@ -31,6 +31,7 @@ import useMemeNft from 'features/nft/hooks/useMemeNft';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 import useTokenBalanceList from './useTokenList';
 import { getBalance, readContract } from 'viem/actions';
+import { useVerifyStore } from 'hooks/useVerifyStore';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
 const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
@@ -53,6 +54,8 @@ export const useBridgeTx = () => {
   const isManta = useMemo(() => networkKey === 'manta', [networkKey]);
   const isBlast = useMemo(() => networkKey === 'blast', [networkKey]);
   const isMantle = useMemo(() => networkKey === 'mantle', [networkKey]);
+
+  const { addTxHash, txhashes } = useVerifyStore();
 
   //estimate: getbaseCost * l2gaslimit
   const getBaseCost = async (l2GasLimit: BigNumber) => {
@@ -557,9 +560,8 @@ export const useBridgeTx = () => {
       //addPrecheckTxHash: (address: string, l1TransactionHash: string, rpcUrl: string, coin: string, chain: string) => void;
 
       const l2hash = await getDepositL2TxHash(res.transactionHash);
-      //await publicClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
+      const initBalance = await publicClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
       await waitForBalanceChange(address, initBalance);
-      console.log(l2hash, 'l2hash');
       return {
         l1TransactionHash: res.transactionHash,
         l2TransactionHash: l2hash,
