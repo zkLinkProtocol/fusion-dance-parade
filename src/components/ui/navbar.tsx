@@ -25,7 +25,7 @@ export const Navbar = () => {
             <Link className={cn('grow', router.pathname === '/' ? 'text-white' : 'text-zinc-500')} href='/'>
               Overview
             </Link>
-            <Link className={cn(router.pathname === '/mint' ? 'text-white' : 'text-zinc-500')} href=''>
+            <Link className={cn(router.pathname === '/mint' ? 'text-white' : 'text-zinc-500')} href='/mint'>
               Mint
             </Link>
           </div>
