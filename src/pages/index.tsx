@@ -99,7 +99,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ duration: 0.3 }}
     >
-      <div className='card'>
+      <div className='card  h-[480px]'>
         <div
           className={cn('', hasMint ? 'disTranform' : 'card-inner', {
             'card-bcak': loading || isMinting,
@@ -136,7 +136,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
               <div className='text-2xl font-bold text-white'>{coin?.toUpperCase() === 'OMNI2' ? 'Omni' : coin}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
                 {shortenAddress(chainTokenAddress)}
-                {/* {nft.address.substring(0,6)}....{nft.address.substring(nft.address.length-5,nft.address.length-1)} */}
                 <img
                   src='/assets/copy.svg'
                   alt=''
@@ -148,7 +147,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
                 <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
               </div>
-              <div className='mb-2 text-[15px] text-slate-400'>
+              <div className='mb-2 h-[70px] text-[15px] text-slate-400'>
                 Deposit 1 {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network and mint
                 your NOVA {chain} {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()}.
               </div>
@@ -160,7 +159,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
                 sendDepositTx={sendDepositTx}
                 loading={loading}
               />
-              {/* <div className={classNames(false ? 'cursor-pointer backButton' : 'disabled')}>Approve</div> */}
             </div>
           </div>
         </div>
@@ -207,7 +205,7 @@ const Summon: React.FC = (props) => {
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
-              <img loading='lazy' src='/assets/Shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
+              <img loading='lazy' src='/assets/shape.svg' className='aspect-square w-4 shrink-0 fill-white' alt='' />
             </div>
             <Merge sendStatus={props.sendStatus} />
           </div>
