@@ -3,28 +3,20 @@
 import { readContract } from '@wagmi/core';
 import { config, nodeType } from 'config/zklin-networks';
 import NovaMeMeAxisNft from 'constants/contracts/abis/NovaMemeAxisNFT.json';
-import NovaComposeNFT from 'constants/contracts/abis/NovaMemeCrossNFT.json';
 import NovaNFT from 'constants/contracts/abis/NovaNFT.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import { getMemeMintSignature } from 'constants/api';
-import {
-  MEME_COMPOSE_NFT_CONTRACT,
-  MEME_NFT_CONTRACT,
-  NOVA_CHAIN_ID,
-  NOVA_NFT_CONTRACT,
-} from 'constants/zklink-config';
-import { BigNumber } from 'ethers';
+import { MEME_NFT_CONTRACT, NOVA_CHAIN_ID, NOVA_NFT_CONTRACT } from 'constants/zklink-config';
 import { map } from 'lodash';
 import { zkSyncProvider } from 'providers/zksync-provider';
 import { useCallback, useEffect, useState } from 'react';
-import type { Hash, WriteContractParameters } from 'viem';
+import type { WriteContractParameters } from 'viem';
 import { encodeFunctionData } from 'viem';
-import { useAccount, useBalance, usePublicClient, useWalletClient } from 'wagmi';
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { sleep } from 'zksync-web3/build/src/utils';
 import { checkMintEligibility } from 'constants/api';
 import { arbitrumSepolia, baseSepolia, lineaSepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 import { create } from 'zustand';
-import { getBalance } from 'viem/actions';
 
 export type NovaNftType = 'ISTP' | 'ESFJ' | 'INFJ' | 'ENTP';
 export type NovaNft = {
@@ -110,7 +102,7 @@ const useMemeNft = () => {
 
   const [isMinting, setIsMinting] = useState(false);
   const [isFetchingNfts, setIsFetchingNfts] = useState(false);
-  const { setBatchBalances } = useBatchBalancesStore();
+  const { setBatchBalances, batchBalances } = useBatchBalancesStore();
 
   const getMemeNftBalance = useCallback(async (address: string) => {
     const balance = await readContract(config, {
@@ -200,6 +192,21 @@ const useMemeNft = () => {
   //  }, []);
 
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
+    if (!address) {
+      // 如果 address 為空或 undefined，回傳預設的陣列
+      return tokenIds.map((tokenId) => ({
+        isEligible: false,
+        chain: tokenMap[tokenId].chain,
+        chainId: tokenMap[tokenId].chainId,
+        coin: tokenMap[tokenId].coin,
+        chainTokenAddress: tokenMap[tokenId].chainTokenAddress,
+        tokenId,
+        balance: '0',
+        hasMint: false,
+        tokenBalance: '0',
+        hasMemeTokenBalance: false,
+      }));
+    }
     const eligibilityRes = await checkMintEligibility(address);
     // const navtiveBalance = await getBalance(config, {
     //   address: '0x000000000000000000000000000000000000800A',
@@ -334,10 +341,10 @@ const useMemeNft = () => {
   };
 
   useEffect(() => {
-    if (address) {
-      fetchMemeNftBalances(address);
-    }
+    fetchMemeNftBalances(address);
   }, [address]);
+
+  console.log(batchBalances, 'batchBalances');
 
   return {
     fetchMemeNftBalances,

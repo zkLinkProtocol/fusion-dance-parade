@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
-import { Button } from 'components/ui/buttons/button';
-import classNames from 'classnames';
 import Bridge from 'components/bridge';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
@@ -107,7 +105,7 @@ export default function Carousel({ lists }) {
                 </div>
               </div>
               {position === 0 && (
-                <div className='mt-5'>
+                <div className='mt-5 flex-col'>
                   {/* <Button className='backButton mt-5 cursor-pointer'>
                     Approve {item.tokenId}
                     {position}
@@ -120,6 +118,11 @@ export default function Carousel({ lists }) {
                     sendDepositTx={sendDepositTx}
                     loading={loading}
                   />
+                  <div className='mt-3 text-xs text-[#AAAAAA]'>
+                    Deposit 1 {item.coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : item.coin?.toUpperCase()} into Nova
+                    Network and mint your NOVA {item.chain}{' '}
+                    {item.coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : item.coin?.toUpperCase()}.
+                  </div>
                 </div>
               )}
             </motion.div>

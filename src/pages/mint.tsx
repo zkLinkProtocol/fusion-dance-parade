@@ -105,18 +105,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
 };
 interface MemeNftGridProps {}
 const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
-  // const { address } = useAccount();
   const { batchBalances } = useBatchBalancesStore();
-
-  //mintRecord
-  // const fetchRes = async (_address: string) => {
-  //   const res = await checkMintEligibility(_address);
-  //   console.log(res.result, 'eligibility-res');
-  // };
-
-  // useEffect(() => {
-  //   if (address) fetchRes(address);
-  // }, [address]);
 
   console.log(batchBalances, 'batchBalances');
   return (
@@ -133,7 +122,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
 
 const Summon: React.FC = (props) => {
   return (
-    <div className='max-md:max-w-full mt-[60px] w-full'>
+    <div className='max-md:max-w-full mt-[120px] w-full md:mt-0'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
         Summon The Nova MEMECROSS
       </div>
