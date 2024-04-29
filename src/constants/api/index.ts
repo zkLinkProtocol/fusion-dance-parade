@@ -32,6 +32,19 @@ export type BindInviteCodeWithAddressParams = {
 };
 
 //meme
+
+///meme/mint/chad/signature
+export const getMergeSignature = (address: string, tokenIds: any[]): Promise<Response> => {
+  return axiosInstance.post(`${TEST_MEME_API}/meme/mint/chad/signature`, {
+    address,
+    tokenIds,
+  });
+};
+
+///meme/mintChad/number
+export const getMemeMintChadNumber = (): Promise<Response> => {
+  return axiosInstance.get(`${TEST_MEME_API}/meme/mintChad/number`);
+};
 export const checkMintEligibility = (address: string): Promise<Response> => {
   return axiosInstance.get(`${TEST_MEME_API}/meme/check/address`, {
     params: { address },

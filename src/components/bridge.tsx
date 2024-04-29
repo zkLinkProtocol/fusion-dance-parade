@@ -507,9 +507,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       }
     };
   }, [l1matchedTx, address, novaClient]);
-
-  console.log(hasEligbleForMint, hasMatchingCoin, 'hasEligbleForMint');
-
   return (
     <>
       <>
