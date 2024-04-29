@@ -13,7 +13,6 @@ import { encodeFunctionData, getContract } from 'viem';
 import { useAccount, useBalance, usePublicClient, useSwitchChain, useWalletClient } from 'wagmi';
 
 import MultiSelectContent from './multi-select-content';
-import { useMintStatus } from 'features/nft/hooks/useMintStatus';
 import { Button } from './ui/buttons/button';
 import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
@@ -23,8 +22,6 @@ export default function Merge() {
   const { address, chainId } = useAccount();
   // const chainId = useChainId({ config });
   const { switchChain, isPending } = useSwitchChain();
-
-  const { refreshBalanceId, updateRefreshBalanceId } = useMintStatus();
 
   const { toggleModal } = useModalStore();
 
@@ -125,7 +122,7 @@ export default function Merge() {
           address,
           params.result.nonce,
           params.result.tokenIds,
-          [1, 1],
+          Array.from({ length: params.result.tokenIds.length }, () => 1),
           params.result.expiry,
           params.result.mintType,
           params.result.signature,
@@ -168,7 +165,6 @@ export default function Merge() {
         toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Approve completed!' />);
       }
       await sendUpgradeSBTTx(address);
-      updateRefreshBalanceId();
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
       toggleModal(true);
     } catch (e: any) {
@@ -184,15 +180,7 @@ export default function Merge() {
       setSelectedTags([]);
       toast.dismiss();
     }
-  }, [
-    address,
-    isInvaidChain,
-    isTrademarkApproved,
-    sendTrademarkApproveTx,
-    sendUpgradeSBTTx,
-    switchChain,
-    updateRefreshBalanceId,
-  ]);
+  }, [address, isInvaidChain, isTrademarkApproved, sendTrademarkApproveTx, sendUpgradeSBTTx, switchChain]);
 
   const maxAllowed = mintLimit || 2;
   const tags = batchBalances;

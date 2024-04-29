@@ -19,19 +19,9 @@ import { NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { Toast } from './ui/toast';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
-import { create } from 'zustand';
 import { config } from 'config/zklin-networks';
 import { formatBalance } from 'utils/time';
 
-export type MintStatus = {
-  refreshBalanceId: string;
-  updateRefreshBalanceId: (status: string) => void;
-};
-
-export const useMintStatus = create<MintStatus>((set) => ({
-  refreshBalanceId: '',
-  updateRefreshBalanceId: (status: string) => set({ refreshBalanceId: status }),
-}));
 
 const AssetTypes = [
   { label: 'ALL', value: 'ALL' },

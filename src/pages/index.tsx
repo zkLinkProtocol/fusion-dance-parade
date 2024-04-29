@@ -92,7 +92,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { txhashes } = useVerifyStore();
   const { precheckTxhashes } = usePreCheckTxStore();
   const { sendDepositTx, loading } = useBridgeTx();
-  // const { refreshBalanceId } = useMintStatus();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
   const hasMatchingCoin = useMemo(() => {
     if (!walletAddr || !txhashes[walletAddr] || !!balance) return false;
