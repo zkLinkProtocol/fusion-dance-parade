@@ -200,7 +200,7 @@ const Summon: React.FC = (props) => {
   return (
     <div className='max-md:max-w-full mt-[120px] w-full md:mt-0'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
-        Summon The Nova MEMECROSS
+        Merge and Create your Chad
       </div>
       <div className='max-md:flex-col flex flex-col gap-1 md:flex-row md:gap-5'>
         <div className='max-md:ml-0 max-md:w-full max-md:order-2 flex w-full flex-col md:w-[29%]'>
@@ -211,9 +211,8 @@ const Summon: React.FC = (props) => {
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
           <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast
-              L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first
-              ZK Aggregated Layer 3, the bridge of the ETH ecosystem.
+              Gather all the memes, fox, cat, aidoge, dragon (Infinity stones) to create the ultimate fused (merged)
+              warrior (gigaChad).
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
@@ -254,10 +253,11 @@ const Page: React.FC = () => {
       <div className='mx-auto max-w-[1200px]'>
         <div className='max-md:max-w-full relative flex grow flex-col tracking-tight md:pt-[100px]'>
           <div className='max-md:max-w-full text-2xl font-black leading-[56.16px] text-white md:text-5xl'>
-            Mint your MemeAxis on Nova
+            Mint your Nova Infinity Stones
           </div>
           <div className='max-md:max-w-full text-sm leading-6 text-neutral-400 md:mt-8 md:text-base'>
-            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your MemeAxis!
+            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your Nova Infinity
+            Stones!
           </div>
         </div>
         <MemeNftGrid />
@@ -265,7 +265,7 @@ const Page: React.FC = () => {
         <Rules />
         <Model />
       </div>
-      <VideoModal />
+      {/* <VideoModal /> */}
     </section>
   );
 };
