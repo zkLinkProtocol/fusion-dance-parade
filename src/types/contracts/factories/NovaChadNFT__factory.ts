@@ -4,12 +4,20 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type {
-  NovaMysteryBoxNFT,
-  NovaMysteryBoxNFTInterface,
-} from "../NovaMysteryBoxNFT";
+import type { NovaChadNFT, NovaChadNFTInterface } from "../NovaChadNFT";
 
 const _abi = [
+  {
+    inputs: [
+      {
+        internalType: "contract ERC1155BurnableUpgradeable",
+        name: "_infinityStones",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
   {
     anonymous: false,
     inputs: [
@@ -271,6 +279,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "COMPOSITE_AUTH_TYPE_HASH",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "DEFAULT_ADMIN_ROLE",
     outputs: [
       {
@@ -297,12 +318,38 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "NOVA_INFINITY_STONES",
+    outputs: [
+      {
+        internalType: "contract ERC1155BurnableUpgradeable",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "WITNESS_ROLE",
     outputs: [
       {
         internalType: "bytes32",
         name: "",
         type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "_tokenIdTracker",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "_value",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -375,19 +422,43 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "",
+        name: "to",
         type: "address",
       },
-    ],
-    name: "burnNonces",
-    outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "nonce",
         type: "uint256",
       },
+      {
+        internalType: "uint256[]",
+        name: "tokenIds",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
+        name: "expiry",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "mintType",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
     ],
-    stateMutability: "view",
+    name: "compositeWithAuth",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -597,6 +668,11 @@ const _abi = [
         name: "_defaultWitness",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "_maxSupply",
+        type: "uint256",
+      },
     ],
     name: "initialize",
     outputs: [],
@@ -640,8 +716,62 @@ const _abi = [
         type: "uint256",
       },
       {
+        internalType: "uint256[]",
+        name: "tokenIds",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
+      {
         internalType: "uint256",
         name: "expiry",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "mintType",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+    ],
+    name: "isCompositeAuthorized",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "nonce",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "expiry",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "mintType",
         type: "uint256",
       },
       {
@@ -662,14 +792,32 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "maxSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
       {
         internalType: "address",
         name: "",
         type: "address",
       },
     ],
-    name: "mintNonces",
+    name: "mintNoncesMap",
     outputs: [
       {
         internalType: "uint256",
@@ -836,12 +984,17 @@ const _abi = [
         type: "uint256",
       },
       {
+        internalType: "uint256",
+        name: "mintType",
+        type: "uint256",
+      },
+      {
         internalType: "bytes",
         name: "signature",
         type: "bytes",
       },
     ],
-    name: "safeMint",
+    name: "safeMintWithAuth",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -864,12 +1017,17 @@ const _abi = [
         type: "uint256",
       },
       {
+        internalType: "uint256",
+        name: "mintType",
+        type: "uint256",
+      },
+      {
         internalType: "bytes",
         name: "signature",
         type: "bytes",
       },
     ],
-    name: "safeMint",
+    name: "safeMintWithAuth",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -939,6 +1097,19 @@ const _abi = [
       },
     ],
     name: "setApprovalForAll",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_maxSupply",
+        type: "uint256",
+      },
+    ],
+    name: "setMaxSupply",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1138,15 +1309,15 @@ const _abi = [
   },
 ] as const;
 
-export class NovaMysteryBoxNFT__factory {
+export class NovaChadNFT__factory {
   static readonly abi = _abi;
-  static createInterface(): NovaMysteryBoxNFTInterface {
-    return new utils.Interface(_abi) as NovaMysteryBoxNFTInterface;
+  static createInterface(): NovaChadNFTInterface {
+    return new utils.Interface(_abi) as NovaChadNFTInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): NovaMysteryBoxNFT {
-    return new Contract(address, _abi, signerOrProvider) as NovaMysteryBoxNFT;
+  ): NovaChadNFT {
+    return new Contract(address, _abi, signerOrProvider) as NovaChadNFT;
   }
 }

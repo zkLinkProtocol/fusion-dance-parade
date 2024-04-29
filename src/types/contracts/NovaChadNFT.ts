@@ -28,64 +28,77 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface NovaMemeNFTInterface extends utils.Interface {
+export interface NovaChadNFTInterface extends utils.Interface {
   functions: {
-    "BATCH_MINT_AUTH_TYPE_HASH()": FunctionFragment;
+    "COMPOSITE_AUTH_TYPE_HASH()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MINT_AUTH_TYPE_HASH()": FunctionFragment;
+    "NOVA_INFINITY_STONES()": FunctionFragment;
     "WITNESS_ROLE()": FunctionFragment;
-    "balanceOf(address,uint256)": FunctionFragment;
-    "balanceOfBatch(address[],uint256[])": FunctionFragment;
-    "burn(address,uint256,uint256)": FunctionFragment;
-    "burnBatch(address,uint256[],uint256[])": FunctionFragment;
+    "_tokenIdTracker()": FunctionFragment;
+    "approve(address,uint256)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
+    "baseTokenURI()": FunctionFragment;
+    "burn(uint256)": FunctionFragment;
+    "compositeWithAuth(address,uint256,uint256[],uint256[],uint256,uint256,bytes)": FunctionFragment;
     "eip712Domain()": FunctionFragment;
     "exists(uint256)": FunctionFragment;
+    "getApproved(uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(string,string,address)": FunctionFragment;
+    "initialize(string,string,string,address,uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "isBatchMintAuthorized(address,uint256,uint256[],uint256[],uint256,uint256,bytes)": FunctionFragment;
-    "isMintAuthorized(address,uint256,uint256,uint256,uint256,uint256,bytes)": FunctionFragment;
+    "isCompositeAuthorized(address,uint256,uint256[],uint256[],uint256,uint256,bytes)": FunctionFragment;
+    "isMintAuthorized(address,uint256,uint256,uint256,bytes)": FunctionFragment;
+    "maxSupply()": FunctionFragment;
     "mintNoncesMap(uint256,address)": FunctionFragment;
-    "mintRecord(address,uint256)": FunctionFragment;
+    "name()": FunctionFragment;
     "owner()": FunctionFragment;
+    "ownerOf(uint256)": FunctionFragment;
     "paused()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
-    "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)": FunctionFragment;
-    "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)": FunctionFragment;
-    "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
-    "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)": FunctionFragment;
-    "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)": FunctionFragment;
-    "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
+    "royaltyInfo(uint256,uint256)": FunctionFragment;
+    "safeMintWithAuth(uint256,uint256,uint256,bytes)": FunctionFragment;
+    "safeMintWithAuth(address,uint256,uint256,uint256,bytes)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setURI(uint256,string)": FunctionFragment;
+    "setMaxSupply(uint256)": FunctionFragment;
     "signatures(bytes32)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "totalSupply(uint256)": FunctionFragment;
+    "symbol()": FunctionFragment;
+    "tokenByIndex(uint256)": FunctionFragment;
+    "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
+    "tokenURI(uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
-    "uri(uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "BATCH_MINT_AUTH_TYPE_HASH"
+      | "COMPOSITE_AUTH_TYPE_HASH"
       | "DEFAULT_ADMIN_ROLE"
       | "MINT_AUTH_TYPE_HASH"
+      | "NOVA_INFINITY_STONES"
       | "WITNESS_ROLE"
+      | "_tokenIdTracker"
+      | "approve"
       | "balanceOf"
-      | "balanceOfBatch"
+      | "baseTokenURI"
       | "burn"
-      | "burnBatch"
+      | "compositeWithAuth"
       | "eip712Domain"
       | "exists"
+      | "getApproved"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
@@ -93,35 +106,40 @@ export interface NovaMemeNFTInterface extends utils.Interface {
       | "hasRole"
       | "initialize"
       | "isApprovedForAll"
-      | "isBatchMintAuthorized"
+      | "isCompositeAuthorized"
       | "isMintAuthorized"
+      | "maxSupply"
       | "mintNoncesMap"
-      | "mintRecord"
+      | "name"
       | "owner"
+      | "ownerOf"
       | "paused"
       | "proxiableUUID"
       | "renounceOwnership"
       | "renounceRole"
       | "revokeRole"
-      | "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)"
-      | "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)"
-      | "safeBatchTransferFrom"
-      | "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)"
-      | "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)"
-      | "safeTransferFrom"
+      | "royaltyInfo"
+      | "safeMintWithAuth(uint256,uint256,uint256,bytes)"
+      | "safeMintWithAuth(address,uint256,uint256,uint256,bytes)"
+      | "safeTransferFrom(address,address,uint256)"
+      | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setURI"
+      | "setMaxSupply"
       | "signatures"
       | "supportsInterface"
+      | "symbol"
+      | "tokenByIndex"
+      | "tokenOfOwnerByIndex"
+      | "tokenURI"
       | "totalSupply"
+      | "transferFrom"
       | "transferOwnership"
       | "upgradeTo"
       | "upgradeToAndCall"
-      | "uri"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "BATCH_MINT_AUTH_TYPE_HASH",
+    functionFragment: "COMPOSITE_AUTH_TYPE_HASH",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -133,31 +151,43 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "NOVA_INFINITY_STONES",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "WITNESS_ROLE",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "balanceOf",
+    functionFragment: "_tokenIdTracker",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approve",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "balanceOfBatch",
-    values: [PromiseOrValue<string>[], PromiseOrValue<BigNumberish>[]]
+    functionFragment: "balanceOf",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "baseTokenURI",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "burn",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "compositeWithAuth",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "burnBatch",
-    values: [
-      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[]
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
@@ -166,6 +196,10 @@ export interface NovaMemeNFTInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "exists",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -193,7 +227,9 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -201,7 +237,7 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "isBatchMintAuthorized",
+    functionFragment: "isCompositeAuthorized",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
@@ -219,20 +255,20 @@ export interface NovaMemeNFTInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BytesLike>
     ]
   ): string;
+  encodeFunctionData(functionFragment: "maxSupply", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mintNoncesMap",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "mintRecord",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "ownerOf",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "proxiableUUID",
@@ -251,44 +287,12 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>
-    ]
+    functionFragment: "royaltyInfo",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)",
+    functionFragment: "safeMintWithAuth(uint256,uint256,uint256,bytes)",
     values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "safeBatchTransferFrom",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
@@ -296,10 +300,9 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)",
+    functionFragment: "safeMintWithAuth(address,uint256,uint256,uint256,bytes)",
     values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
@@ -307,11 +310,18 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "safeTransferFrom",
+    functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BytesLike>
     ]
@@ -321,8 +331,8 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
-    functionFragment: "setURI",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+    functionFragment: "setMaxSupply",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "signatures",
@@ -332,9 +342,30 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
   ): string;
+  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "tokenByIndex",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenOfOwnerByIndex",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenURI",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
-    values: [PromiseOrValue<BigNumberish>]
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferFrom",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -348,13 +379,9 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     functionFragment: "upgradeToAndCall",
     values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "uri",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
 
   decodeFunctionResult(
-    functionFragment: "BATCH_MINT_AUTH_TYPE_HASH",
+    functionFragment: "COMPOSITE_AUTH_TYPE_HASH",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -366,21 +393,37 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "NOVA_INFINITY_STONES",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "WITNESS_ROLE",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "_tokenIdTracker",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "balanceOfBatch",
+    functionFragment: "baseTokenURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "burnBatch", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "compositeWithAuth",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "eip712Domain",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "exists", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -401,19 +444,21 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isBatchMintAuthorized",
+    functionFragment: "isCompositeAuthorized",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "isMintAuthorized",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "maxSupply", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "mintNoncesMap",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "mintRecord", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
@@ -429,41 +474,54 @@ export interface NovaMemeNFTInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)",
+    functionFragment: "royaltyInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)",
+    functionFragment: "safeMintWithAuth(uint256,uint256,uint256,bytes)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeBatchTransferFrom",
+    functionFragment: "safeMintWithAuth(address,uint256,uint256,uint256,bytes)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)",
+    functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "safeTransferFrom",
+    functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setMaxSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "signatures", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenByIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenOfOwnerByIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -475,10 +533,10 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     functionFragment: "upgradeToAndCall",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "uri", data: BytesLike): Result;
 
   events: {
     "AdminChanged(address,address)": EventFragment;
+    "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "BeaconUpgraded(address)": EventFragment;
     "EIP712DomainChanged()": EventFragment;
@@ -488,14 +546,13 @@ export interface NovaMemeNFTInterface extends utils.Interface {
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
-    "TransferBatch(address,address,address,uint256[],uint256[])": EventFragment;
-    "TransferSingle(address,address,address,uint256,uint256)": EventFragment;
-    "URI(string,uint256)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
     "Upgraded(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "EIP712DomainChanged"): EventFragment;
@@ -505,9 +562,7 @@ export interface NovaMemeNFTInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TransferBatch"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TransferSingle"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "URI"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
@@ -523,8 +578,20 @@ export type AdminChangedEvent = TypedEvent<
 
 export type AdminChangedEventFilter = TypedEventFilter<AdminChangedEvent>;
 
+export interface ApprovalEventObject {
+  owner: string;
+  approved: string;
+  tokenId: BigNumber;
+}
+export type ApprovalEvent = TypedEvent<
+  [string, string, BigNumber],
+  ApprovalEventObject
+>;
+
+export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
+
 export interface ApprovalForAllEventObject {
-  account: string;
+  owner: string;
   operator: string;
   approved: boolean;
 }
@@ -617,41 +684,17 @@ export type RoleRevokedEvent = TypedEvent<
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
 
-export interface TransferBatchEventObject {
-  operator: string;
+export interface TransferEventObject {
   from: string;
   to: string;
-  ids: BigNumber[];
-  values: BigNumber[];
+  tokenId: BigNumber;
 }
-export type TransferBatchEvent = TypedEvent<
-  [string, string, string, BigNumber[], BigNumber[]],
-  TransferBatchEventObject
+export type TransferEvent = TypedEvent<
+  [string, string, BigNumber],
+  TransferEventObject
 >;
 
-export type TransferBatchEventFilter = TypedEventFilter<TransferBatchEvent>;
-
-export interface TransferSingleEventObject {
-  operator: string;
-  from: string;
-  to: string;
-  id: BigNumber;
-  value: BigNumber;
-}
-export type TransferSingleEvent = TypedEvent<
-  [string, string, string, BigNumber, BigNumber],
-  TransferSingleEventObject
->;
-
-export type TransferSingleEventFilter = TypedEventFilter<TransferSingleEvent>;
-
-export interface URIEventObject {
-  value: string;
-  id: BigNumber;
-}
-export type URIEvent = TypedEvent<[string, BigNumber], URIEventObject>;
-
-export type URIEventFilter = TypedEventFilter<URIEvent>;
+export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
 export interface UnpausedEventObject {
   account: string;
@@ -667,12 +710,12 @@ export type UpgradedEvent = TypedEvent<[string], UpgradedEventObject>;
 
 export type UpgradedEventFilter = TypedEventFilter<UpgradedEvent>;
 
-export interface NovaMemeNFT extends BaseContract {
+export interface NovaChadNFT extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: NovaMemeNFTInterface;
+  interface: NovaChadNFTInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -694,37 +737,46 @@ export interface NovaMemeNFT extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    BATCH_MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<[string]>;
+    COMPOSITE_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<[string]>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<[string]>;
 
+    NOVA_INFINITY_STONES(overrides?: CallOverrides): Promise<[string]>;
+
     WITNESS_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    balanceOf(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
+    _tokenIdTracker(
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[BigNumber] & { _value: BigNumber }>;
 
-    balanceOfBatch(
-      accounts: PromiseOrValue<string>[],
-      ids: PromiseOrValue<BigNumberish>[],
-      overrides?: CallOverrides
-    ): Promise<[BigNumber[]]>;
-
-    burn(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      value: PromiseOrValue<BigNumberish>,
+    approve(
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    burnBatch(
-      account: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      values: PromiseOrValue<BigNumberish>[],
+    balanceOf(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    baseTokenURI(overrides?: CallOverrides): Promise<[string]>;
+
+    burn(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    compositeWithAuth(
+      to: PromiseOrValue<string>,
+      nonce: PromiseOrValue<BigNumberish>,
+      tokenIds: PromiseOrValue<BigNumberish>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      expiry: PromiseOrValue<BigNumberish>,
+      mintType: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -743,9 +795,14 @@ export interface NovaMemeNFT extends BaseContract {
     >;
 
     exists(
-      id: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    getApproved(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -777,18 +834,20 @@ export interface NovaMemeNFT extends BaseContract {
 
     initialize(
       _name: PromiseOrValue<string>,
+      _symbol: PromiseOrValue<string>,
       _baseTokenURI: PromiseOrValue<string>,
       _defaultWitness: PromiseOrValue<string>,
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     isApprovedForAll(
-      account: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    isBatchMintAuthorized(
+    isCompositeAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
       tokenIds: PromiseOrValue<BigNumberish>[],
@@ -802,13 +861,13 @@ export interface NovaMemeNFT extends BaseContract {
     isMintAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    maxSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     mintNoncesMap(
       arg0: PromiseOrValue<BigNumberish>,
@@ -816,13 +875,14 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    mintRecord(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    name(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
+
+    ownerOf(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -844,62 +904,40 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    royaltyInfo(
+      tokenId: PromiseOrValue<BigNumberish>,
+      salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string, BigNumber]>;
+
+    "safeMintWithAuth(uint256,uint256,uint256,bytes)"(
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    "safeMintWithAuth(address,uint256,uint256,uint256,bytes)"(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    safeBatchTransferFrom(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)"(
-      to: PromiseOrValue<string>,
-      nonce: PromiseOrValue<BigNumberish>,
       tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)"(
-      nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    safeTransferFrom(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -910,9 +948,8 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      newURI: PromiseOrValue<string>,
+    setMaxSupply(
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -926,10 +963,32 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    totalSupply(
-      id: PromiseOrValue<BigNumberish>,
+    symbol(overrides?: CallOverrides): Promise<[string]>;
+
+    tokenByIndex(
+      index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    tokenOfOwnerByIndex(
+      owner: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    tokenURI(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transferFrom(
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
@@ -946,44 +1005,46 @@ export interface NovaMemeNFT extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    uri(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
   };
 
-  BATCH_MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<string>;
+  COMPOSITE_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<string>;
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
   MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<string>;
 
+  NOVA_INFINITY_STONES(overrides?: CallOverrides): Promise<string>;
+
   WITNESS_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  balanceOf(
-    account: PromiseOrValue<string>,
-    id: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  _tokenIdTracker(overrides?: CallOverrides): Promise<BigNumber>;
 
-  balanceOfBatch(
-    accounts: PromiseOrValue<string>[],
-    ids: PromiseOrValue<BigNumberish>[],
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
-
-  burn(
-    account: PromiseOrValue<string>,
-    id: PromiseOrValue<BigNumberish>,
-    value: PromiseOrValue<BigNumberish>,
+  approve(
+    to: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  burnBatch(
-    account: PromiseOrValue<string>,
-    ids: PromiseOrValue<BigNumberish>[],
-    values: PromiseOrValue<BigNumberish>[],
+  balanceOf(
+    owner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  baseTokenURI(overrides?: CallOverrides): Promise<string>;
+
+  burn(
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  compositeWithAuth(
+    to: PromiseOrValue<string>,
+    nonce: PromiseOrValue<BigNumberish>,
+    tokenIds: PromiseOrValue<BigNumberish>[],
+    amounts: PromiseOrValue<BigNumberish>[],
+    expiry: PromiseOrValue<BigNumberish>,
+    mintType: PromiseOrValue<BigNumberish>,
+    signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1002,9 +1063,14 @@ export interface NovaMemeNFT extends BaseContract {
   >;
 
   exists(
-    id: PromiseOrValue<BigNumberish>,
+    tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  getApproved(
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getRoleAdmin(
     role: PromiseOrValue<BytesLike>,
@@ -1036,18 +1102,20 @@ export interface NovaMemeNFT extends BaseContract {
 
   initialize(
     _name: PromiseOrValue<string>,
+    _symbol: PromiseOrValue<string>,
     _baseTokenURI: PromiseOrValue<string>,
     _defaultWitness: PromiseOrValue<string>,
+    _maxSupply: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   isApprovedForAll(
-    account: PromiseOrValue<string>,
+    owner: PromiseOrValue<string>,
     operator: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isBatchMintAuthorized(
+  isCompositeAuthorized(
     to: PromiseOrValue<string>,
     nonce: PromiseOrValue<BigNumberish>,
     tokenIds: PromiseOrValue<BigNumberish>[],
@@ -1061,13 +1129,13 @@ export interface NovaMemeNFT extends BaseContract {
   isMintAuthorized(
     to: PromiseOrValue<string>,
     nonce: PromiseOrValue<BigNumberish>,
-    tokenId: PromiseOrValue<BigNumberish>,
-    amount: PromiseOrValue<BigNumberish>,
     expiry: PromiseOrValue<BigNumberish>,
     mintType: PromiseOrValue<BigNumberish>,
     signature: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   mintNoncesMap(
     arg0: PromiseOrValue<BigNumberish>,
@@ -1075,13 +1143,14 @@ export interface NovaMemeNFT extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  mintRecord(
-    arg0: PromiseOrValue<string>,
-    arg1: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  name(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
+
+  ownerOf(
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   paused(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1103,62 +1172,40 @@ export interface NovaMemeNFT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+  royaltyInfo(
+    tokenId: PromiseOrValue<BigNumberish>,
+    salePrice: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<[string, BigNumber]>;
+
+  "safeMintWithAuth(uint256,uint256,uint256,bytes)"(
     nonce: PromiseOrValue<BigNumberish>,
-    tokenIds: PromiseOrValue<BigNumberish>[],
-    amounts: PromiseOrValue<BigNumberish>[],
     expiry: PromiseOrValue<BigNumberish>,
     mintType: PromiseOrValue<BigNumberish>,
     signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+  "safeMintWithAuth(address,uint256,uint256,uint256,bytes)"(
     to: PromiseOrValue<string>,
     nonce: PromiseOrValue<BigNumberish>,
-    tokenIds: PromiseOrValue<BigNumberish>[],
-    amounts: PromiseOrValue<BigNumberish>[],
     expiry: PromiseOrValue<BigNumberish>,
     mintType: PromiseOrValue<BigNumberish>,
     signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  safeBatchTransferFrom(
+  "safeTransferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
-    ids: PromiseOrValue<BigNumberish>[],
-    amounts: PromiseOrValue<BigNumberish>[],
-    data: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)"(
-    to: PromiseOrValue<string>,
-    nonce: PromiseOrValue<BigNumberish>,
     tokenId: PromiseOrValue<BigNumberish>,
-    amount: PromiseOrValue<BigNumberish>,
-    expiry: PromiseOrValue<BigNumberish>,
-    mintType: PromiseOrValue<BigNumberish>,
-    signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)"(
-    nonce: PromiseOrValue<BigNumberish>,
-    tokenId: PromiseOrValue<BigNumberish>,
-    amount: PromiseOrValue<BigNumberish>,
-    expiry: PromiseOrValue<BigNumberish>,
-    mintType: PromiseOrValue<BigNumberish>,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  safeTransferFrom(
+  "safeTransferFrom(address,address,uint256,bytes)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
-    id: PromiseOrValue<BigNumberish>,
-    amount: PromiseOrValue<BigNumberish>,
+    tokenId: PromiseOrValue<BigNumberish>,
     data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -1169,9 +1216,8 @@ export interface NovaMemeNFT extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setURI(
-    tokenId: PromiseOrValue<BigNumberish>,
-    newURI: PromiseOrValue<string>,
+  setMaxSupply(
+    _maxSupply: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1185,10 +1231,32 @@ export interface NovaMemeNFT extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  totalSupply(
-    id: PromiseOrValue<BigNumberish>,
+  symbol(overrides?: CallOverrides): Promise<string>;
+
+  tokenByIndex(
+    index: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  tokenOfOwnerByIndex(
+    owner: PromiseOrValue<string>,
+    index: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  tokenURI(
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+  transferFrom(
+    from: PromiseOrValue<string>,
+    to: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: PromiseOrValue<string>,
@@ -1206,43 +1274,45 @@ export interface NovaMemeNFT extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  uri(
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
   callStatic: {
-    BATCH_MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<string>;
+    COMPOSITE_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<string>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
     MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<string>;
 
+    NOVA_INFINITY_STONES(overrides?: CallOverrides): Promise<string>;
+
     WITNESS_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    balanceOf(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    _tokenIdTracker(overrides?: CallOverrides): Promise<BigNumber>;
 
-    balanceOfBatch(
-      accounts: PromiseOrValue<string>[],
-      ids: PromiseOrValue<BigNumberish>[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
-
-    burn(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      value: PromiseOrValue<BigNumberish>,
+    approve(
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    burnBatch(
-      account: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      values: PromiseOrValue<BigNumberish>[],
+    balanceOf(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    baseTokenURI(overrides?: CallOverrides): Promise<string>;
+
+    burn(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    compositeWithAuth(
+      to: PromiseOrValue<string>,
+      nonce: PromiseOrValue<BigNumberish>,
+      tokenIds: PromiseOrValue<BigNumberish>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      expiry: PromiseOrValue<BigNumberish>,
+      mintType: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1261,9 +1331,14 @@ export interface NovaMemeNFT extends BaseContract {
     >;
 
     exists(
-      id: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    getApproved(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getRoleAdmin(
       role: PromiseOrValue<BytesLike>,
@@ -1295,18 +1370,20 @@ export interface NovaMemeNFT extends BaseContract {
 
     initialize(
       _name: PromiseOrValue<string>,
+      _symbol: PromiseOrValue<string>,
       _baseTokenURI: PromiseOrValue<string>,
       _defaultWitness: PromiseOrValue<string>,
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     isApprovedForAll(
-      account: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isBatchMintAuthorized(
+    isCompositeAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
       tokenIds: PromiseOrValue<BigNumberish>[],
@@ -1320,13 +1397,13 @@ export interface NovaMemeNFT extends BaseContract {
     isMintAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     mintNoncesMap(
       arg0: PromiseOrValue<BigNumberish>,
@@ -1334,13 +1411,14 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mintRecord(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
+
+    ownerOf(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     paused(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1360,62 +1438,40 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    royaltyInfo(
+      tokenId: PromiseOrValue<BigNumberish>,
+      salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string, BigNumber]>;
+
+    "safeMintWithAuth(uint256,uint256,uint256,bytes)"(
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    "safeMintWithAuth(address,uint256,uint256,uint256,bytes)"(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    safeBatchTransferFrom(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      data: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)"(
-      to: PromiseOrValue<string>,
-      nonce: PromiseOrValue<BigNumberish>,
       tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)"(
-      nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    safeTransferFrom(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1426,9 +1482,8 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      newURI: PromiseOrValue<string>,
+    setMaxSupply(
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1442,10 +1497,32 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    totalSupply(
-      id: PromiseOrValue<BigNumberish>,
+    symbol(overrides?: CallOverrides): Promise<string>;
+
+    tokenByIndex(
+      index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    tokenOfOwnerByIndex(
+      owner: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenURI(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferFrom(
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
@@ -1462,11 +1539,6 @@ export interface NovaMemeNFT extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    uri(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<string>;
   };
 
   filters: {
@@ -1479,13 +1551,24 @@ export interface NovaMemeNFT extends BaseContract {
       newAdmin?: null
     ): AdminChangedEventFilter;
 
+    "Approval(address,address,uint256)"(
+      owner?: PromiseOrValue<string> | null,
+      approved?: PromiseOrValue<string> | null,
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): ApprovalEventFilter;
+    Approval(
+      owner?: PromiseOrValue<string> | null,
+      approved?: PromiseOrValue<string> | null,
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): ApprovalEventFilter;
+
     "ApprovalForAll(address,address,bool)"(
-      account?: PromiseOrValue<string> | null,
+      owner?: PromiseOrValue<string> | null,
       operator?: PromiseOrValue<string> | null,
       approved?: null
     ): ApprovalForAllEventFilter;
     ApprovalForAll(
-      account?: PromiseOrValue<string> | null,
+      owner?: PromiseOrValue<string> | null,
       operator?: PromiseOrValue<string> | null,
       approved?: null
     ): ApprovalForAllEventFilter;
@@ -1548,41 +1631,16 @@ export interface NovaMemeNFT extends BaseContract {
       sender?: PromiseOrValue<string> | null
     ): RoleRevokedEventFilter;
 
-    "TransferBatch(address,address,address,uint256[],uint256[])"(
-      operator?: PromiseOrValue<string> | null,
+    "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
-      ids?: null,
-      values?: null
-    ): TransferBatchEventFilter;
-    TransferBatch(
-      operator?: PromiseOrValue<string> | null,
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): TransferEventFilter;
+    Transfer(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
-      ids?: null,
-      values?: null
-    ): TransferBatchEventFilter;
-
-    "TransferSingle(address,address,address,uint256,uint256)"(
-      operator?: PromiseOrValue<string> | null,
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      id?: null,
-      value?: null
-    ): TransferSingleEventFilter;
-    TransferSingle(
-      operator?: PromiseOrValue<string> | null,
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      id?: null,
-      value?: null
-    ): TransferSingleEventFilter;
-
-    "URI(string,uint256)"(
-      value?: null,
-      id?: PromiseOrValue<BigNumberish> | null
-    ): URIEventFilter;
-    URI(value?: null, id?: PromiseOrValue<BigNumberish> | null): URIEventFilter;
+      tokenId?: PromiseOrValue<BigNumberish> | null
+    ): TransferEventFilter;
 
     "Unpaused(address)"(account?: null): UnpausedEventFilter;
     Unpaused(account?: null): UnpausedEventFilter;
@@ -1596,44 +1654,56 @@ export interface NovaMemeNFT extends BaseContract {
   };
 
   estimateGas: {
-    BATCH_MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<BigNumber>;
+    COMPOSITE_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<BigNumber>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     MINT_AUTH_TYPE_HASH(overrides?: CallOverrides): Promise<BigNumber>;
 
+    NOVA_INFINITY_STONES(overrides?: CallOverrides): Promise<BigNumber>;
+
     WITNESS_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    balanceOf(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    _tokenIdTracker(overrides?: CallOverrides): Promise<BigNumber>;
 
-    balanceOfBatch(
-      accounts: PromiseOrValue<string>[],
-      ids: PromiseOrValue<BigNumberish>[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    burn(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      value: PromiseOrValue<BigNumberish>,
+    approve(
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    burnBatch(
-      account: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      values: PromiseOrValue<BigNumberish>[],
+    balanceOf(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    baseTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
+
+    burn(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    compositeWithAuth(
+      to: PromiseOrValue<string>,
+      nonce: PromiseOrValue<BigNumberish>,
+      tokenIds: PromiseOrValue<BigNumberish>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      expiry: PromiseOrValue<BigNumberish>,
+      mintType: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     eip712Domain(overrides?: CallOverrides): Promise<BigNumber>;
 
     exists(
-      id: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getApproved(
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1667,18 +1737,20 @@ export interface NovaMemeNFT extends BaseContract {
 
     initialize(
       _name: PromiseOrValue<string>,
+      _symbol: PromiseOrValue<string>,
       _baseTokenURI: PromiseOrValue<string>,
       _defaultWitness: PromiseOrValue<string>,
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     isApprovedForAll(
-      account: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isBatchMintAuthorized(
+    isCompositeAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
       tokenIds: PromiseOrValue<BigNumberish>[],
@@ -1692,13 +1764,13 @@ export interface NovaMemeNFT extends BaseContract {
     isMintAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     mintNoncesMap(
       arg0: PromiseOrValue<BigNumberish>,
@@ -1706,13 +1778,14 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mintRecord(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    name(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ownerOf(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1734,62 +1807,40 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    royaltyInfo(
+      tokenId: PromiseOrValue<BigNumberish>,
+      salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "safeMintWithAuth(uint256,uint256,uint256,bytes)"(
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    "safeMintWithAuth(address,uint256,uint256,uint256,bytes)"(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    safeBatchTransferFrom(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)"(
-      to: PromiseOrValue<string>,
-      nonce: PromiseOrValue<BigNumberish>,
       tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)"(
-      nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    safeTransferFrom(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1800,9 +1851,8 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      newURI: PromiseOrValue<string>,
+    setMaxSupply(
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1816,9 +1866,31 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    totalSupply(
-      id: PromiseOrValue<BigNumberish>,
+    symbol(overrides?: CallOverrides): Promise<BigNumber>;
+
+    tokenByIndex(
+      index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenOfOwnerByIndex(
+      owner: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    tokenURI(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferFrom(
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     transferOwnership(
@@ -1836,15 +1908,10 @@ export interface NovaMemeNFT extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    uri(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    BATCH_MINT_AUTH_TYPE_HASH(
+    COMPOSITE_AUTH_TYPE_HASH(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1856,38 +1923,52 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    NOVA_INFINITY_STONES(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     WITNESS_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    balanceOf(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    _tokenIdTracker(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    balanceOfBatch(
-      accounts: PromiseOrValue<string>[],
-      ids: PromiseOrValue<BigNumberish>[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    burn(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      value: PromiseOrValue<BigNumberish>,
+    approve(
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    burnBatch(
-      account: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      values: PromiseOrValue<BigNumberish>[],
+    balanceOf(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    baseTokenURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    burn(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    compositeWithAuth(
+      to: PromiseOrValue<string>,
+      nonce: PromiseOrValue<BigNumberish>,
+      tokenIds: PromiseOrValue<BigNumberish>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      expiry: PromiseOrValue<BigNumberish>,
+      mintType: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     eip712Domain(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     exists(
-      id: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getApproved(
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1921,18 +2002,20 @@ export interface NovaMemeNFT extends BaseContract {
 
     initialize(
       _name: PromiseOrValue<string>,
+      _symbol: PromiseOrValue<string>,
       _baseTokenURI: PromiseOrValue<string>,
       _defaultWitness: PromiseOrValue<string>,
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
-      account: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isBatchMintAuthorized(
+    isCompositeAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
       tokenIds: PromiseOrValue<BigNumberish>[],
@@ -1946,13 +2029,13 @@ export interface NovaMemeNFT extends BaseContract {
     isMintAuthorized(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    maxSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     mintNoncesMap(
       arg0: PromiseOrValue<BigNumberish>,
@@ -1960,13 +2043,14 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    mintRecord(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ownerOf(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1988,62 +2072,40 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "safeBatchMint(uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    royaltyInfo(
+      tokenId: PromiseOrValue<BigNumberish>,
+      salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "safeMintWithAuth(uint256,uint256,uint256,bytes)"(
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "safeBatchMint(address,uint256,uint256[],uint256[],uint256,uint256,bytes)"(
+    "safeMintWithAuth(address,uint256,uint256,uint256,bytes)"(
       to: PromiseOrValue<string>,
       nonce: PromiseOrValue<BigNumberish>,
-      tokenIds: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
       expiry: PromiseOrValue<BigNumberish>,
       mintType: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    safeBatchTransferFrom(
+    "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "safeMint(address,uint256,uint256,uint256,uint256,uint256,bytes)"(
-      to: PromiseOrValue<string>,
-      nonce: PromiseOrValue<BigNumberish>,
       tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "safeMint(uint256,uint256,uint256,uint256,uint256,bytes)"(
-      nonce: PromiseOrValue<BigNumberish>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      mintType: PromiseOrValue<BigNumberish>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    safeTransferFrom(
+    "safeTransferFrom(address,address,uint256,bytes)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
+      tokenId: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -2054,9 +2116,8 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setURI(
-      tokenId: PromiseOrValue<BigNumberish>,
-      newURI: PromiseOrValue<string>,
+    setMaxSupply(
+      _maxSupply: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2070,9 +2131,31 @@ export interface NovaMemeNFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    totalSupply(
-      id: PromiseOrValue<BigNumberish>,
+    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    tokenByIndex(
+      index: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenOfOwnerByIndex(
+      owner: PromiseOrValue<string>,
+      index: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenURI(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferFrom(
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
@@ -2089,11 +2172,6 @@ export interface NovaMemeNFT extends BaseContract {
       newImplementation: PromiseOrValue<string>,
       data: PromiseOrValue<BytesLike>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    uri(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }
