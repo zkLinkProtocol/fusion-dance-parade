@@ -235,14 +235,25 @@ const Rules: React.FC = () => {
         1. Connect your wallet and check your whitelist eligibility. <br />
         <br />
         2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
-        chain to Nova and mint your MemeAxis. <br />
+        chain to Nova and mint your Infinity Stones NFTs. <br />
         <br />
-        3. Collect some different MemeAxises, then summon your own MEMECROSS, the Nova’s exclusive badges for brave meme
-        holders. <br />
+        3. Collect or mint some different Infinity Stones NFTs, then merge your Chad NFT. The amount of Infinity Stones
+        NFTs required to merge Chad NFT will increase based on the amount of Chad NFT that has been merged. <br />
         <br />
-        <span className='text-left text-xs text-slate-400'>
+        4. Airdrop：We have a total of 10,000 Chad NFTs and 10,000 Mystery boxes. Users who hold Chad NFT and bridges
+        0.1ETH to Nova during the course of the campaign will guaranteed a mystery airdrop. If eligible Chad NFT holders
+        are less than 10,000 users, the rest we will randomly allocate to other Infinity Stones holders.
+        <br />
+        <br />
+        5. Join our community，create and vote for your ideal nova Chad. We will mint the most popular Chad meme in the
+        community, and send new Chad NFT to all chad holders.
+        <br />
+        <br />
+        Notice: An address can only receive at most 1 mystery airdrop. If you want to collect or sell Chad NFT or
+        Infinity Stones, just trade it on Alienswap. <br /> Time: 1st May- 29th May 2024
+        {/* <span className='text-left text-xs text-slate-400'>
           zk.Link Nova reserve all the right for the final explanation
-        </span>
+        </span> */}
       </div>
     </div>
   );
