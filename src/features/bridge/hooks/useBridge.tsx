@@ -8,7 +8,7 @@ import IL1Bridge from 'constants/contracts/abis/IL1Bridge.json';
 import IZkSync from 'constants/contracts/abis/IZkSync.json';
 import WrappedMNTAbi from 'constants/contracts/abis/WrappedMNT.json';
 import secondaryAbi from 'constants/contracts/abis/ZkLink.json';
-import { L2_ETH_TOKEN_ADDRESS, NOVA_CHAIN_ID, WRAPPED_MNT } from 'constants/zklink-config';
+import { NOVA_CHAIN_ID, WRAPPED_MNT } from 'constants/zklink-config';
 import type { BigNumberish } from 'ethers';
 import { BigNumber, ethers, utils, VoidSigner } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
@@ -30,8 +30,6 @@ import { toast } from 'sonner';
 import useMemeNft from 'features/nft/hooks/useMemeNft';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 import useTokenBalanceList from './useTokenList';
-import { getBalance, readContract } from 'viem/actions';
-import { useVerifyStore } from 'hooks/useVerifyStore';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
 const REQUIRED_L1_TO_L2_GAS_PER_PUBDATA_LIMIT = 800;
@@ -54,8 +52,6 @@ export const useBridgeTx = () => {
   const isManta = useMemo(() => networkKey === 'manta', [networkKey]);
   const isBlast = useMemo(() => networkKey === 'blast', [networkKey]);
   const isMantle = useMemo(() => networkKey === 'mantle', [networkKey]);
-
-  const { addTxHash, txhashes } = useVerifyStore();
 
   //estimate: getbaseCost * l2gaslimit
   const getBaseCost = async (l2GasLimit: BigNumber) => {

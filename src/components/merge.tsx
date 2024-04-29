@@ -1,15 +1,9 @@
 import classNames from 'classnames';
 import { config } from 'config/zklin-networks';
-import NovaMeMeNft from 'constants/contracts/abis/NovaMemeAxisNFT.json';
-import NovaComposeNFT from 'constants/contracts/abis/NovaMemeCrossNFT.json';
-import { getRemainDrawCount } from 'constants/api';
-import {
-  IS_MAINNET,
-  MEME_COMPOSE_NFT_CONTRACT,
-  MEME_NFT_CONTRACT,
-  MintStatus,
-  NOVA_CHAIN_ID,
-} from 'constants/zklink-config';
+import NovaInfinityStonesNFT from 'constants/contracts/abis/NovaInfinityStonesNFT.json';
+import NovaChadNFT from 'constants/contracts/abis/NovaChadNFT.json';
+import { getMemeMintChadNumber, getMergeSignature } from 'constants/api';
+import { IS_MAINNET, MEME_COMPOSE_NFT_CONTRACT, MEME_NFT_CONTRACT, NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { zkSyncProvider } from 'providers/zksync-provider';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -17,7 +11,6 @@ import { formatBalance } from 'utils/time';
 import type { Hash, WriteContractParameters } from 'viem';
 import { encodeFunctionData, getContract } from 'viem';
 import { useAccount, useBalance, usePublicClient, useSwitchChain, useWalletClient } from 'wagmi';
-import { sleep } from 'zksync-web3/build/src/utils';
 
 import MultiSelectContent from './multi-select-content';
 import { useMintStatus } from 'features/nft/hooks/useMintStatus';
@@ -25,44 +18,20 @@ import { Button } from './ui/buttons/button';
 import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
 import { useModalStore } from 'pages';
-// import { Button } from './ui/button';
 
-//tokenId from api => image id of frontend
-const TRADEMARK_TOKEN_ID_MAP: Record<number, string> = {
-  1: 'Oak Tree Roots',
-  2: 'Magnifying Glass',
-  3: 'Chess Knight',
-  4: 'Binary Code Metrix Cube',
-  6: '+1 Nova points',
-  7: '+5 Nova points',
-  8: '+10 Nova points',
-  9: '+50 Nova points',
-  88: 'Lynks',
-};
-
-const getDrawIndexWithPrizeTokenId = (tokenId: number) => {
-  return Object.keys(TRADEMARK_TOKEN_ID_MAP).findIndex((key) => Number(key) === tokenId);
-};
-export default function Merge({ sendStatus }) {
-  // const mintModal = useDisclosure();
-  // const drawModal = useDisclosure();
-  // const trademarkMintModal = useDisclosure();
-  // const upgradeModal = useDisclosure();
+export default function Merge() {
   const { address, chainId } = useAccount();
   // const chainId = useChainId({ config });
   const { switchChain, isPending } = useSwitchChain();
 
   const { refreshBalanceId, updateRefreshBalanceId } = useMintStatus();
 
-  const { isOpen, toggleModal } = useModalStore();
+  const { toggleModal } = useModalStore();
 
   const { batchBalances } = useBatchBalancesStore();
 
   const { fetchMemeNftBalances } = useMemeNft();
-  const [remainDrawCount, setRemainDrawCount] = useState<number>(0);
-  const [update, setUpdate] = useState(0);
-  const [trademarkMintStatus, setTrademarkMintStatus] = useState<MintStatus | undefined>();
-  const [drawedNftId, setDrawedNftId] = useState<number>();
+  const [mintLimit, setMintLimit] = useState<number>(0);
 
   const [isTrademarkApproved, setIsTrademarkApproved] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -71,17 +40,6 @@ export default function Merge({ sendStatus }) {
 
   const publicClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { data: walletClient } = useWalletClient();
-  useEffect(() => {
-    if (address) {
-      getRemainDrawCount(address).then((res) => {
-        console.log('remain draw count: ', res);
-        const { remainNumber, tokenId } = res.result;
-        tokenId && setDrawedNftId(Number(tokenId));
-        setRemainDrawCount(remainNumber);
-      });
-    }
-  }, [address, update]);
-
   const isInvaidChain = useMemo(() => {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
@@ -107,7 +65,7 @@ export default function Merge({ sendStatus }) {
       setIsApproving(true);
       const tx: WriteContractParameters = {
         address: MEME_NFT_CONTRACT as Hash,
-        abi: NovaMeMeNft,
+        abi: NovaInfinityStonesNFT,
         functionName: 'setApprovalForAll',
         args: [MEME_COMPOSE_NFT_CONTRACT, true],
       };
@@ -151,24 +109,34 @@ export default function Merge({ sendStatus }) {
     if (!address) return;
 
     const tokenIds = selectedTags.map((tag) => tag.tokenId);
-    console.log('tokenIds', tokenIds);
     try {
       setLoading(true);
+      const formattedIds = tokenIds.map((id) => parseInt(id, 10));
+      const params = await getMergeSignature(address, formattedIds);
+      const signature = params.result?.signature;
+      if (!signature) {
+        throw new Error('You are not authorized. Please contact us for help.');
+      }
       const tx: WriteContractParameters = {
         address: MEME_COMPOSE_NFT_CONTRACT as Hash,
-        abi: NovaComposeNFT,
-        functionName: 'safeMint',
-        args: [address, [...tokenIds]],
+        abi: NovaChadNFT,
+        functionName: 'compositeWithAuth',
+        args: [
+          address,
+          params.result.nonce,
+          params.result.tokenIds,
+          [1, 1],
+          params.result.expiry,
+          params.result.mintType,
+          params.result.signature,
+        ],
       };
-      console.log('tx', tx);
       await insertEstimateFee(tx);
       const hash = (await walletClient?.writeContract(tx)) as `0x${string}`;
-      await sleep(1000); //wait to avoid waitForTransactionReceipt failed
-      const res = await publicClient?.waitForTransactionReceipt({
+      await publicClient?.waitForTransactionReceipt({
         hash,
       });
       fetchMemeNftBalances(address);
-      console.log(res);
     } catch (e) {
       console.error(e);
       return Promise.reject(e);
@@ -195,21 +163,16 @@ export default function Merge({ sendStatus }) {
         (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Summoning selected Axis Nft...' />,
         { duration: Infinity },
       );
-      setTrademarkMintStatus(MintStatus.Minting);
       if (!isTrademarkApproved) {
         await sendTrademarkApproveTx(address);
         toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Approve completed!' />);
       }
       await sendUpgradeSBTTx(address);
-      setTrademarkMintStatus(MintStatus.Success);
       updateRefreshBalanceId();
-      setUpdate((update) => update + 1);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
       toggleModal(true);
-      sendStatus(true);
     } catch (e: any) {
       console.log(e);
-      setTrademarkMintStatus(MintStatus.Failed);
 
       if (e?.message.includes('User rejected the request')) {
         // toast.error('Request rejected');
@@ -231,7 +194,7 @@ export default function Merge({ sendStatus }) {
     updateRefreshBalanceId,
   ]);
 
-  const maxAllowed = 2;
+  const maxAllowed = mintLimit || 2;
   const tags = batchBalances;
   const isReachedLimit = selectedTags?.length >= maxAllowed;
 
@@ -253,7 +216,7 @@ export default function Merge({ sendStatus }) {
     if (!publicClient) return null;
     return getContract({
       address: MEME_NFT_CONTRACT as Hash,
-      abi: NovaMeMeNft,
+      abi: NovaInfinityStonesNFT,
       client: {
         public: publicClient,
         wallet: walletClient,
@@ -273,6 +236,15 @@ export default function Merge({ sendStatus }) {
     })();
   }, [address, memeNFTContractInstance]);
 
+  useEffect(() => {
+    (async () => {
+      await getMemeMintChadNumber().then((res) => {
+        console.log('chad number: ', res);
+        const mintNumber = res.result;
+        setMintLimit(mintNumber);
+      });
+    })();
+  }, []);
   return (
     <>
       <div className='flex flex-wrap gap-2 md:gap-4'>

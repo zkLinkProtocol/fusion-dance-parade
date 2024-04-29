@@ -12,9 +12,9 @@ import { Button } from 'components/ui/buttons/button';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useAccount } from 'wagmi';
+import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
 const VideoModal = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -90,6 +90,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { address: walletAddr } = useAccount();
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
   const { txhashes } = useVerifyStore();
+  const { precheckTxhashes } = usePreCheckTxStore();
   const { sendDepositTx, loading } = useBridgeTx();
   // const { refreshBalanceId } = useMintStatus();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
@@ -97,6 +98,11 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
     if (!walletAddr || !txhashes[walletAddr] || !!balance) return false;
     return txhashes[walletAddr]?.some((tx) => tx.coin === coin);
   }, [walletAddr, txhashes, coin, balance]);
+
+  const hasPreTxPendingTx = useMemo(() => {
+    if (!walletAddr || !precheckTxhashes[walletAddr]) return false;
+    return precheckTxhashes[walletAddr]?.some((tx) => tx.coin === coin);
+  }, [walletAddr, precheckTxhashes, coin]);
   // card-bcak loading style
 
   return (
@@ -110,7 +116,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
       <div className='card  h-[480px]'>
         <div
           className={cn('', hasMint ? 'disTranform' : 'card-inner', {
-            'card-bcak': loading || isMinting || (hasMatchingCoin && !hasMint),
+            'card-bcak': loading || isMinting || (hasMatchingCoin && !hasMint) || (hasPreTxPendingTx && !hasMint),
           })}
         >
           <div className='card-front card-wrapper'>
@@ -177,8 +183,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
 interface MemeNftGridProps {}
 const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
   const { batchBalances } = useBatchBalancesStore();
-
-  console.log(batchBalances, 'batchBalances');
   return (
     <motion.div className='max-md:max-w-full relative mt-4 w-full md:mt-10' initial='hidden' animate='visible'>
       <motion.div className='max-md:flex-col max-md:gap-0 hidden flex-wrap gap-5 md:flex'>
@@ -202,7 +206,7 @@ const Summon: React.FC = (props) => {
       <div className='max-md:flex-col flex flex-col gap-1 md:flex-row md:gap-5'>
         <div className='max-md:ml-0 max-md:w-full max-md:order-2 flex w-full flex-col md:w-[29%]'>
           <div className='mt-4 flex w-full grow flex-col rounded-2xl md:mt-0 md:justify-center md:border-2 md:border-solid md:border-indigo-500 md:bg-zinc-900'>
-            <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
+            <img loading='lazy' src='/assets/imgs/chad.png' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
@@ -246,10 +250,6 @@ const Rules: React.FC = () => {
   );
 };
 const Page: React.FC = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const sendStatus = (data) => {
-    setIsSuccess(data);
-  };
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
       <div className='mx-auto max-w-[1200px]'>
@@ -262,7 +262,7 @@ const Page: React.FC = () => {
           </div>
         </div>
         <MemeNftGrid />
-        <Summon sendStatus={sendStatus} />
+        <Summon />
         <Rules />
         <Model />
       </div>
