@@ -12,20 +12,12 @@ import { Button } from 'components/ui/buttons/button';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useAccount } from 'wagmi';
+import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
 const VideoModal = () => {
   const [isOpen, setIsOpen] = useState(true);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setIsOpen(false);
-  //   }, 5000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
 
   const handleVideoEnd = () => {
     setIsOpen(false);
@@ -90,13 +82,18 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
   const { address: walletAddr } = useAccount();
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
   const { txhashes } = useVerifyStore();
+  const { precheckTxhashes } = usePreCheckTxStore();
   const { sendDepositTx, loading } = useBridgeTx();
-  // const { refreshBalanceId } = useMintStatus();
   const { tokenId, balance, hasMint, isEligible, coin, chainTokenAddress, chain } = item.data;
   const hasMatchingCoin = useMemo(() => {
     if (!walletAddr || !txhashes[walletAddr] || !!balance) return false;
     return txhashes[walletAddr]?.some((tx) => tx.coin === coin);
   }, [walletAddr, txhashes, coin, balance]);
+
+  const hasPreTxPendingTx = useMemo(() => {
+    if (!walletAddr || !precheckTxhashes[walletAddr]) return false;
+    return precheckTxhashes[walletAddr]?.some((tx) => tx.coin === coin);
+  }, [walletAddr, precheckTxhashes, coin]);
   // card-bcak loading style
 
   return (
@@ -110,7 +107,7 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
       <div className='card  h-[480px]'>
         <div
           className={cn('', hasMint ? 'disTranform' : 'card-inner', {
-            'card-bcak': loading || isMinting || (hasMatchingCoin && !hasMint),
+            'card-bcak': loading || isMinting || (hasMatchingCoin && !hasMint) || (hasPreTxPendingTx && !hasMint),
           })}
         >
           <div className='card-front card-wrapper'>
@@ -177,8 +174,6 @@ const MemeAxisNftItem: React.FC<MemeAxisNftItemProps> = (item: any) => {
 interface MemeNftGridProps {}
 const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
   const { batchBalances } = useBatchBalancesStore();
-
-  console.log(batchBalances, 'batchBalances');
   return (
     <motion.div className='max-md:max-w-full relative mt-4 w-full md:mt-10' initial='hidden' animate='visible'>
       <motion.div className='max-md:flex-col max-md:gap-0 hidden flex-wrap gap-5 md:flex'>
@@ -193,29 +188,28 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
   );
 };
 
-const Summon: React.FC = (props) => {
+const Summon: React.FC = () => {
   return (
     <div className='max-md:max-w-full mt-[120px] w-full md:mt-0'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
-        Summon The Nova MEMECROSS
+        Merge and Create your Chad
       </div>
       <div className='max-md:flex-col flex flex-col gap-1 md:flex-row md:gap-5'>
         <div className='max-md:ml-0 max-md:w-full max-md:order-2 flex w-full flex-col md:w-[29%]'>
           <div className='mt-4 flex w-full grow flex-col rounded-2xl md:mt-0 md:justify-center md:border-2 md:border-solid md:border-indigo-500 md:bg-zinc-900'>
-            <img loading='lazy' src='/assets/ball.svg' className='aspect-[0.93] w-full' alt='' />
+            <img loading='lazy' src='/assets/imgs/chad.png' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
           <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast
-              L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first
-              ZK Aggregated Layer 3, the bridge of the ETH ecosystem.
+              Gather all the memes, fox, cat, aidoge, dragon (Infinity stones) to create the ultimate fused (merged)
+              warrior (gigaChad).
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
             </div>
-            <Merge sendStatus={props.sendStatus} />
+            <Merge />
           </div>
         </div>
       </div>
@@ -233,36 +227,44 @@ const Rules: React.FC = () => {
         1. Connect your wallet and check your whitelist eligibility. <br />
         <br />
         2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
-        chain to Nova and mint your MemeAxis. <br />
+        chain to Nova and mint your Infinity Stones NFTs. <br />
         <br />
-        3. Collect some different MemeAxises, then summon your own MEMECROSS, the Nova’s exclusive badges for brave meme
-        holders. <br />
+        3. Collect or mint some different Infinity Stones NFTs, then merge your Chad NFT. The amount of Infinity Stones
+        NFTs required to merge Chad NFT will increase based on the amount of Chad NFT that has been merged. <br />
         <br />
-        <span className='text-left text-xs text-slate-400'>
+        4. Airdrop：We have a total of 10,000 Chad NFTs and 10,000 Mystery boxes. Users who hold Chad NFT and bridges
+        0.1ETH to Nova during the course of the campaign will guaranteed a mystery airdrop. If eligible Chad NFT holders
+        are less than 10,000 users, the rest we will randomly allocate to other Infinity Stones holders.
+        <br />
+        <br />
+        5. Join our community，create and vote for your ideal nova Chad. We will mint the most popular Chad meme in the
+        community, and send new Chad NFT to all chad holders.
+        <br />
+        <br />
+        Notice: An address can only receive at most 1 mystery airdrop. If you want to collect or sell Chad NFT or
+        Infinity Stones, just trade it on Alienswap. <br /> Time: 1st May- 29th May 2024
+        {/* <span className='text-left text-xs text-slate-400'>
           zk.Link Nova reserve all the right for the final explanation
-        </span>
+        </span> */}
       </div>
     </div>
   );
 };
 const Page: React.FC = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const sendStatus = (data) => {
-    setIsSuccess(data);
-  };
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
       <div className='mx-auto max-w-[1200px]'>
         <div className='max-md:max-w-full relative flex grow flex-col tracking-tight md:pt-[100px]'>
           <div className='max-md:max-w-full text-2xl font-black leading-[56.16px] text-white md:text-5xl'>
-            Mint your MemeAxis on Nova
+            Mint your Nova Infinity Stones
           </div>
           <div className='max-md:max-w-full text-sm leading-6 text-neutral-400 md:mt-8 md:text-base'>
-            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your MemeAxis!
+            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your Nova Infinity
+            Stones!
           </div>
         </div>
         <MemeNftGrid />
-        <Summon sendStatus={sendStatus} />
+        <Summon />
         <Rules />
         <Model />
       </div>
@@ -276,7 +278,7 @@ export const useModalStore = create((set) => ({
   toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
 }));
 
-const Model: React.FC = (props) => {
+const Model: React.FC = () => {
   const { isOpen, toggleModal } = useModalStore();
   return (
     <div className={cn(!isOpen && '!hidden', 'w-full h-full mask z-50')}>
@@ -285,8 +287,8 @@ const Model: React.FC = (props) => {
         <div className='mb-6 text-center text-2xl text-white'>You’ve summoned</div>
         <img
           loading='lazy'
-          src='/assets/ball.svg'
-          className='mb-6 aspect-[0.93] w-full rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
+          src='/assets/imgs/chad.png'
+          className='mb-6 aspect-[0.93] w-full max-w-[450px] rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
           alt=''
         />
         <Button

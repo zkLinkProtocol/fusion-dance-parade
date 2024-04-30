@@ -26,25 +26,27 @@ export const NOVA_CHAIN_ID = (() => {
       return 810182;
   }
 })();
+//NovaInfinityStonesNFT
 export const MEME_NFT_CONTRACT = (() => {
   switch (nodeType) {
     case 'nexus':
       return '0x6774B0692EC9B3f77Fc787aD3c3DD028BCf676F1';
     case 'nexus-sepolia':
-      return '0xA9AbDac4305954Ec8b29b71E9cc418C7EC366331';
+      return '0xDBBD57f02DdbC9f1e2B80D8DAcfEC34BC8B287e3';
     default:
-      return '0x64881e59578561bB206a68C02351e747C9E93e91';
+      return '0xDBBD57f02DdbC9f1e2B80D8DAcfEC34BC8B287e3';
   }
 })();
 
+//NovaChadNFT
 export const MEME_COMPOSE_NFT_CONTRACT = (() => {
   switch (nodeType) {
     case 'nexus':
       return '0x6774B0692EC9B3f77Fc787aD3c3DD028BCf676F1';
     case 'nexus-sepolia':
-      return '0x56f07Be4d385d31396322460787F0aD65f7D69BE';
+      return '0x558bC0d29c6117e1FDD40478C23Ec29900D3B325';
     default:
-      return '0x56f07Be4d385d31396322460787F0aD65f7D69BE';
+      return '0x558bC0d29c6117e1FDD40478C23Ec29900D3B325';
   }
 })();
 

@@ -2,11 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { readContract } from '@wagmi/core';
 import { config, nodeType } from 'config/zklin-networks';
-import NovaMeMeAxisNft from 'constants/contracts/abis/NovaMemeAxisNFT.json';
-import NovaNFT from 'constants/contracts/abis/NovaNFT.json';
+import NovaInfinityStonesNFT from 'constants/contracts/abis/NovaInfinityStonesNFT.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import { getMemeMintSignature } from 'constants/api';
-import { MEME_NFT_CONTRACT, NOVA_CHAIN_ID, NOVA_NFT_CONTRACT } from 'constants/zklink-config';
+import { MEME_NFT_CONTRACT, NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { map } from 'lodash';
 import { zkSyncProvider } from 'providers/zksync-provider';
 import { useCallback, useEffect, useState } from 'react';
@@ -106,7 +105,7 @@ const useMemeNft = () => {
 
   const getMemeNftBalance = useCallback(async (address: string) => {
     const balance = await readContract(config, {
-      abi: NovaMeMeAxisNft,
+      abi: NovaInfinityStonesNFT,
       address: MEME_NFT_CONTRACT as `0x${string}`,
       functionName: 'balanceOf',
       args: [address, 4],
@@ -116,50 +115,50 @@ const useMemeNft = () => {
     return balance;
   }, []);
 
-  const getTokenIdByIndex = useCallback(async (address: string) => {
-    const tokenId = await readContract(config, {
-      abi: NovaNFT.abi,
-      address: NOVA_NFT_CONTRACT as `0x${string}`,
-      functionName: 'tokenOfOwnerByIndex',
-      args: [address, 0],
-      chainId: NOVA_CHAIN_ID,
-    });
-    console.log('Token ID:', tokenId);
-    return tokenId as number;
-  }, []);
+  // const getTokenIdByIndex = useCallback(async (address: string) => {
+  //   const tokenId = await readContract(config, {
+  //     abi: NovaNFT.abi,
+  //     address: NOVA_NFT_CONTRACT as `0x${string}`,
+  //     functionName: 'tokenOfOwnerByIndex',
+  //     args: [address, 0],
+  //     chainId: NOVA_CHAIN_ID,
+  //   });
+  //   console.log('Token ID:', tokenId);
+  //   return tokenId as number;
+  // }, []);
 
-  const getTokenURIByTokenId = useCallback(async (tokenId: number) => {
-    const tokenURI = await readContract(config, {
-      abi: NovaMeMeAxisNft,
-      address: MEME_NFT_CONTRACT as `0x${string}`,
-      functionName: 'uri',
-      args: [tokenId],
-      chainId: NOVA_CHAIN_ID,
-    });
-    console.log('Token URI:', tokenURI);
-    return tokenURI as string;
-  }, []);
+  // const getTokenURIByTokenId = useCallback(async (tokenId: number) => {
+  //   const tokenURI = await readContract(config, {
+  //     abi: NovaInfinityStonesNFT,
+  //     address: MEME_NFT_CONTRACT as `0x${string}`,
+  //     functionName: 'uri',
+  //     args: [tokenId],
+  //     chainId: NOVA_CHAIN_ID,
+  //   });
+  //   console.log('Token URI:', tokenURI);
+  //   return tokenURI as string;
+  // }, []);
 
-  const fetchMetadataByURI = async (uri: string, tokenId: string) => {
-    if (uri.startsWith('ipfs://')) {
-      uri = uri.substring(7);
-    }
-    const response = await fetch(`https://ipfs.io/ipfs/${uri}`);
-    console.log(`https://ipfs.io/ipfs/${uri}`, 'ipfs');
-    const json = await response.json();
-    const result: NovaNft = {
-      name: json.name,
-      description: json.description,
-      image: `https://ipfs.io/ipfs/${json.image.substring(7)}`,
-      type: Number(tokenId),
-    };
-    console.log('Metadata:', result);
-    return result;
-  };
+  // const fetchMetadataByURI = async (uri: string, tokenId: string) => {
+  //   if (uri.startsWith('ipfs://')) {
+  //     uri = uri.substring(7);
+  //   }
+  //   const response = await fetch(`https://ipfs.io/ipfs/${uri}`);
+  //   console.log(`https://ipfs.io/ipfs/${uri}`, 'ipfs');
+  //   const json = await response.json();
+  //   const result: NovaNft = {
+  //     name: json.name,
+  //     description: json.description,
+  //     image: `https://ipfs.io/ipfs/${json.image.substring(7)}`,
+  //     type: Number(tokenId),
+  //   };
+  //   console.log('Metadata:', result);
+  //   return result;
+  // };
 
   const getMemeNftBalanceForTokenId = async (address: string, tokenId: string) => {
     const balance = await readContract(config, {
-      abi: NovaMeMeAxisNft,
+      abi: NovaInfinityStonesNFT,
       address: MEME_NFT_CONTRACT as `0x${string}`,
       functionName: 'balanceOf',
       args: [address, tokenId],
@@ -170,7 +169,7 @@ const useMemeNft = () => {
 
   const getMintRecordByTokenId = async (address: string, tokenId: string) => {
     const balance = await readContract(config, {
-      abi: NovaMeMeAxisNft,
+      abi: NovaInfinityStonesNFT,
       address: MEME_NFT_CONTRACT as `0x${string}`,
       functionName: 'mintRecord',
       args: [address, tokenId],
@@ -249,7 +248,6 @@ const useMemeNft = () => {
         };
       }),
     );
-    console.log('fetching.....________________________________', balances);
     return balances;
   };
 
@@ -279,7 +277,7 @@ const useMemeNft = () => {
       }
       const tx: WriteContractParameters = {
         address: MEME_NFT_CONTRACT,
-        abi: NovaMeMeAxisNft,
+        abi: NovaInfinityStonesNFT,
         functionName: 'safeMint',
         args: [
           address,
@@ -293,7 +291,7 @@ const useMemeNft = () => {
       };
 
       const txData = encodeFunctionData({
-        abi: NovaMeMeAxisNft,
+        abi: NovaInfinityStonesNFT,
         functionName: 'safeMint',
         args: [
           address,
@@ -343,8 +341,6 @@ const useMemeNft = () => {
   useEffect(() => {
     fetchMemeNftBalances(address);
   }, [address]);
-
-  console.log(batchBalances, 'batchBalances');
 
   return {
     fetchMemeNftBalances,
