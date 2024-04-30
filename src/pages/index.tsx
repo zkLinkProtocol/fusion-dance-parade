@@ -287,8 +287,8 @@ const Model: React.FC = () => {
         <div className='mb-6 text-center text-2xl text-white'>You’ve summoned</div>
         <img
           loading='lazy'
-          src='/assets/ball.svg'
-          className='mb-6 aspect-[0.93] w-full rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
+          src='/assets/imgs/chad.png'
+          className='mb-6 aspect-[0.93] w-full max-w-[450px] rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
           alt=''
         />
         <Button
