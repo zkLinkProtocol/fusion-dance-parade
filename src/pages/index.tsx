@@ -6,7 +6,7 @@ import useMemeNft, { useBatchBalancesStore } from '../features/nft/hooks/useMeme
 import { useMemo, useState } from 'react';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
-import Merge from 'components/merge';
+import Merge, { useMintLimitStore } from 'components/merge';
 import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
 import { Button } from 'components/ui/buttons/button';
@@ -190,6 +190,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
 };
 
 const Summon: React.FC = () => {
+  const { mintLimit } = useMintLimitStore();
   return (
     <div className='max-md:max-w-full mt-[120px] w-full md:mt-0'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
@@ -207,7 +208,7 @@ const Summon: React.FC = () => {
               Gather all the memes, cat, doge, frog, hat to create the ultimate fused (merged) warrior (gigaChad).
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
-              <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
+              <div className='my-auto flex-auto'>Select {mintLimit} NFT to Summon</div>
             </div>
             <Merge />
           </div>

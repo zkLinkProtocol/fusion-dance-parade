@@ -18,6 +18,17 @@ import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft
 import { Toast } from './ui/toast';
 import { useModalStore } from 'pages';
 import { motion, AnimatePresence } from 'framer-motion';
+import { create } from 'zustand';
+
+interface MintLimitState {
+  mintLimit: number | null;
+  setMintLimit: (limit: number | null) => void;
+}
+
+export const useMintLimitStore = create<MintLimitState>((set) => ({
+  mintLimit: null,
+  setMintLimit: (limit: number | null) => set({ mintLimit: limit }),
+}));
 
 export default function Merge() {
   const { address, chainId } = useAccount();
@@ -28,7 +39,7 @@ export default function Merge() {
 
   const { fetchMemeNftBalances } = useMemeNft();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [mintLimit, setMintLimit] = useState<number>(0);
+  const { mintLimit, setMintLimit } = useMintLimitStore();
 
   const [isTrademarkApproved, setIsTrademarkApproved] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -182,7 +193,7 @@ export default function Merge() {
     }
   }, [address, isInvaidChain, isTrademarkApproved, sendTrademarkApproveTx, sendUpgradeSBTTx, switchChain]);
 
-  const maxAllowed = mintLimit || 2;
+  const maxAllowed = mintLimit !== null ? mintLimit : 0;
   const tags = batchBalances;
   const isReachedLimit = selectedTags?.length >= maxAllowed;
 
@@ -227,9 +238,14 @@ export default function Merge() {
   useEffect(() => {
     (async () => {
       await getMemeMintChadNumber().then((res) => {
-        console.log('chad number: ', res);
-        const mintNumber = res.result;
-        setMintLimit(mintNumber);
+        if (res.result === null) {
+          console.log('Minting limit reached: 10000');
+          setMintLimit(null);
+        } else {
+          console.log('Chad number: ', res);
+          const mintNumber = res.result;
+          setMintLimit(mintNumber);
+        }
       });
     })();
   }, []);
