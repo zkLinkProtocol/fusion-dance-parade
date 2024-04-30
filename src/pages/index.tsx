@@ -276,7 +276,7 @@ const Page: React.FC = () => {
         <Rules />
         <Model />
       </div>
-      {/* <VideoModal /> */}
+      <VideoModal />
     </section>
   );
 };
