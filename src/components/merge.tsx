@@ -251,7 +251,7 @@ export default function Merge() {
             disabled={!isReachedLimit || loading || isApproving}
             loading={loading || isPending || isApproving}
           >
-            {isInvaidChain ? 'Switch to Nova Chain' : isApproving ? 'Approving' : 'Summon Now'}
+            {isInvaidChain ? 'Switch to Nova Chain' : isApproving ? 'Approving' : 'Merge Now'}
           </Button>
         </div>
       </div>
