@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
 import { create } from 'zustand';
@@ -203,8 +204,7 @@ const Summon: React.FC = () => {
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
           <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              Gather all the memes, fox, cat, aidoge, dragon (Infinity stones) to create the ultimate fused (merged)
-              warrior (gigaChad).
+              Gather all the memes, cat, doge, frog, hat to create the ultimate fused (merged) warrior (gigaChad).
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
@@ -224,28 +224,25 @@ const Rules: React.FC = () => {
         Rules
       </div>
       <div className='w-full rounded-lg bg-slate-900 p-8 text-left text-sm text-slate-400'>
-        1. Connect your wallet and check your whitelist eligibility. <br />
-        <br />
+        1. Connect your wallet and check your whitelist eligibility.
+        <br /> <br />
         2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
-        chain to Nova and mint your Infinity Stones NFTs. <br />
-        <br />
-        3. Collect or mint some different Infinity Stones NFTs, then merge your Chad NFT. The amount of Infinity Stones
-        NFTs required to merge Chad NFT will increase based on the amount of Chad NFT that has been merged. <br />
-        <br />
-        4. Airdrop：We have a total of 10,000 Chad NFTs and 10,000 Mystery boxes. Users who hold Chad NFT and bridges
-        0.1ETH to Nova during the course of the campaign will guaranteed a mystery airdrop. If eligible Chad NFT holders
-        are less than 10,000 users, the rest we will randomly allocate to other Infinity Stones holders.
+        chain to Nova and mint your "Infinity Stones" NFTs. <br /> <br />
+        3. Collect or mint some different "Infinity Stones" NFTs, then merge your "Chad" NFT. The amount of "Infinity
+        Stones" NFTs required to merge "Chad" NFT will increase based on the amount of "Chad" NFT that has been merged.
         <br />
         <br />
-        5. Join our community，create and vote for your ideal nova Chad. We will mint the most popular Chad meme in the
-        community, and send new Chad NFT to all chad holders.
+        4. Bonus：We have a total of “Chad” NFTs and 10,000 Mystery boxes. Users who mint “Chad” NFT and bridges 0.1ETH/
+        equivalent to Nova during the course of the campaign will guaranteed a mystery box.
         <br />
         <br />
-        Notice: An address can only receive at most 1 mystery airdrop. If you want to collect or sell Chad NFT or
-        Infinity Stones, just trade it on Alienswap. <br /> Time: 1st May- 29th May 2024
-        {/* <span className='text-left text-xs text-slate-400'>
-          zk.Link Nova reserve all the right for the final explanation
-        </span> */}
+        5. Recreate “Chad” campaign: Join our community, create and vote for your ideal “Chad” Meme. We will mint the
+        most popular Chad meme in the community, and replace all “Chad” NFT with new “Chad” NFT. <br />
+        <br />
+        Notice: An address can only get at most 1 mystery box. If you want to collect or sell "Chad" NFT or Infinity
+        Stones, just trade it on Alienswap. Time: 1st May- 29th May 2024 <br />
+        <br />
+        zkLink reserved all the rights for this campaign
       </div>
     </div>
   );
@@ -291,13 +288,15 @@ const Model: React.FC = () => {
           className='mb-6 aspect-[0.93] w-full max-w-[450px] rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
           alt=''
         />
+        <span className='mb-3 text-lg text-[#c875ff]'>Deposit 0.1 ETH to get 1 Mystery box</span>
         <Button
           className='backButton cursor-pointer'
           onClick={() => {
+            window.open('https://app.zklink.io/aggregation-parade');
             toggleModal(false);
           }}
         >
-          <span>Confirm</span>
+          <span>Deposit Now</span>
         </Button>
       </div>
     </div>
