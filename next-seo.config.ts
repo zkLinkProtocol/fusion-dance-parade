@@ -1,11 +1,11 @@
 import type { DefaultSeoProps } from 'next-seo';
 
 const seo = {
-  titleTemplate: '%s | Meme',
-  title: 'Nova MEMECROSS：Exclusive badge for brave meme holders on the Nova',
-  defaultTitle: 'Nova MEMECROSS：Exclusive badge for brave meme holders on the Nova',
+  title:
+    'Fusion Dance Parade | Gather all the memes, fox, cat, aidoge, dragon  (Infinity stones) to create the ultimate fused (merged) warrior (gigaChad).',
+  defaultTitle: 'Fusion Dance Parade',
   description:
-    'MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first ZK Aggregated Layer 3, the bridge of the ETH ecosystem.',
+    'Gather all the memes, fox, cat, aidoge, dragon  (Infinity stones) to create the ultimate fused (merged) warrior (gigaChad).',
   twitter: {
     handle: '@zkLink_Official',
     site: '@zkLink_Official',
@@ -13,18 +13,18 @@ const seo = {
   },
   openGraph: {
     type: 'website',
-    title: 'zkLink Meme',
+    title: 'Fusion Dance Parade',
     description:
-      'MEMECROSS is an exclusive badge for brave meme holders on the Nova. You explored extensively in the vast L2 ecosystem and hold firmly through the prices up and down. Then, Nova is discovered , the world’s first ZK Aggregated Layer 3, the bridge of the ETH ecosystem.',
+      'Gather all the memes, fox, cat, aidoge, dragon  (Infinity stones) to create the ultimate fused (merged) warrior (gigaChad).',
     images: [
       {
         url: 'https://app.zklink.io/img/preview.png',
         width: 400,
         height: 432,
-        alt: 'MeMe',
+        alt: 'Fusion Dance Parade',
       },
     ],
-    site_name: 'MeMe',
+    site_name: 'Fusion Dance Parade',
     // locale: 'en_IE',
   },
 } as const satisfies DefaultSeoProps;
