@@ -17,17 +17,17 @@ import { Button } from './ui/buttons/button';
 import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
 import { useModalStore } from 'pages';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Merge() {
   const { address, chainId } = useAccount();
   // const chainId = useChainId({ config });
   const { switchChain, isPending } = useSwitchChain();
 
-  const { toggleModal } = useModalStore();
-
   const { batchBalances } = useBatchBalancesStore();
 
   const { fetchMemeNftBalances } = useMemeNft();
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [mintLimit, setMintLimit] = useState<number>(0);
 
   const [isTrademarkApproved, setIsTrademarkApproved] = useState(false);
@@ -166,7 +166,7 @@ export default function Merge() {
       }
       await sendUpgradeSBTTx(address);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Congrats! Upgrade completed!' />);
-      toggleModal(true);
+      setIsVideoModalOpen(true);
     } catch (e: any) {
       console.log(e);
 
@@ -255,6 +255,51 @@ export default function Merge() {
           </Button>
         </div>
       </div>
+      <MergeVideoModal toggleModal={setIsVideoModalOpen} isModalOpen={isVideoModalOpen} />
     </>
   );
 }
+
+const MergeVideoModal = ({
+  isModalOpen,
+  toggleModal,
+}: {
+  isModalOpen: boolean;
+  toggleModal: (isOpen: boolean) => void;
+}) => {
+  const { toggleModal: toggleMergeModal } = useModalStore();
+
+  const handleVideoEnd = () => {
+    toggleModal(false);
+    toggleMergeModal(true);
+  };
+
+  return (
+    <AnimatePresence>
+      {isModalOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75'
+        >
+          <motion.div
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            className='relative w-full'
+          >
+            <video autoPlay muted onEnded={handleVideoEnd} className='h-auto w-full'>
+              <source src='/assets/videos/intro-video.mp4' type='video/mp4' />
+            </video>
+            <button onClick={() => toggleModal(false)} className='absolute right-4 top-4 text-2xl font-bold text-white'>
+              &times;
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};

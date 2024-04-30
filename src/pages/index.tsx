@@ -19,14 +19,6 @@ import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 const VideoModal = () => {
   const [isOpen, setIsOpen] = useState(true);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setIsOpen(false);
-  //   }, 5000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
-
   const handleVideoEnd = () => {
     setIsOpen(false);
   };
@@ -196,7 +188,7 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
   );
 };
 
-const Summon: React.FC = (props) => {
+const Summon: React.FC = () => {
   return (
     <div className='max-md:max-w-full mt-[120px] w-full md:mt-0'>
       <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
@@ -217,7 +209,7 @@ const Summon: React.FC = (props) => {
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select 2 NFT to Summon</div>
             </div>
-            <Merge sendStatus={props.sendStatus} />
+            <Merge />
           </div>
         </div>
       </div>
@@ -286,7 +278,7 @@ export const useModalStore = create((set) => ({
   toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
 }));
 
-const Model: React.FC = (props) => {
+const Model: React.FC = () => {
   const { isOpen, toggleModal } = useModalStore();
   return (
     <div className={cn(!isOpen && '!hidden', 'w-full h-full mask z-50')}>
