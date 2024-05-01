@@ -1,58 +1,23 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable tailwindcss/no-custom-classname */
-import { create } from 'zustand';
 import useMemeNft, { useBatchBalancesStore } from '../features/nft/hooks/useMemeNft';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
-import Merge, { useMintLimitStore } from 'components/merge';
 import Carousel from 'components/carousel';
 import { shortenAddress } from 'utils/format';
-import { Button } from 'components/ui/buttons/button';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useAccount } from 'wagmi';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
+import Modal from 'components/ui/modals/modal';
+import VideoModal from 'components/ui/modals/video-modal';
+import Rules from 'features/nft/components/rules';
+import Summon from 'features/nft/components/summon';
 
-const VideoModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
-
-  const handleVideoEnd = () => {
-    setIsOpen(false);
-  };
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75'
-        >
-          <motion.div
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0.8 }}
-            transition={{ duration: 0.3 }}
-            className='relative w-full'
-          >
-            <video autoPlay muted onEnded={handleVideoEnd} className='h-auto w-full'>
-              <source src='/assets/videos/intro-video.mp4' type='video/mp4' />
-            </video>
-            <button onClick={() => setIsOpen(false)} className='absolute right-4 top-4 text-2xl font-bold text-white'>
-              &times;
-            </button>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
 // Define the stagger animation variant
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -189,65 +154,6 @@ const MemeNftGrid: React.FC<MemeNftGridProps> = () => {
   );
 };
 
-const Summon: React.FC = () => {
-  const { mintLimit } = useMintLimitStore();
-  return (
-    <div className='max-md:max-w-full mt-[120px] w-full md:mt-0'>
-      <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-6 self-start text-2xl font-black leading-[56.16px] tracking-tight text-white md:mt-24 md:text-5xl'>
-        Merge and Create your Chad
-      </div>
-      <div className='max-md:flex-col flex flex-col gap-1 md:flex-row md:gap-5'>
-        <div className='max-md:ml-0 max-md:w-full max-md:order-2 flex w-full flex-col md:w-[29%]'>
-          <div className='mt-4 flex w-full grow flex-col rounded-2xl md:mt-0 md:justify-center md:border-2 md:border-solid md:border-indigo-500 md:bg-zinc-900'>
-            <img loading='lazy' src='/assets/imgs/chad.png' className='aspect-[0.93] w-full' alt='' />
-          </div>
-        </div>
-        <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
-          <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
-            <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              Gather all the memes, cat, doge, frog, hat to create the ultimate fused (merged) warrior (gigaChad).
-            </div>
-            <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
-              <div className='my-auto flex-auto'>Select {mintLimit} NFT to Summon</div>
-            </div>
-            <Merge />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Rules: React.FC = () => {
-  return (
-    <div className='max-md:max-w-full w-full'>
-      <div className='max-md:mt-10 max-md:max-w-full relative mb-5 mt-24 self-start text-2xl  font-black leading-[56.16px] tracking-tight text-white md:text-5xl'>
-        Rules
-      </div>
-      <div className='w-full rounded-lg bg-slate-900 p-8 text-left text-sm text-slate-400'>
-        1. Connect your wallet and check your whitelist eligibility.
-        <br /> <br />
-        2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
-        chain to Nova and mint your "Infinity Stones" NFTs. <br /> <br />
-        3. Collect or mint some different "Infinity Stones" NFTs, then merge your "Chad" NFT. The amount of "Infinity
-        Stones" NFTs required to merge "Chad" NFT will increase based on the amount of "Chad" NFT that has been merged.
-        <br />
-        <br />
-        4. Bonus：We have a total of “Chad” NFTs and 10,000 Mystery boxes. Users who mint “Chad” NFT and bridges 0.1ETH/
-        equivalent to Nova during the course of the campaign will guaranteed a mystery box.
-        <br />
-        <br />
-        5. Recreate “Chad” campaign: Join our community, create and vote for your ideal “Chad” Meme. We will mint the
-        most popular Chad meme in the community, and replace all “Chad” NFT with new “Chad” NFT. <br />
-        <br />
-        Notice: An address can only get at most 1 mystery box. If you want to collect or sell "Chad" NFT or Infinity
-        Stones, just trade it on Alienswap. Time: 1st May- 29th May 2024 <br />
-        <br />
-        zkLink reserved all the rights for this campaign
-      </div>
-    </div>
-  );
-};
 const Page: React.FC = () => {
   return (
     <section className='h-[calc(100vh-0px)] w-full overflow-auto bg-dunes bg-cover bg-center px-4 pb-[200px] md:px-40'>
@@ -264,43 +170,11 @@ const Page: React.FC = () => {
         <MemeNftGrid />
         <Summon />
         <Rules />
-        <Model />
+        <Modal />
       </div>
       <VideoModal />
     </section>
   );
 };
 
-export const useModalStore = create((set) => ({
-  isOpen: false,
-  toggleModal: () => set((state) => ({ isOpen: !state.isOpen })),
-}));
-
-const Model: React.FC = () => {
-  const { isOpen, toggleModal } = useModalStore();
-  return (
-    <div className={cn(!isOpen && '!hidden', 'w-full h-full mask z-50')}>
-      <div className='flex flex-col items-center rounded-2xl bg-black p-8'>
-        <div className='mb-2 text-center text-5xl font-bold text-white'>Congratulations</div>
-        <div className='mb-6 text-center text-2xl text-white'>You’ve summoned</div>
-        <img
-          loading='lazy'
-          src='/assets/imgs/chad.png'
-          className='mb-6 aspect-[0.93] w-full max-w-[450px] rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
-          alt=''
-        />
-        <span className='mb-3 text-lg text-[#c875ff]'>Deposit 0.1 ETH to get 1 Mystery box</span>
-        <Button
-          className='backButton cursor-pointer'
-          onClick={() => {
-            window.open('https://app.zklink.io/aggregation-parade');
-            toggleModal(false);
-          }}
-        >
-          <span>Deposit Now</span>
-        </Button>
-      </div>
-    </div>
-  );
-};
 export default Page;
