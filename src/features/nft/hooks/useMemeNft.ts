@@ -115,47 +115,6 @@ const useMemeNft = () => {
     return balance;
   }, []);
 
-  // const getTokenIdByIndex = useCallback(async (address: string) => {
-  //   const tokenId = await readContract(config, {
-  //     abi: NovaNFT.abi,
-  //     address: NOVA_NFT_CONTRACT as `0x${string}`,
-  //     functionName: 'tokenOfOwnerByIndex',
-  //     args: [address, 0],
-  //     chainId: NOVA_CHAIN_ID,
-  //   });
-  //   console.log('Token ID:', tokenId);
-  //   return tokenId as number;
-  // }, []);
-
-  // const getTokenURIByTokenId = useCallback(async (tokenId: number) => {
-  //   const tokenURI = await readContract(config, {
-  //     abi: NovaInfinityStonesNFT,
-  //     address: MEME_NFT_CONTRACT as `0x${string}`,
-  //     functionName: 'uri',
-  //     args: [tokenId],
-  //     chainId: NOVA_CHAIN_ID,
-  //   });
-  //   console.log('Token URI:', tokenURI);
-  //   return tokenURI as string;
-  // }, []);
-
-  // const fetchMetadataByURI = async (uri: string, tokenId: string) => {
-  //   if (uri.startsWith('ipfs://')) {
-  //     uri = uri.substring(7);
-  //   }
-  //   const response = await fetch(`https://ipfs.io/ipfs/${uri}`);
-  //   console.log(`https://ipfs.io/ipfs/${uri}`, 'ipfs');
-  //   const json = await response.json();
-  //   const result: NovaNft = {
-  //     name: json.name,
-  //     description: json.description,
-  //     image: `https://ipfs.io/ipfs/${json.image.substring(7)}`,
-  //     type: Number(tokenId),
-  //   };
-  //   console.log('Metadata:', result);
-  //   return result;
-  // };
-
   const getMemeNftBalanceForTokenId = async (address: string, tokenId: string) => {
     const balance = await readContract(config, {
       abi: NovaInfinityStonesNFT,
@@ -178,18 +137,6 @@ const useMemeNft = () => {
     return balance;
   };
 
-  //  const getTokenURIByTokenId = useCallback(async (tokenId: number) => {
-  //    const tokenURI = await readContract(config, {
-  //      abi: NovaNFT.abi,
-  //      address: NOVA_NFT_CONTRACT as `0x${string}`,
-  //      functionName: 'tokenURI',
-  //      args: [tokenId],
-  //      chainId: NOVA_CHAIN_ID,
-  //    });
-  //    console.log('tokenURI: ', tokenURI);
-  //    return tokenURI as string;
-  //  }, []);
-
   const getAddressBalancesForTokenIds = async (address: string, tokenIds: string[]) => {
     if (!address) {
       // 如果 address 為空或 undefined，回傳預設的陣列
@@ -207,17 +154,11 @@ const useMemeNft = () => {
       }));
     }
     const eligibilityRes = await checkMintEligibility(address);
-    // const navtiveBalance = await getBalance(config, {
-    //   address: '0x000000000000000000000000000000000000800A',
-    //   chainId: NOVA_CHAIN_ID,
-    // });
     const eligibileChainData = eligibilityRes.result || [];
     const balances = await Promise.all(
       map(tokenIds, async (tokenId) => {
         const balance = await getMemeNftBalanceForTokenId(address, tokenId);
-        // const tokenURI = await getTokenURIByTokenId(parseInt(tokenId));
         const hasMint = await getMintRecordByTokenId(address, tokenId);
-        // const nft = await fetchMetadataByURI(tokenURI, tokenId);
 
         const tokeBalance_nova = await readContract(config, {
           abi: IERC20.abi,
