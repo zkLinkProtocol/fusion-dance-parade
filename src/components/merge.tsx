@@ -154,6 +154,7 @@ export default function Merge() {
   };
 
   const handleUpgrade = useCallback(async () => {
+    await getMemeMintChadNumber();
     if (!address) return;
     if (isInvaidChain) {
       switchChain(
@@ -188,6 +189,7 @@ export default function Merge() {
       }
       toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Upgrade Nft failed' />);
     } finally {
+      await getMemeMintChadNumber();
       setSelectedTags([]);
       toast.dismiss();
     }
