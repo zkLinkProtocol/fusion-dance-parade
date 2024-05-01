@@ -52,21 +52,6 @@ export default function Merge() {
     return chainId !== NOVA_CHAIN_ID;
   }, [chainId]);
 
-  const { data: nativeTokenBalance } = useBalance({
-    config,
-    address: address as `0x${string}`,
-    chainId: NOVA_CHAIN_ID,
-    token: undefined,
-  });
-
-  const novaBalance = useMemo(() => {
-    if (nativeTokenBalance) {
-      return formatBalance(nativeTokenBalance?.value ?? 0n, 18);
-    }
-    return 0;
-  }, [nativeTokenBalance]);
-  console.log('nativeTokenBalance: ', nativeTokenBalance);
-
   const sendTrademarkApproveTx = async (address: string) => {
     if (!address) return;
     try {
@@ -262,11 +247,11 @@ export default function Merge() {
             className={classNames(
               'w-full max-md:px-5 max-md:max-w-full mt-6 items-center justify-center rounded-lg bg-[linear-gradient(90deg,#6276E7_0%,#E884FE_100%)] px-2.5 py-1 text-2xl font-black leading-[56px] tracking-tight text-white',
               {
-                'opacity-50 cursor-not-allowed': !isReachedLimit || loading,
+                'opacity-50 cursor-not-allowed': !isReachedLimit || loading || mintLimit === null,
               },
             )}
             onClick={handleUpgrade}
-            disabled={!isReachedLimit || loading || isApproving}
+            disabled={!isReachedLimit || loading || isApproving || mintLimit === null}
             loading={loading || isPending || isApproving}
           >
             {isInvaidChain ? 'Switch to Nova Chain' : isApproving ? 'Approving' : 'Merge Now'}
@@ -291,7 +276,6 @@ const MergeVideoModal = ({
     toggleModal(false);
     toggleMergeModal(true);
   };
-
   return (
     <AnimatePresence>
       {isModalOpen && (

@@ -19,7 +19,7 @@ const Summon: React.FC = () => {
               Gather all the memes, cat, doge, frog, hat to create the ultimate fused (merged) warrior (gigaChad).
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
-              <div className='my-auto flex-auto'>Select {mintLimit} NFT to Summon</div>
+              <div className='my-auto flex-auto'>Select {mintLimit !== null ? mintLimit : 0} NFT to Summon</div>
             </div>
             <Merge />
           </div>

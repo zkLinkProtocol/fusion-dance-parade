@@ -18,7 +18,7 @@ const seo = {
       'Gather all the memes, fox, cat, aidoge, dragon  (Infinity stones) to create the ultimate fused (merged) warrior (gigaChad).',
     images: [
       {
-        url: 'https://app.zklink.io/img/preview.png',
+        url: '/assets/imgs/preview.png',
         width: 400,
         height: 432,
         alt: 'Fusion Dance Parade',
