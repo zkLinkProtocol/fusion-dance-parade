@@ -16,9 +16,9 @@ import MultiSelectContent from './multi-select-content';
 import { Button } from './ui/buttons/button';
 import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
 import { Toast } from './ui/toast';
-import { useModalStore } from 'pages';
 import { motion, AnimatePresence } from 'framer-motion';
 import { create } from 'zustand';
+import { useModalStore } from './ui/modals/modal';
 
 interface MintLimitState {
   mintLimit: number | null;
