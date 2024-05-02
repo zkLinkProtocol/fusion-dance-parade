@@ -1,4 +1,4 @@
-import { useBatchBalancesStore } from '../hooks/useMemeNft';
+import { useBatchBalancesStore } from '../hooks/useNft';
 import { motion } from 'framer-motion';
 import NftItem from './nft-item';
 import Carousel from 'components/carousel';

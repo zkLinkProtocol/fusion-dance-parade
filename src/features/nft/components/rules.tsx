@@ -21,7 +21,8 @@ const Rules: React.FC = () => {
         most popular Chad meme in the community, and replace all “Chad” NFT with new “Chad” NFT. <br />
         <br />
         Notice: An address can only get at most 1 mystery box. If you want to collect or sell "Chad" NFT or Infinity
-        Stones, just trade it on Alienswap. Time: 1st May- 29th May 2024 <br />
+        Stones, just trade it on Alienswap. <br /> <br />
+        Time: 1st May- 29th May 2024 <br />
         <br />
         zkLink reserved all the rights for this campaign
       </div>

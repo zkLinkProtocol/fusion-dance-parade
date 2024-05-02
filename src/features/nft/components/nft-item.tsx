@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useAccount } from 'wagmi';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
-import useMemeNft from '../hooks/useMemeNft';
+import useNft from '../hooks/useNft';
 
 const copyAddress = (address: string) => {
   navigator.clipboard
@@ -27,7 +27,7 @@ interface NftItemProps {
 
 const NftItem: React.FC<NftItemProps> = (item: any) => {
   const { address: walletAddr } = useAccount();
-  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useNft();
   const { txhashes } = useVerifyStore();
   const { precheckTxhashes } = usePreCheckTxStore();
   const { sendDepositTx, loading } = useBridgeTx();
@@ -96,8 +96,8 @@ const NftItem: React.FC<NftItemProps> = (item: any) => {
                     copyAddress(chainTokenAddress);
                   }}
                 />
-                <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
-                <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
+                {/* <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
+                <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' /> */}
               </div>
               <div className='mb-2 h-[70px] text-[15px] text-slate-400'>
                 Deposit 1 {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network and mint

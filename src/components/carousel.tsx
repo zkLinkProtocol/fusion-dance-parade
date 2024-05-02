@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
-import useMemeNft from 'features/nft/hooks/useMemeNft';
+import useNft from 'features/nft/hooks/useNft';
 
 export default function Carousel({ lists }) {
-  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useNft();
   const { sendDepositTx, loading } = useBridgeTx();
   const [index, setIndex] = useState(0);
   const [list, setList] = useState(lists);
