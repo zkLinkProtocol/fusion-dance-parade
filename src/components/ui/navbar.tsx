@@ -1,10 +1,6 @@
 import { ConnectButton, useAccountModal, useChainModal, useConnectModal } from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
-import { cn } from 'lib/utils';
-
-// import { logo as Logo } from 'components/svgs';
 import { Button } from 'components/ui/buttons/button';
 import { showAccount } from 'utils/format';
 import Image from 'next/image';

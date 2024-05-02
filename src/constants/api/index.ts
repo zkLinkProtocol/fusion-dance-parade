@@ -1,3 +1,4 @@
+import { nodeType } from 'config/zklin-networks';
 import axiosInstance from 'utils/axios';
 
 type Response = {
@@ -8,7 +9,7 @@ type Response = {
   data?: any;
 };
 
-const isProd = process.env.NEXT_PUBLIC_APP_ENV;
+const isProd = nodeType === 'nexus' ? true : false;
 const apiBaseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const BASE_URL = isProd ? apiBaseURL : '/app-api';
@@ -19,10 +20,7 @@ export const BASE_URL_TWITTER = `${BASE_URL}/twitter`;
 export const BASE_URL_LRT_POINTS = `${BASE_URL}/lrt-points`;
 export const BASE_URL_QUEST = `${BASE_URL}/quest-api`;
 
-export const TEST_MEME_API = 'https://goerli.app.zklink.io/api';
-//'http://3.114.68.110:8097';
-//'http://localhost:3050';
-//'http://3.114.68.110:8097'
+export const MEME_BASE_API = isProd ? `${apiBaseURL}/api` : 'https://goerli.app.zklink.io/api';
 
 export type BindInviteCodeWithAddressParams = {
   address: string;
@@ -35,7 +33,7 @@ export type BindInviteCodeWithAddressParams = {
 
 ///meme/mint/chad/signature
 export const getMergeSignature = (address: string, tokenIds: any[]): Promise<Response> => {
-  return axiosInstance.post(`${TEST_MEME_API}/meme/mint/chad/signature`, {
+  return axiosInstance.post(`${MEME_BASE_API}/meme/mint/chad/signature`, {
     address,
     tokenIds,
   });
@@ -43,10 +41,10 @@ export const getMergeSignature = (address: string, tokenIds: any[]): Promise<Res
 
 ///meme/mintChad/number
 export const getMemeMintChadNumber = (): Promise<Response> => {
-  return axiosInstance.get(`${TEST_MEME_API}/meme/mintChad/number`);
+  return axiosInstance.get(`${MEME_BASE_API}/meme/mintChad/number`);
 };
 export const checkMintEligibility = (address: string): Promise<Response> => {
-  return axiosInstance.get(`${TEST_MEME_API}/meme/check/address`, {
+  return axiosInstance.get(`${MEME_BASE_API}/meme/check/address`, {
     params: { address },
   });
 };
@@ -60,12 +58,10 @@ export const getMemeMintSignature = ({
   chain: string;
   coin: string;
 }): Promise<Response> => {
-  return axiosInstance.post(`${TEST_MEME_API}/meme/mint/meme/nft`, {
+  return axiosInstance.post(`${MEME_BASE_API}/meme/mint/meme/nft`, {
     address,
     chain,
     coin,
-    // chain: 'Linea',
-    // coin: 'Foxy',
   });
 };
 export const bindInviteCodeWithAddress = (data: BindInviteCodeWithAddressParams): Promise<Response> => {
@@ -247,222 +243,5 @@ export const getAccountsRank = (params?: PageParams): Promise<Response> =>
 
 export const getAccountRank = (address: string): Promise<Response> =>
   axiosInstance.get(`${BASE_URL_POINTS}/addressTokenTvl/getAccountRank`, {
-    params: { address },
-  });
-
-export type TotalSupply = {
-  type: string;
-  hex: string;
-};
-
-export type ExplorerTvlItem = {
-  l2Address: string;
-  l1Address: string;
-  networkKey: string;
-  symbol: string;
-  name: string;
-  decimals: number;
-  usdPrice: number;
-  liquidity: number;
-  iconURL: string;
-  totalSupply: TotalSupply;
-  tvl: string;
-};
-
-export const getExplorerTokenTvl = (isall: boolean): Promise<ExplorerTvlItem[]> =>
-  axiosInstance.get(`https://explorer-api.zklink.io/tokens/tvl`, {
-    params: { isall },
-  });
-
-export const validTwitter = (twitterHandler: string, address?: string): Promise<Response> => {
-  return axiosInstance.get(`${BASE_URL_API}/invite/validTwitter2`, {
-    params: {
-      twitterHandler,
-      address,
-    },
-  });
-};
-
-export type TxHashResponse = {
-  isValid: boolean;
-};
-
-export type TxHashParams = {
-  txHash: string;
-  chainId: string;
-  address?: string;
-};
-export const getTxByTxHash = (params: TxHashParams): Promise<TxHashResponse> =>
-  axiosInstance.get(`${BASE_URL_API}/invite/getTxByTxHash`, {
-    params,
-  });
-
-export type RegisterAccountParams = {
-  address: string;
-  code?: string | null;
-  siganture: string;
-  accessToken?: string | null;
-  chainId: string | number;
-  txHash: string;
-};
-
-export const registerAccount = (data: RegisterAccountParams): Promise<Response> => {
-  console.log(data);
-  if (!data.code) {
-    delete data.code;
-  }
-  return axiosInstance.post(`${BASE_URL_API}/invite/register/account`, {
-    ...data,
-  });
-};
-
-export type AccessTokenParams = {
-  code: string;
-  grant_type: string;
-  client_id: string;
-  redirect_uri: string;
-  code_verifier: string;
-};
-export type AccessTokenResponse = {
-  token_type: string;
-  expires_in: number;
-  access_token: string;
-  scope: string;
-};
-// export const getTwitterAccessToken = (params: AccessTokenParams): Promise<AccessTokenResponse> =>
-//   axiosInstance.post('/twitter/2/oauth2/token', qs.stringify({ ...params }), {
-//     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//   })
-
-export type TwitterUserResponse = {
-  data: {
-    id: string;
-    name: string;
-    username: string;
-  };
-};
-export const getTwitterUser = (accessToken: string): Promise<TwitterUserResponse> =>
-  axiosInstance.get('/twitter/2/users/me', {
-    headers: {
-      // "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-export const checkOkx = (address: string): Promise<Response> =>
-  axiosInstance.get(`${BASE_URL_API}/invite/check/okx`, {
-    params: { addressList: [address] },
-  });
-
-export const visitReward = (address: string): Promise<Response> =>
-  axiosInstance.get(`${BASE_URL_API}/invite/visit/reward`, {
-    params: { address },
-  });
-
-export const getEigenlayerPoints = (address: string) =>
-  axiosInstance.get(`${BASE_URL_LRT_POINTS}/points/forward/puffer/zklink_point`, {
-    params: { address },
-    headers: {
-      'client-id': '08879426f59a4b038b7755b274bc19dc',
-    },
-  });
-
-export const getPufferPoints = (address: string) =>
-  axiosInstance.get(`${BASE_URL_LRT_POINTS}/points/${address}/pufferpoints`);
-
-export interface MagPieResponse {
-  errno: number;
-  errmsg: string;
-  data: [
-    {
-      address: string;
-      tokenAddress: string;
-      points: {
-        eigenpiePoints: number;
-        eigenLayerPoints: number;
-      };
-      updatedAt: number;
-    },
-  ];
-}
-
-export const getMagPiePoints = (address: string): Promise<MagPieResponse> =>
-  axiosInstance.get(`${BASE_URL_LRT_POINTS}/magpie/points`, {
-    params: { address },
-  });
-
-export interface RenzoResponse {
-  errno: number;
-  errmsg: string;
-  data: [
-    {
-      address: string;
-      tokenAddress: string;
-      points: {
-        renzoPoints: number;
-        eigenLayerPoints: number;
-      };
-      updatedAt: number;
-    },
-  ];
-}
-export const getRenzoPoints = (address: string): Promise<RenzoResponse> =>
-  axiosInstance.get(`${BASE_URL_LRT_POINTS}/renzo/points`, {
-    params: { address },
-  });
-
-export const getTradeMarkRank = (address: string): Promise<Response> =>
-  axiosInstance.get(`${BASE_URL_API}/referrer/tradeMark/balance/rank`, {
-    params: { address },
-  });
-
-export const getTopInviteAndRandom = (date?: string): Promise<Response> =>
-  axiosInstance.get(`${BASE_URL_API}/referrer/daily/topInviteAndRandom`, {
-    params: { date },
-  });
-
-export interface LrtNovaPointsData {
-  address: string;
-  points: string;
-  realPoints: number;
-  balance: string;
-  tokenAddress: string;
-  updated_at: number;
-}
-
-export interface LrtNovaPoints {
-  errno: number;
-  errmsg: string;
-  total_points: string;
-  data: LrtNovaPointsData[];
-}
-
-export const getLayerbankNovaPoints = (address: string): Promise<LrtNovaPoints> =>
-  axiosInstance.get(`${BASE_URL_LRT_POINTS}/nova/points`, { params: { address } });
-
-export const getLayerbankTokenPoints = (address: string, tokenAddress: string): Promise<LrtNovaPoints> =>
-  axiosInstance.get(`${BASE_URL_LRT_POINTS}/nova/points/token`, {
-    params: { address, tokenAddress },
-  });
-
-export interface LinkswapNovaPoints {
-  code: number;
-  message: string;
-  data: {
-    address: string;
-    pairs: {
-      novaPoint: string;
-      pair: string;
-      totalPoint: string;
-    }[];
-  };
-}
-export const getLinkswapNovaPoints = (address: string): Promise<LinkswapNovaPoints> =>
-  axiosInstance.get('https://api.linkswap.finance/api/Zklink/AddressPoint', {
-    params: { address },
-  });
-
-export const getRoyaltyBooster = (address: string): Promise<Response> =>
-  axiosInstance.get(`${BASE_URL_POINTS}/addressTokenTvl/getAccountLoyaltyBooster`, {
     params: { address },
   });

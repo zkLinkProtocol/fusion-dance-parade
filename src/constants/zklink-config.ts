@@ -30,7 +30,7 @@ export const NOVA_CHAIN_ID = (() => {
 export const MEME_NFT_CONTRACT = (() => {
   switch (nodeType) {
     case 'nexus':
-      return '0x6774B0692EC9B3f77Fc787aD3c3DD028BCf676F1';
+      return '0xbE0ba296db7aE8E64A7addc444B8BE251cdcea66';
     case 'nexus-sepolia':
       return '0xDBBD57f02DdbC9f1e2B80D8DAcfEC34BC8B287e3';
     default:
@@ -42,7 +42,7 @@ export const MEME_NFT_CONTRACT = (() => {
 export const MEME_COMPOSE_NFT_CONTRACT = (() => {
   switch (nodeType) {
     case 'nexus':
-      return '0x6774B0692EC9B3f77Fc787aD3c3DD028BCf676F1';
+      return '0xe06A5E9e4fEDb7f78ef65572607A6A702c91556A';
     case 'nexus-sepolia':
       return '0xf299CAF83a181B4Ea97bDb8a4FeB14A3f65F5e42';
     default:

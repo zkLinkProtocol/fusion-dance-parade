@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { readContract } from '@wagmi/core';
-import { config, nodeType } from 'config/zklin-networks';
+import { config, nodeType, tokenMap } from 'config/zklin-networks';
 import NovaInfinityStonesNFT from 'constants/contracts/abis/NovaInfinityStonesNFT.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import { getMemeMintSignature } from 'constants/api';
@@ -14,7 +14,6 @@ import { encodeFunctionData } from 'viem';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { sleep } from 'zksync-web3/build/src/utils';
 import { checkMintEligibility } from 'constants/api';
-import { arbitrumSepolia, baseSepolia, lineaSepolia, zkSyncSepoliaTestnet } from 'viem/chains';
 import { create } from 'zustand';
 
 export type NovaNftType = 'ISTP' | 'ESFJ' | 'INFJ' | 'ENTP';
@@ -25,64 +24,6 @@ export type NovaNft = {
   type: number;
 };
 
-const tokenMap = {
-  '1': {
-    name: 'Linea-Foxy',
-    chain: 'Linea',
-    coin: 'Foxy',
-    chainId: lineaSepolia.id,
-    tokenAddress: '0x5f728Ab5E5860b4951AFaF865e9bE27043f407ec',
-    chainTokenAddress: '0x6E715cb02d9AFA3Fb95608e75A291e83b8dBf179',
-  },
-  '2': {
-    name: 'Base-Degen',
-    chain: 'Base',
-    coin: 'Degen',
-    chainId: baseSepolia.id,
-    tokenAddress: '0x1b7b96405BD6C0c9265072D27fb1810e9FC2e456',
-    chainTokenAddress: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
-  },
-  '3': {
-    name: 'Base-Brett',
-    chain: 'Base',
-    coin: 'Brett',
-    chainId: baseSepolia.id,
-    tokenAddress: '0x1b7b96405BD6C0c9265072D27fb1810e9FC2e456',
-    chainTokenAddress: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
-  },
-  '4': {
-    name: 'Base-Omni',
-    chain: 'Base',
-    coin: 'Omni',
-    chainId: baseSepolia.id,
-    tokenAddress: '0x1b7b96405BD6C0c9265072D27fb1810e9FC2e456',
-    chainTokenAddress: '0x7E3183f43B2c5E2E782f6f9bb7Aab01dB101D4Dc',
-  },
-  '5': {
-    name: 'ZkSync-Meow',
-    chain: 'ZkSync',
-    coin: 'Meow',
-    chainId: zkSyncSepoliaTestnet.id,
-    tokenAddress: '0xA126F1a0bC5f5AC8c7b349e39b4b62623e8EFC4D',
-    chainTokenAddress: '0xBadb2cdC5085bf70B085f2c8052cD5A74fbFaEb0',
-  },
-  '6': {
-    name: 'Arbitrum-AIdoge',
-    chain: 'Arbitrum',
-    coin: 'AIdoge',
-    chainId: arbitrumSepolia.id,
-    tokenAddress: '0x8310551a5d200F9bc7fa2E0F08E2915156A1FBD0',
-    chainTokenAddress: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
-  },
-  '7': {
-    name: 'Arbitrum-Omni',
-    chain: 'Arbitrum',
-    coin: 'Omni2',
-    chainId: arbitrumSepolia.id,
-    tokenAddress: '0x8310551a5d200F9bc7fa2E0F08E2915156A1FBD0',
-    chainTokenAddress: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
-  },
-};
 
 interface ActiveIndexState {
   batchBalances: any[];
