@@ -1,7 +1,7 @@
 import { suggestMaxPriorityFee } from '@rainbow-me/fee-suggestions';
 import { getPublicClient } from '@wagmi/core';
 import BigNum from 'bignumber.js';
-import { config, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
+import { config, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
 import primaryGetterAbi from 'constants/contracts/abis/GettersFacet.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import IL1Bridge from 'constants/contracts/abis/IL1Bridge.json';
@@ -330,28 +330,8 @@ export const useBridgeTx = () => {
     }
   };
 
-  // const navtiveBalance = await getBalance(config, {
-  //   address: '0x000000000000000000000000000000000000800A',
-  //   chainId: NOVA_CHAIN_ID,
-  // });
-
   const getBalanceOnAnotherChain = async (address: string): Promise<BigNumber> => {
-    // const navtiveBalance = await getBalance(config, {
-    //   address: '0x000000000000000000000000000000000000800A',
-    //   chainId: NOVA_CHAIN_ID,
-    // });
     const balance = await novaClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
-    // const balance = await readContract(config, {
-    //   abi: IERC20.abi,
-    //   address: L2_ETH_TOKEN_ADDRESS,
-    //   functionName: 'balanceOf',
-    //   args: [address as `0x${string}`],
-    //   chainId: NOVA_CHAIN_ID,
-    // });
-    //await publicClient?.getBalance({ address, chainId: NOVA_CHAIN_ID });
-    console.log(balance, 'getBalanceOnAnotherChain');
-    // const provider = new ethers.providers.JsonRpcProvider(anotherChainRpcUrl);
-    // const balance = await provider.getBalance(address);
     return balance;
   };
 
@@ -470,7 +450,6 @@ export const useBridgeTx = () => {
           }
         }
       } else {
-        console.log(network, 'network.mainContract');
         const bridgeContract = network.erc20BridgeL1;
         tx = {
           address: bridgeContract,
@@ -495,9 +474,10 @@ export const useBridgeTx = () => {
           address,
         ]) as `0x${string}`;
         if (isZkSyncChain) {
-          console.log('pass-zkysync-chain', network.rpcUrl);
           //TODO: Remmber to update sepolia & mainnet condition config
-          const fee = await zkSyncProvider.attachEstimateFee('https://sepolia.era.zksync.dev')({
+          const zkSyncProviderRpc = nodeType === 'nexus-sepolia' ? 'https://sepolia.era.zksync.dev' : undefined;
+
+          const fee = await zkSyncProvider.attachEstimateFee(zkSyncProviderRpc)({
             from: address,
             to: bridgeContract,
             value: BigNumber.from(tx.value).toHexString(),

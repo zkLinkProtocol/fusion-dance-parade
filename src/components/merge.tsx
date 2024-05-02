@@ -76,7 +76,6 @@ export default function Merge() {
     }
   };
 
-  //nodeType === 'nexus-sepolia' ? 'https://sepolia.rpc.zklink.io' :
   const insertEstimateFee = async (tx: WriteContractParameters) => {
     const txData = encodeFunctionData({
       abi: tx.abi,

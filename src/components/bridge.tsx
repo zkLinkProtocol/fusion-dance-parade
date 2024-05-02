@@ -59,10 +59,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const { openConnectModal } = useConnectModal();
   const novaClient = usePublicClient({ config: config, chainId: NOVA_CHAIN_ID });
   const { isConnected, address, chainId } = useAccount();
-  const [failMessage, setFailMessage] = useState('');
   const [amount, setAmount] = useState('1');
-
-  const [url, setUrl] = useState('');
   const {
     chain,
     coin,
@@ -82,17 +79,12 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const [fromActive, setFromActive] = useState(0);
   const [tokenActive, setTokenActive] = useState(0);
   const { setNetworkKey, networkKey } = useBridgeNetworkStore();
-  const { tokenList, refreshTokenBalanceList, allTokens, nativeTokenBalance, novaNativeTokenBalance } =
-    useTokenBalanceList();
+  const { tokenList, refreshTokenBalanceList, nativeTokenBalance, novaNativeTokenBalance } = useTokenBalanceList();
 
   const [minDepositValue, setMinDepositValue] = useState(0.1);
   const [category, setCategory] = useState(AssetTypes[0].value);
   const [tokenFiltered, setTokenFiltered] = useState<Token[]>([]);
   const [connectorName, setConnectorName] = useState('');
-  const [switchLoading, setSwitchLoading] = useState(false);
-  const [switchChainError, setSwitchChainError] = useState('');
-
-  // const dispatch = useDispatch()
 
   const { addPrecheckTxHash, precheckTxhashes, removePrecheckTxHash } = usePreCheckTxStore();
   const { addTxHash, txhashes } = useVerifyStore();
@@ -265,10 +257,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   }, [invalidChain, amount, tokenActive, tokenFiltered, isDepositErc20, isEligible]);
 
   useEffect(() => {
-    setSwitchChainError('');
-  }, [fromActive]);
-
-  useEffect(() => {
     if (selectedChainId) {
       setFromActive(fromList.findIndex((item) => item.chainId === selectedChainId));
     }
@@ -289,22 +277,14 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     setNetworkKey(fromList[fromActive]?.networkKey);
     if (invalidChain) {
       try {
-        setSwitchLoading(true);
         await switchChainAsync({ chainId: fromList[fromActive].chainId });
-        setSwitchChainError('');
         return;
       } catch (e: any) {
         console.log(e);
         if (e.message && e.message.includes('the method now not support')) {
           // imported wallet in binance not support some chain
-          setSwitchChainError(
-            `The Binance Web3 wallet may not be support ${fromList[fromActive].chainName} if you're using an imported wallet.`,
-          );
           return;
         }
-        setSwitchChainError('Switch network failed. Please refresh page and try again.');
-      } finally {
-        setSwitchLoading(false);
       }
       return;
     }
@@ -339,21 +319,17 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       }
       //save tx hash
       addTxHash(address, l1TransactionHash, l2TransactionHash, rpcUrl!, coin, chain);
-
-      setUrl(`${fromList[fromActive].explorerUrl}/tx/${l1TransactionHash}`);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully deposit to Nova' />);
       fetchMemeNftBalances(address);
     } catch (e: any) {
       if (e.message) {
         if (e.message.includes('Insufficient Gas Token Balance')) {
-          setFailMessage(e.message);
         } else if (e.message.includes('User rejected the request' || e.message.includes('OKX Wallet Reject'))) {
-          setFailMessage('User rejected the request');
           toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('Internal JSON-RPC error ')) {
-          setFailMessage('Internal JSON-RPC error. Please try again');
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description='Internal JSON-RPC error' />);
         } else {
-          setFailMessage(e.message);
+          toast.custom((t) => <Toast type='error' id={t} title='Failed' description={e.message} />);
         }
       }
       // return;
@@ -439,8 +415,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     }
   };
 
-  //TODO: deposit-> check meme user balance & gas balance -> mint
-  //TODO: chain token list
 
   const hasNativeTokenBalance = novaNativeTokenBalance && novaNativeTokenBalance > 0.00001;
   const hasMatchingCoin = txhashes[address]?.some((item) => item.coin === coin);
