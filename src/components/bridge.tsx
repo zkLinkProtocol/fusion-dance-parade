@@ -59,7 +59,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const { openConnectModal } = useConnectModal();
   const novaClient = usePublicClient({ config: config, chainId: NOVA_CHAIN_ID });
   const { isConnected, address, chainId } = useAccount();
-  // const [status, setStatus] = useState('');
   const [failMessage, setFailMessage] = useState('');
   const [amount, setAmount] = useState('1');
 
@@ -89,8 +88,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const [minDepositValue, setMinDepositValue] = useState(0.1);
   const [category, setCategory] = useState(AssetTypes[0].value);
   const [tokenFiltered, setTokenFiltered] = useState<Token[]>([]);
-  // const [bridgeTokenInited, setBridgeTokenInited] = useState(false);
-  // const connections = useConnections();
   const [connectorName, setConnectorName] = useState('');
   const [switchLoading, setSwitchLoading] = useState(false);
   const [switchChainError, setSwitchChainError] = useState('');
@@ -124,13 +121,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       { passive: false },
     );
   }, []);
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     refreshTokenBalanceList();
-  //   }, 5000);
-  //   return () => clearInterval(timer);
-  // }, [refreshTokenBalanceList]);
 
   useEffect(() => {
     (async () => {
@@ -351,11 +341,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       addTxHash(address, l1TransactionHash, l2TransactionHash, rpcUrl!, coin, chain);
 
       setUrl(`${fromList[fromActive].explorerUrl}/tx/${l1TransactionHash}`);
-      // dispatch(setDepositL1TxHash(hash!))
-      // transLoadModal.onClose()
-      // dispatch(setDepositStatus("pending"));
-      // transSuccModal.onOpen();
-      console.log('addTxHash', l1TransactionHash, l2TransactionHash);
       toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully deposit to Nova' />);
       fetchMemeNftBalances(address);
     } catch (e: any) {
@@ -410,7 +395,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       const filterCoin = coin?.toUpperCase() === 'OMNI2' ? 'Omni' : coin;
       await mintNovaNft(address, chain, filterCoin);
       await fetchMemeNftBalances(address);
-      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully minted Axis NFT!' />);
+      toast.custom((t) => <Toast type='success' id={t} title='Success' description='Successfully minted NFT!' />);
     } catch (e: any) {
       console.log(e);
       if (e.message) {
@@ -475,7 +460,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       }
 
       const l2hash = await getDepositL2TxHash(l1matchedTx.l1TransactionHash as `0x${string}`);
-      console.log(l2hash, 'l2hash-result');
 
       if (l2hash) {
         //TODO: record & compare status

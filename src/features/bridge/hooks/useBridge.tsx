@@ -27,7 +27,7 @@ import { useBridgeNetworkStore } from './useBridgeNetwork';
 import { useZksyncProvider, nodeConfig, walletClientToProvider, l1EthDepositAbi } from '../utils';
 import { Toast } from 'components/ui/toast';
 import { toast } from 'sonner';
-import useMemeNft from 'features/nft/hooks/useMemeNft';
+import useNft from 'features/nft/hooks/useNft';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 import useTokenBalanceList from './useTokenList';
 
@@ -41,7 +41,7 @@ export const useBridgeTx = () => {
   const publicClient = usePublicClient({ config, chainId });
   const novaClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { address } = useAccount();
-  const { fetchMemeNftBalances } = useMemeNft();
+  const { fetchMemeNftBalances } = useNft();
   const { data: walletClient } = useWalletClient();
   const [loading, setLoading] = useState(false);
   const { provider: providerL2, getDefaultBridgeAddresses } = useZksyncProvider();

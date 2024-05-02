@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useAccount } from 'wagmi';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
-import useMemeNft from '../hooks/useMemeNft';
+import useNft from '../hooks/useNft';
 
 const copyAddress = (address: string) => {
   navigator.clipboard
@@ -27,7 +27,7 @@ interface NftItemProps {
 
 const NftItem: React.FC<NftItemProps> = (item: any) => {
   const { address: walletAddr } = useAccount();
-  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useMemeNft();
+  const { mintNovaNft, isMinting, fetchMemeNftBalances } = useNft();
   const { txhashes } = useVerifyStore();
   const { precheckTxhashes } = usePreCheckTxStore();
   const { sendDepositTx, loading } = useBridgeTx();

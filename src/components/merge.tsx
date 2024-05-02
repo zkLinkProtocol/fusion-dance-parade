@@ -14,7 +14,7 @@ import { useAccount, useBalance, usePublicClient, useSwitchChain, useWalletClien
 
 import MultiSelectContent from './multi-select-content';
 import { Button } from './ui/buttons/button';
-import useMemeNft, { useBatchBalancesStore } from 'features/nft/hooks/useMemeNft';
+import useNft, { useBatchBalancesStore } from 'features/nft/hooks/useNft';
 import { Toast } from './ui/toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { create } from 'zustand';
@@ -37,7 +37,7 @@ export default function Merge() {
 
   const { batchBalances } = useBatchBalancesStore();
 
-  const { fetchMemeNftBalances } = useMemeNft();
+  const { fetchMemeNftBalances } = useNft();
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const { mintLimit, setMintLimit } = useMintLimitStore();
 
@@ -169,7 +169,7 @@ export default function Merge() {
     }
     try {
       toast.custom(
-        (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Summoning selected Axis Nft...' />,
+        (t) => <Toast type='loading' id={t} title='Pending Transaction' description='Summoning selected Nft...' />,
         { duration: Infinity },
       );
       if (!isTrademarkApproved) {

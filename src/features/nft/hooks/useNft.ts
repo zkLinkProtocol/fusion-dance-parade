@@ -94,7 +94,7 @@ export const useBatchBalancesStore = create<ActiveIndexState>((set) => ({
   setBatchBalances: (value: any) => set({ batchBalances: value }),
 }));
 
-const useMemeNft = () => {
+const useNft = () => {
   const publicClient = usePublicClient({ config, chainId: NOVA_CHAIN_ID });
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount();
@@ -292,4 +292,4 @@ const useMemeNft = () => {
   };
 };
 
-export default useMemeNft;
+export default useNft;
