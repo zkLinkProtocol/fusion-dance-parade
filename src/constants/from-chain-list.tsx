@@ -329,6 +329,4 @@ const FromList = (() => {
   }
 })();
 
-console.log('FromList', FromList);
-
 export default FromList;
