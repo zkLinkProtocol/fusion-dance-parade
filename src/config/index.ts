@@ -6,7 +6,6 @@ import {
   okxWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
-import { coinbaseWallet, injected, safe, walletConnect } from '@wagmi/connectors';
 import { cookieStorage, createConfig, createStorage, http } from 'wagmi';
 import type { Writeable } from 'zod';
 
@@ -55,16 +54,7 @@ const connectors = connectorsForWallets(
   [
     {
       groupName: 'Recommended',
-      wallets: [
-        injectedWallet,
-        // rainbowWallet,
-        gateWallet, // hide gate for now
-        okxWallet,
-        BinanceWallet,
-        // rabbyWallet,
-        metaMaskWallet,
-        walletConnectWallet,
-      ],
+      wallets: [injectedWallet, metaMaskWallet, walletConnectWallet, okxWallet, BinanceWallet],
     },
   ],
   {
@@ -120,48 +110,8 @@ export const createProductionConfig = () => {
     ...publicWagmiConfig,
     transports,
     pollingInterval,
-    connectors: [
-      ...connectors,
-      walletConnect({
-        projectId,
-        metadata,
-        showQrModal: true,
-      }),
-    ],
+    connectors,
     multiInjectedProviderDiscovery: true,
-    // connectors: [
-    //   injected({
-    //     shimDisconnect: true,
-    //   }),
-    //   walletConnect({
-    //     showQrModal: true,
-    //     projectId: '187b0394dbf3b20ce7762592560eafd2',
-    //     metadata: {
-    //       name: 'Sushi',
-    //       description: 'Community home of DeFi',
-    //       url: 'https://www.sushi.com',
-    //       icons: ['https://www.sushi.com/icon.png'],
-    //     },
-    //   }),
-    //   coinbaseWallet({
-    //     // TODO: Flesh out coinbase wallet connect options?
-    //     appName: 'Sushi 2.0',
-    //     appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/list/master/logos/token-logos/token/sushi.jpg',
-    //   }),
-    //   safe({
-    //     // TODO: Other self-hosted safes for some networks?
-    //     allowedDomains: [
-    //       /gnosis-safe.io$/,
-    //       /app.safe.global$/,
-    //       /safe.fuse.io$/,
-    //       /multisig.moonbeam.network$/,
-    //       /safe.fantom.network$/,
-    //       /ui.celo-safe.io$/,
-    //       /multisig.harmony.one$/,
-    //     ],
-    //     debug: false,
-    //   }),
-    // ],
     storage: createStorage({
       storage: cookieStorage,
     }),
