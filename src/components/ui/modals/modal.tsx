@@ -23,10 +23,10 @@ const Modal: React.FC = () => {
         <img
           loading='lazy'
           src='/assets/imgs/chad.png'
-          className='aspect-\[0.93\] max-w-\[450px\] mb-6 w-full rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
+          className='mb-6 aspect-[0.93] w-full max-w-[450px] rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
           alt=''
         />
-        <span className='text-\[#c875ff\] mb-3 text-lg'>Deposit 0.1 ETH to get 1 Mystery box</span>
+        <span className='mb-3 text-lg text-[#c875ff]'>Deposit 0.1 ETH to get 1 Mystery box</span>
         <Button
           className='backButton cursor-pointer'
           onClick={() => {
