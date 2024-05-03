@@ -1,19 +1,17 @@
+/* eslint-disable no-dupe-else-if */
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import BigNumber from 'bignumber.js';
-import { getDepositETHThreshold } from 'constants/api';
 import fromList from 'constants/from-chain-list';
 import FromList from 'constants/from-chain-list';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 import { useBridgeNetworkStore } from 'features/bridge/hooks/useBridgeNetwork';
 import useTokenBalanceList from 'features/bridge/hooks/useTokenList';
-import { SourceTokenInfo, useMergeToken } from 'features/nft/hooks/useMergeToken';
 import { useVerifyStore } from 'hooks/useVerifyStore';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { parseUnits } from 'viem';
 import { useAccount, usePublicClient, useSwitchChain } from 'wagmi';
 import { ETH_ADDRESS } from 'zksync-web3/build/src/utils';
 import { Button } from './ui/buttons/button';
-import type { Token } from 'types/token';
 import { toast } from 'sonner';
 import { NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { Toast } from './ui/toast';
@@ -21,35 +19,6 @@ import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
 import { config } from 'config/zklin-networks';
 import { formatBalance } from 'utils/time';
-
-
-const AssetTypes = [
-  { label: 'ALL', value: 'ALL' },
-  {
-    label: 'Native',
-    value: 'NATIVE',
-  },
-  {
-    label: 'Stable',
-    value: 'Stablecoin',
-  },
-  {
-    label: 'Synthetic',
-    value: 'Synthetic',
-  },
-  {
-    label: 'RWA',
-    value: 'RWA',
-  },
-  {
-    label: 'LST',
-    value: 'LST',
-  },
-  {
-    label: 'LRT',
-    value: 'LRT',
-  },
-];
 export interface IBridgeComponentProps {
   onClose?: () => void;
   bridgeToken?: string;
@@ -81,123 +50,10 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const { setNetworkKey, networkKey } = useBridgeNetworkStore();
   const { tokenList, refreshTokenBalanceList, nativeTokenBalance, novaNativeTokenBalance } = useTokenBalanceList();
 
-  const [minDepositValue, setMinDepositValue] = useState(0.1);
-  const [category, setCategory] = useState(AssetTypes[0].value);
-  const [tokenFiltered, setTokenFiltered] = useState<Token[]>([]);
-  const [connectorName, setConnectorName] = useState('');
+  const tokenFiltered = tokenList;
 
-  const { addPrecheckTxHash, precheckTxhashes, removePrecheckTxHash } = usePreCheckTxStore();
+  const { precheckTxhashes, removePrecheckTxHash } = usePreCheckTxStore();
   const { addTxHash, txhashes } = useVerifyStore();
-
-  const inputRef1 = useRef<HTMLInputElement>(null);
-  const inputRef2 = useRef<HTMLInputElement>(null);
-  const [isMergeSelected, setIsMergeSelected] = useState(true);
-  const [mergeTokenInfo, setMergeTokenInfo] = useState<SourceTokenInfo>();
-
-  const { fetchMergeTokenInfo } = useMergeToken();
-
-  useEffect(() => {
-    //https://github.com/ant-design/ant-design-mobile/issues/5174
-    inputRef1.current?.addEventListener(
-      'wheel',
-      (event) => {
-        event.preventDefault();
-      },
-      { passive: false },
-    );
-    inputRef2.current?.addEventListener(
-      'wheel',
-      (event) => {
-        event.preventDefault();
-      },
-      { passive: false },
-    );
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const token = tokenFiltered[tokenActive];
-      if (token && token.l2Address) {
-        const info = await fetchMergeTokenInfo(token.l2Address);
-        console.log('mergeInfo: ', info);
-        setMergeTokenInfo(info);
-      } else {
-        setMergeTokenInfo(undefined);
-      }
-    })();
-  }, [fetchMergeTokenInfo, tokenActive, tokenFiltered]);
-
-  const mergeSupported = useMemo(() => {
-    return mergeTokenInfo?.isSupported && !mergeTokenInfo?.isLocked;
-  }, [mergeTokenInfo]);
-
-  const mergeLimitExceeds = useMemo(() => {
-    if (!amount) return false;
-    const amountVal = parseUnits(String(amount), tokenFiltered[tokenActive]?.decimals);
-    const exceeds = new BigNumber(amountVal.toString())
-      .plus(mergeTokenInfo?.balance.toString() ?? 0)
-      .gt(mergeTokenInfo?.depositLimit.toString() ?? 0);
-    console.log('exceeds: ', exceeds);
-    return mergeSupported && isMergeSelected && exceeds;
-  }, [
-    amount,
-    tokenFiltered,
-    tokenActive,
-    mergeTokenInfo?.balance,
-    mergeTokenInfo?.depositLimit,
-    mergeSupported,
-    isMergeSelected,
-  ]);
-
-  const unsupportedChainWithConnector = useMemo(() => {
-    if (connectorName && fromList[fromActive]) {
-      if (connectorName.toLowerCase().includes('binance') && fromList[fromActive].networkKey === 'mantle') {
-        return 'Binance wallet may not support Mantle Network.';
-      } else if (
-        connectorName.toLowerCase().includes('gate') &&
-        !['ethereum', 'arbitrum', 'zksync', 'optimism'].includes(fromList[fromActive].networkKey)
-      ) {
-        return `Gate wallet may not support ${fromList[fromActive].chainName} Network.`;
-      }
-    }
-    return '';
-  }, [fromActive, connectorName]);
-
-  useEffect(() => {
-    if (category === 'ALL') {
-      const arr = [...tokenList];
-      const ezEthIndex = arr.findIndex((item) => item.symbol === 'ezETH');
-      const ezEthItem = arr.splice(ezEthIndex, 1);
-      arr.splice(4, 0, ezEthItem[0]);
-
-      console.log(tokenList, 'all token list');
-
-      setTokenFiltered(arr);
-    } else {
-      const tokens = tokenList.filter((item) => item.type?.toUpperCase() === category.toUpperCase());
-      setTokenFiltered(tokens);
-    }
-  }, [tokenList, category]);
-
-  useEffect(() => {
-    (async () => {
-      const minDeposit = await getDepositETHThreshold();
-      console.log('minDeposit: ', minDeposit);
-      setMinDepositValue(minDeposit.ethAmount || 0.1);
-    })();
-  }, []);
-
-  const errorInputMsg = useMemo(() => {
-    if (mergeLimitExceeds) {
-      return 'Input amount exceeds the merge limit.';
-    }
-    const token = tokenFiltered[tokenActive];
-    const [_, decimals] = amount.split('.');
-    if (token && decimals && decimals.length > token.decimals) {
-      return `Max decimal length for ${token.symbol} is ${token.decimals}`;
-    }
-    return '';
-  }, [tokenActive, tokenFiltered, amount, mergeLimitExceeds]);
 
   const invalidChain = useMemo(() => {
     return chainId !== fromList[fromActive]?.chainId;
@@ -205,11 +61,9 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
 
   const actionBtnDisabled = useMemo(() => {
     if (!isEligible) return true;
-    if (!invalidChain && mergeLimitExceeds) {
+    if (!invalidChain) {
       return true;
     } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
-      return true;
-    } else if (unsupportedChainWithConnector) {
       return true;
     } else if (
       !invalidChain &&
@@ -217,23 +71,12 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       (!tokenFiltered[tokenActive].balance ||
         tokenFiltered[tokenActive].balance! <= 0 ||
         Number(tokenFiltered[tokenActive].formatedBalance) < Number(amount) ||
-        Number(amount) <= 0 ||
-        errorInputMsg)
+        Number(amount) <= 0)
     ) {
       return true;
     }
     return false;
-  }, [
-    nativeTokenBalance,
-    unsupportedChainWithConnector,
-    invalidChain,
-    tokenFiltered,
-    tokenActive,
-    amount,
-    errorInputMsg,
-    mergeLimitExceeds,
-    isEligible,
-  ]);
+  }, [nativeTokenBalance, invalidChain, tokenFiltered, tokenActive, amount, isEligible]);
 
   const isDepositErc20 = useMemo(() => {
     return tokenFiltered[tokenActive] && tokenFiltered[tokenActive].address !== ETH_ADDRESS;
@@ -309,7 +152,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
         // utils.parseEther(String(amount))
         parseUnits(String(amount), tokenFiltered[tokenActive]?.decimals),
         nativeTokenBalance,
-        mergeSupported && isMergeSelected,
+        false,
         coin,
         chain,
         rpcUrl!,
@@ -324,6 +167,9 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     } catch (e: any) {
       if (e.message) {
         if (e.message.includes('Insufficient Gas Token Balance')) {
+          toast.custom((t) => (
+            <Toast type='error' id={t} title='Failed' description='Insufficient Gas Token Balance' />
+          ));
         } else if (e.message.includes('User rejected the request' || e.message.includes('OKX Wallet Reject'))) {
           toast.custom((t) => <Toast type='error' id={t} title='Failed' description='User rejected the request' />);
         } else if (e.message.includes('Internal JSON-RPC error ')) {
@@ -349,7 +195,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
     sendDepositTx,
     tokenFiltered,
     tokenActive,
-    isMergeSelected,
     addTxHash,
     networkKey,
   ]);
@@ -414,7 +259,6 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       }
     }
   };
-
 
   const hasNativeTokenBalance = novaNativeTokenBalance && novaNativeTokenBalance > 0.00001;
   const hasMatchingCoin = txhashes[address]?.some((item) => item.coin === coin);
@@ -489,12 +333,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
             Connect Wallet
           </Button>
         )}
-        {/* {unsupportedChainWithConnector && (
-          <p className='mt-4 text-[14px] text-[#C57D10]'>{unsupportedChainWithConnector}</p>
-        )} */}
       </>
     </>
   );
 }
-
-
