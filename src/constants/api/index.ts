@@ -152,9 +152,6 @@ export const getInvite = (address: string): Promise<Response> => axiosInstance.g
 export const getReferrer = (address: string): Promise<Response> =>
   axiosInstance.get(`${BASE_URL_API}/referrer/${address}`);
 
-export const getDepositETHThreshold = (): Promise<{ ethAmount: number }> =>
-  axiosInstance.get(`${BASE_URL_POINTS}/addressTokenTvl/getDepositEthThreshold`);
-
 export const getAccounTvl = (address: string): Promise<Response> =>
   axiosInstance.get(`${BASE_URL_POINTS}/addressTokenTvl/getAccounTvl`, {
     params: { address },
