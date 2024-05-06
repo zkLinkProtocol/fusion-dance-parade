@@ -115,8 +115,8 @@ export default function Carousel({ lists }) {
                     loading={loading}
                   />
                   <div className='mt-3 text-xs text-[#AAAAAA]'>
-                    Deposit 1 {item.coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : item.coin?.toUpperCase()} into Nova
-                    Network and mint your NOVA {item.chain}{' '}
+                    Deposit any amount of {item.coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : item.coin?.toUpperCase()}{' '}
+                    into Nova Network and mint your NOVA {item.chain}{' '}
                     {item.coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : item.coin?.toUpperCase()}.
                   </div>
                 </div>

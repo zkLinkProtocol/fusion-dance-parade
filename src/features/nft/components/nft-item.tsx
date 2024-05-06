@@ -100,8 +100,8 @@ const NftItem: React.FC<NftItemProps> = (item: any) => {
                 <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' /> */}
               </div>
               <div className='mb-2 h-[70px] text-[15px] text-slate-400'>
-                Deposit 1 {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network and mint
-                your NOVA {chain} {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()}.
+                Deposit any amount of {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network
+                and mint your NOVA {chain} {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()}.
               </div>
               <Bridge
                 mintNovaNft={mintNovaNft}
