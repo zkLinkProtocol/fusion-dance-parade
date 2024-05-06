@@ -91,7 +91,7 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
       return 'Insufficient Gas Token';
     } else if (amount && tokenFiltered[tokenActive]) {
       if (Number(amount) > Number(tokenFiltered[tokenActive].formatedBalance)) {
-        return `Insufficient ${tokenFiltered[tokenActive].symbol} balance`;
+        return `Lack of ${tokenFiltered[tokenActive].symbol} token`;
       }
     } else if (isDepositErc20) {
       return 'Approve and Deposit';
