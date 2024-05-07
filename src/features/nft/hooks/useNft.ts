@@ -110,7 +110,7 @@ const useNft = () => {
         });
         Object.keys(tokenMap).forEach((key) => {
           const token = tokenMap[key];
-          token.eligible = eligibileChainData.some((obj: any) => token.name.includes(obj.coin));
+          token.eligible = eligibileChainData.some((obj: any) => token.name === `${obj.chain}-${obj.coin}`);
         });
         return {
           isEligible: tokenMap[tokenId].eligible,
@@ -123,10 +123,6 @@ const useNft = () => {
           hasMint,
           tokenBalance: tokeBalance_nova,
           hasMemeTokenBalance: tokeBalance_nova > 0,
-          // name: nft.name,
-          // description: nft.description,
-          // image: nft.image,
-          // type: nft.type,
         };
       }),
     );
