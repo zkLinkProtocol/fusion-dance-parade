@@ -4,9 +4,7 @@ WORKDIR /fusion-dance-parade
 
 ADD . /fusion-dance-parade
 
-ENV NODE_ENV=production
-
-RUN yarn && yarn build
+RUN yarn --ignore-scripts && env NODE_ENV=production yarn build
 
 FROM 475911326710.dkr.ecr.ap-northeast-1.amazonaws.com/nginx:alpine3.18
 
