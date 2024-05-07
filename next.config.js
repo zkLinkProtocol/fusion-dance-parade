@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
-  // basePath: '/fusion-dance-parade',
   basePath: process.env.NODE_ENV === 'production' ? '/fusion-dance-parade' : '',
   swcMinify: true,
   output: 'standalone',
