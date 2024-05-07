@@ -1,19 +1,7 @@
-import { type FC, type ReactNode, useMemo } from 'react';
+import { type FC, type ReactNode } from 'react';
 import { WagmiProvider } from 'wagmi';
-
-import { createProductionConfig } from '../config';
-import { createTestConfig } from '../config/test';
-import type { PublicWagmiConfig } from '../config/wagmi';
-
-const isTest = process.env.NEXT_PUBLIC_APP_ENV === 'test';
+import { wagmiDefaultConfig } from 'config/zklin-networks';
 
 export const WagmiConfig: FC<{ children: ReactNode }> = ({ children }) => {
-  const config = useMemo(() => {
-    if (isTest) {
-      return createTestConfig() as unknown as PublicWagmiConfig;
-    }
-    return createProductionConfig();
-  }, []);
-
-  return <WagmiProvider config={config}>{children}</WagmiProvider>;
+  return <WagmiProvider config={wagmiDefaultConfig}>{children}</WagmiProvider>;
 };

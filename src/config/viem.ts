@@ -484,8 +484,6 @@ export const blast = {
   },
 } as const;
 
-// const alchemyId =
-//   process.env['ALCHEMY_ID'] || process.env['NEXT_PUBLIC_ALCHEMY_ID']
 const drpcId = process.env['DRPC_ID'] || process.env['NEXT_PUBLIC_DRPC_ID'];
 
 export const publicTransports = {
