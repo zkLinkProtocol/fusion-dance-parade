@@ -40,6 +40,7 @@
     "@types/node": "20.8.2",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.2.4",
+    "@walletconnect/modal": "^2.6.2",
     "autoprefixer": "10.4.16",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",

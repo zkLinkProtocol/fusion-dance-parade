@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
+  basePath: process.env.NODE_ENV === 'production' ? '/fusion-dance-parade' : '',
   swcMinify: true,
-  output: 'standalone',
+  output: 'export',
   reactStrictMode: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+  images: {
+    unoptimized: true,
   },
   typescript: {
     // !! WARN !!

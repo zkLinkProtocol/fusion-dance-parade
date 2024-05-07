@@ -1,8 +1,6 @@
 import { createContext, useContext } from 'react';
 import { createStore, useStore as useZustandStore } from 'zustand';
 import { combine } from 'zustand/middleware';
-import { isChainSupported } from 'config/connectors';
-import { getChainId } from 'config/chain_dep';
 
 type ColorModeStore = {
   mode: string;
@@ -41,23 +39,6 @@ export const initializeStore = (preloadedState = {}) => {
       },
       toggleMode: (state: ColorModeStore) => {
         set({ mode: state.mode === 'light' ? 'dark' : 'light' });
-      },
-      onQueryChainMount: () => {
-        if (typeof window !== 'undefined') {
-          const params = new URL(window.location.href).searchParams;
-          let chainId: any;
-          const c = params.get('chain');
-          if (!c) {
-            chainId = params.get('chainId');
-          } else {
-            chainId = getChainId(c);
-          }
-          if (isChainSupported(+chainId)) {
-            set({ queryChainId: +chainId });
-          } else {
-            set({ queryChainId: 0 });
-          }
-        }
       },
       setSessionChainId: (chainId: number) => set({ sessionChainId: chainId }),
       setSwitchNetworkLoading: (value: boolean) => set({ switchNetworkLoading: value }),
