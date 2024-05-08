@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { Button } from 'components/ui/buttons/button';
 import { showAccount } from 'utils/format';
-import Image from 'next/image';
+import { EnhancedImg } from 'hoc/withImagePath';
 
 export const Navbar = () => {
   const { address, isConnected } = useAccount();
@@ -15,11 +15,10 @@ export const Navbar = () => {
       <div className='max-md:flex-wrap flex w-full justify-between gap-5 py-3 font-medium'>
         <div className='max-md:max-w-full max-md:flex-wrap my-auto flex items-center gap-5 whitespace-nowrap text-base leading-6 text-slate-500'>
           <Link href='/'>
-            <Image src='/assets/imgs/nova-logo.png' alt='logo' width={150} height={50} />
+            <EnhancedImg src='/assets/imgs/nova-logo.png' alt='logo' width={150} height={50} />
           </Link>
         </div>
         <div className='flex justify-between gap-5 px-5 text-center text-lg leading-5'>
-          {/* <HeaderNetworkSelector networks={SUPPORTED_CHAIN_IDS} /> */}
           <ConnectButton.Custom>
             {({ chain }) => (
               <Button

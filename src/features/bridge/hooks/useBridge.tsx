@@ -1,7 +1,7 @@
 import { suggestMaxPriorityFee } from '@rainbow-me/fee-suggestions';
 import { getPublicClient } from '@wagmi/core';
 import BigNum from 'bignumber.js';
-import { config, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
+import { config, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklink-networks';
 import primaryGetterAbi from 'constants/contracts/abis/GettersFacet.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import IL1Bridge from 'constants/contracts/abis/IL1Bridge.json';

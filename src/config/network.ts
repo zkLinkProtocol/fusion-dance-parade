@@ -1,7 +1,7 @@
 import type { Chain } from '@wagmi/core/chains';
 import type { Address } from 'viem';
 
-import { l1Networks } from './zklin-networks';
+import { l1Networks } from './zklink-networks';
 import { Token } from 'types/token';
 
 export type L1Network = Chain;

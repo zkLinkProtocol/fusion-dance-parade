@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { config } from 'config/zklin-networks';
+import { config } from 'config/zklink-networks';
 import NovaInfinityStonesNFT from 'constants/contracts/abis/NovaInfinityStonesNFT.json';
 import NovaChadNFT from 'constants/contracts/abis/NovaChadNFT.json';
 import { getMemeMintChadNumber, getMergeSignature } from 'constants/api';
@@ -7,10 +7,9 @@ import { IS_MAINNET, MEME_COMPOSE_NFT_CONTRACT, MEME_NFT_CONTRACT, NOVA_CHAIN_ID
 import { zkSyncProvider } from 'providers/zksync-provider';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { formatBalance } from 'utils/time';
 import type { Hash, WriteContractParameters } from 'viem';
 import { encodeFunctionData, getContract } from 'viem';
-import { useAccount, useBalance, usePublicClient, useSwitchChain, useWalletClient } from 'wagmi';
+import { useAccount, usePublicClient, useSwitchChain, useWalletClient } from 'wagmi';
 
 import MultiSelectContent from './multi-select-content';
 import { Button } from './ui/buttons/button';
@@ -19,6 +18,7 @@ import { Toast } from './ui/toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { create } from 'zustand';
 import { useModalStore } from './ui/modals/modal';
+import { useAssetPath } from 'hoc/withImagePath';
 
 interface MintLimitState {
   mintLimit: number | null;
@@ -269,6 +269,7 @@ const MergeVideoModal = ({
   isModalOpen: boolean;
   toggleModal: (isOpen: boolean) => void;
 }) => {
+  const getAssetPath = useAssetPath();
   const { toggleModal: toggleMergeModal } = useModalStore();
 
   const handleVideoEnd = () => {
@@ -293,7 +294,7 @@ const MergeVideoModal = ({
             className='relative w-full'
           >
             <video autoPlay muted onEnded={handleVideoEnd} className='h-auto w-full'>
-              <source src='/assets/videos/intro-video.mp4' type='video/mp4' />
+              <source src={getAssetPath('/assets/videos/intro-video.mp4')} type='video/mp4' />
             </video>
             <button onClick={() => toggleModal(false)} className='absolute right-4 top-4 text-2xl font-bold text-white'>
               &times;
