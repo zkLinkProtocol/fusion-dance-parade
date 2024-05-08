@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import { useAssetPath } from 'hoc/withImagePath';
 
 type TProps = {
   onClick: (tag: string) => void;
@@ -7,6 +8,7 @@ type TProps = {
 };
 
 const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [] }) => {
+  const getAssetPath = useAssetPath();
   return (
     <>
       {tags.map((tag) => (
@@ -26,7 +28,7 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             },
           )}
           style={{
-            backgroundImage: `url(${`https://preview.zklink.io/fusion-dance-parade/assets/imgs/${tag.tokenId}.png`})`,
+            backgroundImage: `url(${getAssetPath(`/assets/imgs/${tag.tokenId}.png`)})`,
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
