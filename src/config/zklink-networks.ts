@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
@@ -29,13 +30,71 @@ import {
 import { BinanceWallet } from 'constants/wallet/binanceWallet';
 import Hyperchains from 'hyperchains/config.json';
 import type { Token } from 'types/token';
-import { createClient } from 'viem';
+// import { createClient } from 'viem';
 import { defineChain } from 'viem';
 import { baseSepolia, blastSepolia, lineaGoerli, lineaSepolia, optimismSepolia } from 'viem/chains';
-import { createConfig, http } from 'wagmi';
-import { walletConnect } from 'wagmi/connectors';
+import { cookieStorage, createConfig, createStorage } from 'wagmi';
 
 import type { ZkSyncNetwork } from './network';
+export const DEFAULT_POLLING_INTERVAL = 4_000;
+// import { publicWagmiConfig } from './wagmi';
+
+export const ChainId = {
+  ETHEREUM: 1,
+  // ROPSTEN: 3,
+  // RINKEBY: 4,
+  // GÖRLI: 5,
+  // KOVAN: 42,
+  POLYGON: 137,
+  POLYGON_TESTNET: 80001,
+  FANTOM: 250,
+  FANTOM_TESTNET: 4002,
+  GNOSIS: 100,
+  BSC: 56,
+  BSC_TESTNET: 97,
+  ARBITRUM: 42161,
+  ARBITRUM_NOVA: 42170,
+  ARBITRUM_TESTNET: 421614,
+  AVALANCHE: 43114,
+  AVALANCHE_TESTNET: 43113,
+  HECO: 128,
+  // HECO_TESTNET: 256,
+  HARMONY: 1666600000,
+  // HARMONY_TESTNET: 1666700000,
+  OKEX: 66,
+  // OKEX_TESTNET: 65,
+  CELO: 42220,
+  PALM: 11297108109,
+  MOONRIVER: 1285,
+  FUSE: 122,
+  TELOS: 40,
+  MOONBEAM: 1284,
+  OPTIMISM: 10,
+  KAVA: 2222,
+  METIS: 1088,
+  BOBA: 288,
+  BOBA_AVAX: 43288,
+  BOBA_BNB: 56288,
+  BTTC: 199,
+  SEPOLIA: 11155111,
+  // CONSENSUS_ZKEVM_TESTNET: 59140,
+  // SCROLL_ALPHA_TESTNET: 534353,
+  // BASE_TESTNET: 84531,
+  POLYGON_ZKEVM: 1101,
+  THUNDERCORE: 108,
+  FILECOIN: 314,
+  HAQQ: 11235,
+  CORE: 1116,
+  ZKSYNC_ERA: 324,
+  LINEA: 59144,
+  BASE: 8453,
+  SCROLL: 534352,
+  ZETACHAIN: 7000,
+  CRONOS: 25,
+  BLAST: 81457,
+  // RONIN: 2020,
+} as const;
+export type ChainId = (typeof ChainId)[keyof typeof ChainId];
 
 export const mantaSepolia = /*#__PURE__*/ defineChain({
   id: 3441006,
@@ -833,7 +892,6 @@ export const memeTokenList = (() => {
   }
 })();
 
-
 // Create wagmiConfig
 
 // export const NetworkConfig = nodeType === 'nexus-goerli' ? nexusGoerliNode : nexusNode
@@ -890,7 +948,7 @@ const metadata = {
   name: 'zkLink Nova App',
   description: 'zkLink Nova App - Aggregated Layer 3 zkEVM network Aggregation Parade',
   url: 'https://app.zklink.io',
-  icons: ['../../public/img/favicon.png'],
+  icons: ['../../public/favicon.ico'],
 };
 okxWallet({
   projectId,
@@ -950,13 +1008,42 @@ export const config = getDefaultConfig({
   // ssr: false, // If your dApp uses server side rendering (SSR)
 });
 
-export const wagmiDefaultConfig = createConfig({
-  chains: chains,
-  connectors: [...connectors],
-  multiInjectedProviderDiscovery: true,
-  client: ({ chain }) => {
-    return createClient({ chain, transport: http() });
+export const publicWagmiConfig = {
+  chains,
+  transports: {},
+  batch: {
+    multicall: {
+      wait: 64,
+    },
   },
+} as const satisfies Parameters<typeof createConfig>[0];
+
+export type PublicWagmiConfig = ReturnType<
+  typeof createConfig<(typeof publicWagmiConfig)['chains'], (typeof publicWagmiConfig)['transports']>
+>;
+
+const pollingInterval = new Proxy(
+  {
+    [ChainId.ETHEREUM]: 8000, // BT is 12s
+    [ChainId.POLYGON_ZKEVM]: 8000, // BT is 13s
+    [ChainId.FILECOIN]: 20000, // BT is 30s
+  } as Partial<Record<ChainId, number>>,
+  {
+    get: (target, name) => {
+      return Object.hasOwn(target, name) ? target[Number(name) as keyof typeof target] : DEFAULT_POLLING_INTERVAL;
+    },
+  },
+);
+
+export const wagmiDefaultConfig = createConfig({
+  ...publicWagmiConfig,
+  pollingInterval,
+  connectors,
+  multiInjectedProviderDiscovery: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+  ssr: true,
 });
 
 const determineChainList = (): ZkSyncNetwork[] => {
