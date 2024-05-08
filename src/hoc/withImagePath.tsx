@@ -11,8 +11,7 @@ function withImagePath<T extends Partial<ImageProps>>(WrappedComponent: React.Co
     const router = useRouter();
     const isProduction = process.env.NODE_ENV === 'production';
     const basePath = isProduction ? router.basePath : '';
-    const imageUrl =
-      src?.replace('/assets/imgs/', `${basePath}${isProduction ? '/fusion-dance-parade' : ''}/assets/imgs/`) || '';
+    const imageUrl = src?.replace('/assets/imgs/', `${basePath}/assets/imgs/`) || '';
 
     return <WrappedComponent src={imageUrl} {...(rest as T)} />;
   };
@@ -21,14 +20,13 @@ function withImagePath<T extends Partial<ImageProps>>(WrappedComponent: React.Co
 //@ts-ignore
 export const EnhancedImg = withImagePath<ImageProps>('img');
 
-
 export function useAssetPath() {
   const router = useRouter();
   const isProduction = process.env.NODE_ENV === 'production';
   const basePath = isProduction ? router.basePath : '';
 
   const getAssetPath = (assetPath: string) => {
-    const fullPath = `${basePath}${isProduction ? '/fusion-dance-parade' : ''}${assetPath}`;
+    const fullPath = `${basePath}${assetPath}`;
     return fullPath;
   };
 
