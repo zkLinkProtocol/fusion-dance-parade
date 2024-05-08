@@ -26,7 +26,10 @@ const VideoModal = () => {
             className='relative w-full'
           >
             <video autoPlay muted onEnded={handleVideoEnd} className='h-auto w-full'>
-              <source src='/assets/videos/intro-video.mp4' type='video/mp4' />
+              <source
+                src='https://preview.zklink.io/fusion-dance-parade/assets/videos/intro-video.mp4'
+                type='video/mp4'
+              />
             </video>
             <button onClick={() => setIsOpen(false)} className='absolute right-4 top-4 text-2xl font-bold text-white'>
               &times;
