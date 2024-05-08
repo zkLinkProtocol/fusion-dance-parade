@@ -1,4 +1,5 @@
 import Merge, { useMintLimitStore } from 'components/merge';
+import { EnhancedImg } from 'hoc/withImagePath';
 
 const Summon: React.FC = () => {
   const { mintLimit } = useMintLimitStore();
@@ -10,7 +11,7 @@ const Summon: React.FC = () => {
       <div className='max-md:flex-col flex flex-col gap-1 md:flex-row md:gap-5'>
         <div className='max-md:ml-0 max-md:w-full max-md:order-2 flex w-full flex-col md:w-[29%]'>
           <div className='mt-4 flex w-full grow flex-col rounded-2xl md:mt-0 md:justify-center md:border-2 md:border-solid md:border-indigo-500 md:bg-zinc-900'>
-            <img loading='lazy' src='/assets/imgs/chad.png' className='aspect-[0.93] w-full' alt='' />
+            <EnhancedImg loading='lazy' src='/assets/imgs/chad.png' className='aspect-[0.93] w-full' alt='' />
           </div>
         </div>
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>

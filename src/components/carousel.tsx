@@ -4,6 +4,7 @@ import { cn } from 'lib/utils';
 import Bridge from 'components/bridge';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 import useNft from 'features/nft/hooks/useNft';
+import { EnhancedImg } from 'hoc/withImagePath';
 
 export default function Carousel({ lists }) {
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useNft();
@@ -86,7 +87,7 @@ export default function Carousel({ lists }) {
               transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
             >
               <div className='relative flex aspect-[0.5] h-full w-full flex-col overflow-hidden rounded-2xl bg-black'>
-                <img
+                <EnhancedImg
                   src={`/assets/imgs/${item.tokenId}.png`}
                   className={cn(
                     'absolute inset-0 object-cover rounded-2xl',
