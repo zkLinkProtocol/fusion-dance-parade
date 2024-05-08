@@ -17,7 +17,7 @@ import { NOVA_CHAIN_ID } from 'constants/zklink-config';
 import { Toast } from './ui/toast';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 
-import { config } from 'config/zklin-networks';
+import { config } from 'config/zklink-networks';
 import { formatBalance } from 'utils/time';
 export interface IBridgeComponentProps {
   onClose?: () => void;

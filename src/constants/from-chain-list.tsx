@@ -25,7 +25,7 @@ import {
   optimismIcon,
   zkscyncIcon,
 } from 'components/svgs';
-import { nexusGoerliNode, nexusNode, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
+import { nexusGoerliNode, nexusNode, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklink-networks';
 
 export const NOVA_NETWORK = {
   label: nexusNode[0].name,

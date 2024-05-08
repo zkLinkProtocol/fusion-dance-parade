@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useAccount, useBalance, useReadContracts } from 'wagmi';
 
-import { config, memeTokenList, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
+import { config, memeTokenList, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklink-networks';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import { getSupportedTokens } from 'constants/api';
 import FromList from 'constants/from-chain-list';

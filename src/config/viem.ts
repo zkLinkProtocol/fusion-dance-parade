@@ -64,7 +64,7 @@ import {
 } from 'viem/chains';
 
 import { ChainId } from './chain';
-import { chains } from './zklin-networks';
+import { chains } from './zklink-networks';
 // import { ChainId } from '../chain/index.js';
 
 export {

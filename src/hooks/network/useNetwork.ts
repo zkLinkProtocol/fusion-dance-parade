@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import type { ZkSyncNetwork } from 'config/network';
 import { zkSyncNetworks as defaultEraNetworks } from 'config/network';
-import { nexusGoerliNode, nexusNode, nexusSepoliaNode, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
+import { nexusGoerliNode, nexusNode, nexusSepoliaNode, nodeType, PRIMARY_CHAIN_KEY } from 'config/zklink-networks';
 import Hyperchains from 'hyperchains/config.json';
 import type { Token } from 'types/token';
 
