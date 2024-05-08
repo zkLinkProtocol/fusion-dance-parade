@@ -1,4 +1,4 @@
-import { nodeType } from 'config/zklin-networks';
+import { nodeType } from 'config/zklink-networks';
 import axiosInstance from 'utils/axios';
 
 type Response = {

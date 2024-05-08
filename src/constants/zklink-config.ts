@@ -1,4 +1,4 @@
-import { nodeType, PRIMARY_CHAIN_KEY } from 'config/zklin-networks';
+import { nodeType, PRIMARY_CHAIN_KEY } from 'config/zklink-networks';
 
 export const STORAGE_NETWORK_KEY = 'STORAGE_NETWORK_KEY';
 
