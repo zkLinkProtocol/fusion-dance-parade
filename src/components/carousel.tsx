@@ -9,6 +9,7 @@ import { EnhancedImg } from 'hoc/withImagePath';
 export default function Carousel({ lists }) {
   const { mintNovaNft, isMinting, fetchMemeNftBalances } = useNft();
   const { sendDepositTx, loading } = useBridgeTx();
+  const [index, setIndex] = useState(0);
   const [list, setList] = useState(lists);
   // lists.length > 0 && setList(lists)
   const handleMove = (direction) => {
