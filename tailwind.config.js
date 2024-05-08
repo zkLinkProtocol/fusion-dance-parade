@@ -166,7 +166,7 @@ module.exports = {
         box: '20px',
       },
       backgroundImage: () => ({
-        dunes: "url('/banner.svg')",
+        dunes: "url('https://zklink.io/fusion-dance-parade/banner.svg')",
       }),
       keyframes: {
         'border-spin': {
