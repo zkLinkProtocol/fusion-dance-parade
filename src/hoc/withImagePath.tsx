@@ -20,3 +20,17 @@ function withImagePath<T extends Partial<ImageProps>>(WrappedComponent: React.Co
 
 //@ts-ignore
 export const EnhancedImg = withImagePath<ImageProps>('img');
+
+
+export function useAssetPath() {
+  const router = useRouter();
+  const isProduction = process.env.NODE_ENV === 'production';
+  const basePath = isProduction ? router.basePath : '';
+
+  const getAssetPath = (assetPath: string) => {
+    const fullPath = `${basePath}${isProduction ? '/fusion-dance-parade' : ''}${assetPath}`;
+    return fullPath;
+  };
+
+  return getAssetPath;
+}

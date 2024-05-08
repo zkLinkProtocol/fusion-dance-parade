@@ -18,6 +18,7 @@ import { Toast } from './ui/toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { create } from 'zustand';
 import { useModalStore } from './ui/modals/modal';
+import { useAssetPath } from 'hoc/withImagePath';
 
 interface MintLimitState {
   mintLimit: number | null;
@@ -268,6 +269,7 @@ const MergeVideoModal = ({
   isModalOpen: boolean;
   toggleModal: (isOpen: boolean) => void;
 }) => {
+  const getAssetPath = useAssetPath();
   const { toggleModal: toggleMergeModal } = useModalStore();
 
   const handleVideoEnd = () => {
@@ -292,10 +294,7 @@ const MergeVideoModal = ({
             className='relative w-full'
           >
             <video autoPlay muted onEnded={handleVideoEnd} className='h-auto w-full'>
-              <source
-                src='https://preview.zklink.io/fusion-dance-parade/assets/videos/intro-video.mp4'
-                type='video/mp4'
-              />
+              <source src={getAssetPath('/assets/videos/intro-video.mp4')} type='video/mp4' />
             </video>
             <button onClick={() => toggleModal(false)} className='absolute right-4 top-4 text-2xl font-bold text-white'>
               &times;
