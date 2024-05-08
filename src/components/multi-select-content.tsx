@@ -1,4 +1,5 @@
 import cx from 'classnames';
+import { useAssetPath } from 'hoc/withImagePath';
 
 type TProps = {
   onClick: (tag: string) => void;
@@ -7,6 +8,7 @@ type TProps = {
 };
 
 const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [] }) => {
+  const getAssetPath = useAssetPath();
   return (
     <>
       {tags.map((tag) => (
@@ -26,14 +28,19 @@ const MultiSelectContent: React.FC<TProps> = ({ onClick, isSelectedTag, tags = [
             },
           )}
           style={{
-            backgroundImage: `url(${`/assets/imgs/${tag.tokenId}.png`})`,
+            backgroundImage: `url(${getAssetPath(`/assets/imgs/${tag.tokenId}.png`)})`,
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
           }}
         >
-          <div className={cx('font-normal absolute rounded-lg border md:top-1 top-0 md:right-2 right-1 md:text-sm text-xs border-solid border-indigo-400 bg-zinc-900 md:px-2 px-1', !tag.hasMint&&'hidden')}>
-            {tag.hasMint?tag.balance?.toString():''}
+          <div
+            className={cx(
+              'font-normal absolute rounded-lg border md:top-1 top-0 md:right-2 right-1 md:text-sm text-xs border-solid border-indigo-400 bg-zinc-900 md:px-2 px-1',
+              !tag.hasMint && 'hidden',
+            )}
+          >
+            {tag.hasMint ? tag.balance?.toString() : ''}
           </div>
         </li>
       ))}

@@ -1,6 +1,7 @@
 import { cn } from 'lib/utils';
 import { Button } from '../buttons/button';
 import { create } from 'zustand';
+import { EnhancedImg } from 'hoc/withImagePath';
 
 interface ModalState {
   isOpen: boolean;
@@ -20,13 +21,13 @@ const Modal: React.FC = () => {
       <div className='flex flex-col items-center rounded-2xl bg-black p-8'>
         <div className='mb-2 text-center text-5xl font-bold text-white'>Congratulations</div>
         <div className='mb-6 text-center text-2xl text-white'>You've summoned</div>
-        <img
+        <EnhancedImg
           loading='lazy'
           src='/assets/imgs/chad.png'
           className='mb-6 aspect-[0.93] w-full max-w-[450px] rounded-2xl border-2 border-solid border-indigo-500 bg-zinc-900'
           alt=''
         />
-        <span className='mb-3 text-lg text-[#c875ff]'>Deposit 0.1 ETH to get 1 Mystery box</span>
+        <span className='mb-3 text-lg text-[#c875ff]'>Join the zkLink Aggregation Parade to get 1 Mystery Box</span>
         <Button
           className='backButton cursor-pointer'
           onClick={() => {
@@ -34,7 +35,7 @@ const Modal: React.FC = () => {
             toggleModal(false);
           }}
         >
-          <span>Deposit Now</span>
+          <span>Join Now</span>
         </Button>
       </div>
     </div>

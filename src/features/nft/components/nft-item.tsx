@@ -9,6 +9,7 @@ import { useVerifyStore } from 'hooks/useVerifyStore';
 import { useAccount } from 'wagmi';
 import { usePreCheckTxStore } from 'hooks/usePreCheckTxStore';
 import useNft from '../hooks/useNft';
+import { EnhancedImg } from 'hoc/withImagePath';
 
 const copyAddress = (address: string) => {
   navigator.clipboard
@@ -61,7 +62,7 @@ const NftItem: React.FC<NftItemProps> = (item: any) => {
             <div className='card-content h-full w-full'>
               <div className='max-md:mt-6 relative flex h-full w-full grow flex-col justify-center whitespace-nowrap rounded-2xl bg-zinc-900 text-right text-xl font-bold leading-6 tracking-normal text-white'>
                 <div className='relative flex aspect-[0.93] h-full w-full flex-col overflow-hidden rounded-2xl pt-2.5'>
-                  <img
+                  <EnhancedImg
                     src={`/assets/imgs/${tokenId}.png`}
                     className={cn(
                       'absolute inset-0 object-cover rounded-2xl',
@@ -84,11 +85,11 @@ const NftItem: React.FC<NftItemProps> = (item: any) => {
           </div>
           <div className='card-back'>
             <div className='flex flex-col items-center gap-1 p-[20px]'>
-              <img src={`/assets/imgs/${tokenId}.png`} className='w-[80px]' alt='' />
+              <EnhancedImg src={`/assets/imgs/${tokenId}.png`} className='w-[80px]' alt='' />
               <div className='text-2xl font-bold text-white'>{coin?.toUpperCase() === 'OMNI2' ? 'Omni' : coin}</div>
               <div className='mb-3 flex gap-1 text-xs text-white'>
                 {shortenAddress(chainTokenAddress)}
-                <img
+                <EnhancedImg
                   src='/assets/copy.svg'
                   alt=''
                   className='mt-[3px] h-[9px] w-[9px] cursor-pointer'
@@ -96,8 +97,6 @@ const NftItem: React.FC<NftItemProps> = (item: any) => {
                     copyAddress(chainTokenAddress);
                   }}
                 />
-                {/* <img src='/assets/circle.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' />
-                <img src='/assets/dexscreener.svg' alt='' className='mt-[3px] h-[9px] w-[9px] cursor-pointer' /> */}
               </div>
               <div className='mb-2 h-[70px] text-[15px] text-slate-400'>
                 Deposit any amount of {coin?.toUpperCase() === 'OMNI2' ? 'OMNI' : coin?.toUpperCase()} into Nova Network
