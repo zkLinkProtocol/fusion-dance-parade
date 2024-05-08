@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { config } from 'config/zklin-networks';
+import { config } from 'config/zklink-networks';
 import NovaInfinityStonesNFT from 'constants/contracts/abis/NovaInfinityStonesNFT.json';
 import NovaChadNFT from 'constants/contracts/abis/NovaChadNFT.json';
 import { getMemeMintChadNumber, getMergeSignature } from 'constants/api';

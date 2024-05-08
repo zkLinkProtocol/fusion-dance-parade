@@ -952,14 +952,7 @@ export const config = getDefaultConfig({
 
 export const wagmiDefaultConfig = createConfig({
   chains: chains,
-  connectors: [
-    ...connectors,
-    walletConnect({
-      projectId,
-      metadata,
-      showQrModal: true,
-    }),
-  ],
+  connectors: [...connectors],
   multiInjectedProviderDiscovery: true,
   client: ({ chain }) => {
     return createClient({ chain, transport: http() });

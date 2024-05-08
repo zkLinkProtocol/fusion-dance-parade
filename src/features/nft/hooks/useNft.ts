@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { readContract } from '@wagmi/core';
-import { config, nodeType, tokenMap } from 'config/zklin-networks';
+import { config, nodeType, tokenMap } from 'config/zklink-networks';
 import NovaInfinityStonesNFT from 'constants/contracts/abis/NovaInfinityStonesNFT.json';
 import IERC20 from 'constants/contracts/abis/IERC20.json';
 import { getMemeMintSignature } from 'constants/api';

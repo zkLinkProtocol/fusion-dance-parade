@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { nodeType } from 'config/zklin-networks';
+import { nodeType } from 'config/zklink-networks';
 import { STORAGE_NETWORK_KEY } from 'constants/zklink-config';
 
 export type NetworkStore = {

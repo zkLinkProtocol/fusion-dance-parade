@@ -14,7 +14,7 @@ import { BinanceWallet } from 'constants/wallet/binanceWallet';
 import { ChainId } from './chain';
 import { publicTransports } from './viem';
 import { publicWagmiConfig } from './wagmi';
-import { projectId } from './zklin-networks';
+import { projectId } from './zklink-networks';
 
 const metadata = {
   name: 'zkLink Nova App',

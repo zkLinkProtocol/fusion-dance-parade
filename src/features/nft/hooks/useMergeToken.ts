@@ -3,7 +3,7 @@ import MergeTokenPortal from 'constants/contracts/abis/MergeTokenPortal.json';
 import { useCallback } from 'react';
 // import { config } from '@/constants/networks'
 import { usePublicClient } from 'wagmi';
-import { config } from 'config/zklin-networks';
+import { config } from 'config/zklink-networks';
 import { IS_MAINNET, NOVA_CHAIN_ID } from 'constants/zklink-config';
 
 export type SourceTokenInfo = {

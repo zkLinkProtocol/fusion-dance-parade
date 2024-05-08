@@ -1,4 +1,4 @@
-import { chains } from 'config/zklin-networks';
+import { chains } from 'config/zklink-networks';
 import { memoize } from 'lodash';
 
 // const { chains, provider } = configureChains(CHAINS, chainRpcProviders as ChainProviderFn<any>[]);

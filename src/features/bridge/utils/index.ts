@@ -1,4 +1,4 @@
-import { nexusGoerliNode, nexusNode, nexusSepoliaNode, nodeType } from 'config/zklin-networks';
+import { nexusGoerliNode, nexusNode, nexusSepoliaNode, nodeType } from 'config/zklink-networks';
 import { ethers } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import type { WalletClient } from 'viem';
