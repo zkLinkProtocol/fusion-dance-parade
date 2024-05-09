@@ -791,7 +791,7 @@ const memeTokenListSepolia = [
   },
   {
     address: '0x6DA0B20B5Bb2Ff135b6d9A13814dE1240526AE2b',
-    decimals: 18,
+    decimals: 6,
     icon: 'aidoge-icon',
     multiplier: 2,
     networkKey: 'arbitrum',
@@ -863,7 +863,7 @@ const memeTokenListMainnet = [
   },
   {
     address: '0x09e18590e8f76b6cf471b3cd75fe1a1a9d2b2c2b',
-    decimals: 18,
+    decimals: 6,
     icon: 'aidoge-icon',
     multiplier: 2,
     networkKey: 'arbitrum',
