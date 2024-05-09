@@ -42,11 +42,11 @@ export const MEME_NFT_CONTRACT = (() => {
 export const MEME_COMPOSE_NFT_CONTRACT = (() => {
   switch (nodeType) {
     case 'nexus':
-      return '0xe06A5E9e4fEDb7f78ef65572607A6A702c91556A';
+      return '0x1631D495B8cF799B760D228bd5A602be5CdC439D';
     case 'nexus-sepolia':
-      return '0xf299CAF83a181B4Ea97bDb8a4FeB14A3f65F5e42';
+      return '0x3da9282234509DCBE15e4113078DA32f8bE6eDF2';
     default:
-      return '0xf299CAF83a181B4Ea97bDb8a4FeB14A3f65F5e42';
+      return '0x3da9282234509DCBE15e4113078DA32f8bE6eDF2';
   }
 })();
 
