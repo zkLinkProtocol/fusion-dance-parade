@@ -1,10 +1,8 @@
 import * as React from 'react';
 import Image from 'next/image';
-import { toast } from 'sonner';
-import { ChainId, SCAN_URLS } from 'config/chain';
 import { Spinner } from './spinner';
-import { useAccount } from 'wagmi';
 import { cn } from 'lib/utils';
+import { useAssetPath } from 'hoc/withImagePath';
 
 type Props = {
   id: string | number;
@@ -14,17 +12,17 @@ type Props = {
   type?: 'success' | 'error' | 'loading';
 };
 export const Toast = (props: Props) => {
-  const { address, chainId } = useAccount();
-  const { id, title, description, transactionHash } = props;
+  const getAssetPath = useAssetPath();
+  const { title, description } = props;
 
   const type = props.type || 'success';
 
   const renderIcon = () => {
     switch (type) {
       case 'success':
-        return <Image src='/assets/svgs/success.svg' width={24} height={24} alt='check-green' />;
+        return <Image src={getAssetPath('/assets/svgs/success.svg')} width={24} height={24} alt='check-green' />;
       case 'error':
-        return <Image src='/assets/svgs/error.svg' width={24} height={24} alt='error' />;
+        return <Image src={getAssetPath('/assets/svgs/error.svg')} width={24} height={24} alt='error' />;
       case 'loading':
         return <Spinner />;
       default:
