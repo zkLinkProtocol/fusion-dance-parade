@@ -1,7 +1,6 @@
 /* eslint-disable no-dupe-else-if */
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import BigNumber from 'bignumber.js';
-import fromList from 'constants/from-chain-list';
 import FromList from 'constants/from-chain-list';
 import { useBridgeTx } from 'features/bridge/hooks/useBridge';
 import { useBridgeNetworkStore } from 'features/bridge/hooks/useBridgeNetwork';
@@ -56,14 +55,12 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
   const { addTxHash, txhashes } = useVerifyStore();
 
   const invalidChain = useMemo(() => {
-    return chainId !== fromList[fromActive]?.chainId;
+    return chainId !== FromList[fromActive]?.chainId;
   }, [chainId, fromActive]);
 
   const actionBtnDisabled = useMemo(() => {
     if (!isEligible) return true;
-    if (!invalidChain) {
-      return true;
-    } else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
+    else if (!invalidChain && (!nativeTokenBalance || new BigNumber(nativeTokenBalance.toString()).eq(0))) {
       return true;
     } else if (
       !invalidChain &&
@@ -103,9 +100,9 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
 
   useEffect(() => {
     if (selectedChainId) {
-      setFromActive(fromList.findIndex((item) => item.chainId === selectedChainId));
+      setFromActive(FromList.findIndex((item) => item.chainId === selectedChainId));
     }
-  }, [fromActive, selectedChainId, fromList, chain]);
+  }, [fromActive, selectedChainId, FromList, chain]);
 
   useEffect(() => {
     if (coin) {
@@ -118,11 +115,11 @@ export default function Bridge({ data, mintNovaNft, isMinting, fetchMemeNftBalan
 
   const handleAction = useCallback(async () => {
     // TODO: remove || !nativeTokenBalance first, add button to notfiy user about their balance
-    if (!address || !fromList[fromActive].chainId) return;
-    setNetworkKey(fromList[fromActive]?.networkKey);
+    if (!address || !FromList[fromActive].chainId) return;
+    setNetworkKey(FromList[fromActive]?.networkKey);
     if (invalidChain) {
       try {
-        await switchChainAsync({ chainId: fromList[fromActive].chainId });
+        await switchChainAsync({ chainId: FromList[fromActive].chainId });
         return;
       } catch (e: any) {
         console.log(e);
