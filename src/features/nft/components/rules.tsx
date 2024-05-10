@@ -46,34 +46,35 @@ const Rules: React.FC = () => {
         2. If you have whitelist qualifications, you can transfer any amount of corresponding meme coins across the
         chain to Nova and mint your "Nova Infinity Stone" NFTs <br /> <br />
         3. Collect or mint some different "Nova Infinity Stone" NFTs, then merge your "Chad" NFT. The amount of "Nova
-        Infinity Stone" NFTs required to merge "Chad" NFT will increase based on the amount of "Chad" NFT that has been
-        merged.
+        Infinity Stone" NFTs required to merge a "Chad" NFT will increase based on the amount of "Chad" NFTs that have
+        been merged.
         <br />
         <br />
-        For example: the 1st-999th“Chad” NFT requires the synthesis of 2 different "Nova Infinity Stone" NFTs
+        For example: the 1st-999th “Chad” NFT requires the synthesis of 2 different "Nova Infinity Stone" NFTs
         <br />
         <br />
         <NFTCollectionTable />
         <br />
-        4. Bonus：We have a total of 10,000 “Chad” NFTs and 10,000 Mystery boxes. Users who mint “Chad” NFT and join the
-        zkLink Aggregation Parade will be guaranteed a mystery box.
+        4. Bonus: We have a total of 10,000 “Chad” NFTs and 10,000 Mystery boxes. Users who mint a “Chad” NFT and join
+        the zkLink Aggregation Parade will be guaranteed a mystery box.
         <br />
         <br />
         5. Recreate “Chad” campaign: Join our community, create and vote for your ideal “Chad” Meme. We will mint the
-        most popular Chad meme in the community, and replace all “Chad” NFT with new “Chad” NFT. <br />
+        most popular Chad meme in the community, and replace all “Chad” NFTs with a new “Chad” NFT. <br />
         <br />
         <br />
         Notice: <br />
         <br />
         An address can only get at most 1 mystery box. <br /> <br />
-        If you want to collect or sell "Chad" NFT or Infinity Stones, just trade it on Alienswap. <br /> <br />
-        “Chad” NFT is a voucher and badge for early Nova participants, and it is non-transferable, just like SBT. <br />
+        If you want to collect or sell a "Chad" NFT or Infinity Stones, just trade it on Alienswap. <br /> <br />
+        “Chad” NFT is a voucher and badge for early Nova participants, and it is non-transferable, just like a SBT.
         <br />
         <br />
-        Time: 10th May- 10th June 2024
+        <br />
+        Time: 10th May-10th June 2024
         <br />
         <br />
-        <span className='text-xs'>All rights of this campaign reserved by zkLink Nova.</span>
+        <span className='text-xs'>All rights of this campaign are reserved by zkLink Nova.</span>
       </div>
     </div>
   );
