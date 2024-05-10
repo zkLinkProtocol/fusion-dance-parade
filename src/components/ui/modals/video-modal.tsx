@@ -18,7 +18,7 @@ const VideoModal = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75'
+          className='fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-75 sm:flex'
         >
           <motion.div
             initial={{ scale: 0.8 }}
