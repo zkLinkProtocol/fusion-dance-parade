@@ -13,7 +13,7 @@ const Page: React.FC = () => {
             Mint your Nova Infinity Stones
           </div>
           <div className='max-md:max-w-full text-sm leading-6 text-neutral-400 md:mt-8 md:text-base'>
-            My brave holders, bridge any amount of the selected meme tokens to Nova, then bright your Nova Infinity
+            My brave holders, bridge any amount of the selected meme tokens to Nova, then claim your Nova Infinity
             Stones!
           </div>
         </div>
