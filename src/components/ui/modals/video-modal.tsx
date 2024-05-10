@@ -27,7 +27,7 @@ const VideoModal = () => {
             transition={{ duration: 0.3 }}
             className='relative w-full'
           >
-            <video autoPlay muted onEnded={handleVideoEnd} className='h-auto w-full'>
+            <video autoPlay muted playsInline onEnded={handleVideoEnd} className='h-auto w-full'>
               <source src={getAssetPath('/assets/videos/intro-video.mp4')} type='video/mp4' />
             </video>
             <button onClick={() => setIsOpen(false)} className='absolute right-4 top-4 text-2xl font-bold text-white'>
