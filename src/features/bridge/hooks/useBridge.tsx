@@ -373,7 +373,7 @@ export const useBridgeTx = () => {
       //TODO: Custom gas limit
       const l2GasLimit =
         coin.toUpperCase() === 'AIDOGE'
-          ? BigNumber.from(2000000)
+          ? BigNumber.from(1000000)
           : await estimateDefaultBridgeDepositL2Gas(token, amount, address, isMergeSelected);
       const baseCost = await getBaseCost(l2GasLimit);
       const fee = await getEstimateFee(token);
