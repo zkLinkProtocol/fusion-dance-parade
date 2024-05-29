@@ -66,7 +66,7 @@ const Rules: React.FC = () => {
         Notice: <br />
         <br />
         An address can only get at most 1 mystery box. <br /> <br />
-        If you want to collect or sell a "Chad" NFT or Infinity Stones, just trade it on Alienswap. <br /> <br />
+        If you want to collect or sell Infinity Stones, just trade it on Alienswap. <br /> <br />
         “Chad” NFT is a voucher and badge for early Nova participants, and it is non-transferable, just like a SBT.
         <br />
         <br />

@@ -2,10 +2,10 @@ import type { DefaultSeoProps } from 'next-seo';
 
 const seo = {
   title:
-    'Fusion Dance Parade | Gather all the memes, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior (gigaChad).',
+    'Fusion Dance Parade | Gather Nova Infinity Stones, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior (Chad).',
   defaultTitle: 'Fusion Dance Parade',
   description:
-    'Gather all the memes, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior (gigaChad).',
+    'Gather Nova Infinity Stones, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior (Chad).',
   twitter: {
     handle: '@zkLink_Official',
     site: '@zkLink_Official',
@@ -15,7 +15,7 @@ const seo = {
     type: 'website',
     title: 'Fusion Dance Parade',
     description:
-      'Gather all the memes, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior (gigaChad).',
+      'Gather Nova Infinity Stones, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior (Chad).',
     images: [
       {
         url: 'https://zklink.io/fusion-dance-parade/assets/imgs/preview.png',

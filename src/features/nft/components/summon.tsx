@@ -17,8 +17,8 @@ const Summon: React.FC = () => {
         <div className='max-md:ml-0 max-md:w-full max-md:order-1 ml-1 flex w-full flex-col md:ml-5 md:w-[71%]'>
           <div className='max-md:mt-9 max-md:max-w-full mt-1.5 flex grow flex-col px-1 md:px-5'>
             <div className='max-md:max-w-full text-base leading-6 tracking-tight text-neutral-400'>
-              Gather all the memes, cats, doges, frogs, and hats to create the ultimate fused (merged) warrior
-              (gigaChad).
+              Gather the Nova infinity stone NFTs and merge into Chad. The earlier you mint, the less types of NFTs are
+              needed.
             </div>
             <div className='max-md:mt-10 mb-4 mt-6 flex gap-2 self-start text-base leading-6 tracking-tight text-white md:mt-24'>
               <div className='my-auto flex-auto'>Select {mintLimit !== null ? mintLimit : 0} NFTs to Merge</div>
